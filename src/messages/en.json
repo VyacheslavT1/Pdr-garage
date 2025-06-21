@@ -1,0 +1,12 @@
+{
+  "Header": {
+    "services": "Services",
+    "about": "About us",
+    "blog": "Blog",
+    "contacts": "Contacts",
+    "button": "Request"
+  },
+  "HomePage": {
+    "title": " Title"
+  }
+}
