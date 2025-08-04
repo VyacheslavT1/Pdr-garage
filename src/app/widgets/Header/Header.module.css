@@ -1,0 +1,324 @@
+:root {
+  --color-green-main: #00c950;
+  --color-light: #fafafa;
+  --color-light-semi-transparent: rgba(250, 250, 250, 0.8);
+  --color-dark: #222;
+  --color-error: #e7000b;
+  --color-grey-10: #d1d5db;
+  --color-grey-70: #505050;
+  --color-grey-80: #707070;
+  --color-grey-100: #5c5f6e;
+  --border-radius: 0.5rem;
+  --border-radius-small: 0.25rem;
+  --padding-large: 2rem;
+  --padding-small: 1rem;
+  --padding-xsmall: 0.5rem;
+  --padding-vertical: 1rem 0;
+  --padding-vertical-small: 0.75rem 0;
+  --padding-vertical-xsmall: 0.5rem 0;
+  --padding-custom-small: 1rem 0.5rem;
+  --margin-vertical: 1rem 0;
+  --margin-vertical-small: 0.5rem 0;
+  --margin-small: 1rem;
+  --margin-medium: 1.5rem;
+  --margin-large: 2rem;
+  --margin-xlarge: 4rem;
+  --margin-custom: 2rem 4rem;
+  --gap-large: 2.5rem;
+  --gap-medium: 1.5rem;
+  --gap-small: 1rem;
+  --gap-xsmall: 0.5rem;
+  --font-size-small: 0.75rem;
+  --font-size-xsmall: 0.6rem;
+  --font-weight-bold: 700;
+  --line-height-medium: 1.2rem;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  padding: 0 1rem;
+  background-color: var(--color-dark);
+  box-shadow: #18181b 0px 4px 6px -1px, rgba(0, 0, 0, 0.0588235294) 0px 2px 4px -1px;
+}
+@media (min-width: 576px) {
+  .header {
+    padding-inline: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .header {
+    padding-inline: 1rem;
+  }
+}
+@media (min-width: 1050px) {
+  .header {
+    padding-inline: 1.5rem;
+  }
+}
+@media (min-width: 1200px) {
+  .header {
+    padding-inline: 5rem;
+  }
+}
+@media (min-width: 1600px) {
+  .header {
+    padding-inline: 0;
+    margin-inline: auto;
+  }
+}
+.header .nav {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+.header .nav .logoLink {
+  display: flex;
+}
+@media (max-width: 439px) {
+  .header .nav .logoLink {
+    padding: 0.5rem 0;
+  }
+}
+.header .nav .logoLink .logoIcon {
+  width: 6rem;
+}
+@media (min-width: 768px) {
+  .header .nav .logoLink .logoIcon {
+    width: 7rem;
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .logoLink .logoIcon {
+    width: 8rem;
+  }
+}
+.header .nav .menuList {
+  display: none;
+  position: relative;
+}
+.header .nav .menuList a {
+  position: relative;
+}
+.header .nav .menuList a::before {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-green-main);
+  transition: width 0.5s ease-in-out, left 0.5s ease-in-out;
+}
+@media (hover: hover) {
+  .header .nav .menuList a:hover, .header .nav .menuList a.is-active {
+    color: var(--color-green-main);
+  }
+  .header .nav .menuList a:hover::before, .header .nav .menuList a.is-active::before {
+    width: 100%;
+    left: 0;
+  }
+}
+@media (hover: none) {
+  .header .nav .menuList a:active, .header .nav .menuList a.is-active {
+    color: var(--color-green-main);
+  }
+  .header .nav .menuList a:active::before, .header .nav .menuList a.is-active::before {
+    width: 100%;
+    left: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .menuList {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: var(--color-light);
+  }
+}
+.header .nav .menuList .menuItem {
+  padding: 1.5rem 0;
+}
+.header .nav .menuList .menuItem .servicesLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.header .nav .menuList .menuItem .servicesLink .chevronDownIcon {
+  display: block;
+}
+.header .nav .menuList .menuItem .servicesLink .chevronUpIcon {
+  display: none;
+}
+@media (hover: hover) {
+  .header .nav .menuList .menuItem .servicesLink:hover .chevronDownIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronDownIcon {
+    display: none;
+  }
+  .header .nav .menuList .menuItem .servicesLink:hover .chevronUpIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronUpIcon {
+    display: block;
+  }
+}
+@media (hover: none) {
+  .header .nav .menuList .menuItem .servicesLink:active .chevronDownIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronDownIcon {
+    display: none;
+  }
+  .header .nav .menuList .menuItem .servicesLink:active .chevronUpIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronUpIcon {
+    display: block;
+  }
+}
+.header .nav .menuList .menuItem .serviceOptions {
+  position: absolute;
+  top: 100%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  z-index: 50;
+  transition: all 500ms ease-in-out;
+  opacity: 0;
+  transform: scaleY(0.75);
+  transform-origin: top;
+  visibility: hidden;
+  text-indent: 1rem;
+}
+@media (hover: hover) and (pointer: fine) and (hover: hover) {
+  .header .nav .menuList .menuItem:hover .serviceOptions, .header .nav .menuList .menuItem.is-active .serviceOptions {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (hover: none) {
+  .header .nav .menuList .menuItem:active .serviceOptions, .header .nav .menuList .menuItem.is-active .serviceOptions {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .header .nav .menuList .menuItem:focus-within .serviceOptions {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+  }
+}
+.header .nav .controls {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 1rem;
+}
+.header .nav .controls .requestQuoteButton {
+  display: none;
+}
+@media (440px <= width < 1024px) {
+  .header .nav .controls .requestQuoteButton {
+    display: block;
+    padding: 0.5rem 0;
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .controls .requestQuoteButton {
+    display: block;
+    order: 1;
+  }
+}
+.header .nav .controls .menuButton {
+  display: flex;
+}
+.header .nav .controls .menuButton button {
+  padding: 0;
+}
+.header .nav .controls .menuButton button svg {
+  color: var(--color-light);
+}
+@media (min-width: 768px) {
+  .header .nav .controls .menuButton button svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .controls .menuButton {
+    display: none;
+  }
+}
+.header .nav .mobileMenuOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background-color: var(--color-dark);
+  color: var(--color-light);
+  transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+.header .nav .mobileMenuOverlay--open {
+  height: 100vh;
+}
+.header .nav .mobileMenuOverlay--closed {
+  height: 0;
+}
+.header .nav .mobileMenuOverlay .closeButtonWrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+.header .nav .mobileMenuOverlay .closeButtonWrapper svg {
+  color: var(--color-error);
+}
+.header .nav .mobileMenuOverlay .mobileMenuList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 7.5rem;
+}
+@media (hover: hover) {
+  .header .nav .mobileMenuOverlay .mobileMenuList a:hover, .header .nav .mobileMenuOverlay .mobileMenuList a.is-active {
+    color: var(--color-green-main);
+  }
+}
+@media (hover: none) {
+  .header .nav .mobileMenuOverlay .mobileMenuList a:active, .header .nav .mobileMenuOverlay .mobileMenuList a.is-active {
+    color: var(--color-green-main);
+  }
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsIcon {
+  position: absolute;
+  margin-left: 1rem;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper {
+  overflow: hidden;
+  transition: max-height 500ms ease-in-out;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper--open {
+  max-height: 500px;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper--closed {
+  max-height: 0;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+@media (hover: hover) {
+  .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption:hover, .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption.is-active {
+    color: var(--color-green-main);
+  }
+}
+@media (hover: none) {
+  .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption:active, .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption.is-active {
+    color: var(--color-green-main);
+  }
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .callToAction {
+  padding-top: 7.5rem;
+}/*# sourceMappingURL=Header.module.css.map */

@@ -1,11 +1,14 @@
 // app/[locale]/page.tsx
-import { useTranslations } from "next-intl";
+import HeroSection from "@/app/widgets/ HeroSection/ HeroSection";
+import AboutUs from "@/app/widgets/About/About";
+import Services from "@/app/widgets/Services/Services";
 
 export default function HomePage() {
-  const t = useTranslations("HomePage");
   return (
     <main>
-      <h1>{t("title")}</h1>
+      <HeroSection />
+      <AboutUs />
+      <Services />
     </main>
   );
 }

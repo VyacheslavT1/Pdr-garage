@@ -1,3 +1,5 @@
+import React, { useState, useEffect, useRef } from "react";
+import styles from "./Dropdown.module.scss";
 interface Options {
   value: string;
   label: string;
@@ -5,12 +7,12 @@ interface Options {
 
 export interface DropdownProps {
   options: Options[];
-  icon?: React.ReactNode;
   className?: string;
   value?: string;
   renderValue?: (option: Options | undefined) => React.ReactNode;
   renderOption?: (option: Options, isActive: boolean) => React.ReactNode;
   onSelect?: (newValue: string) => void;
+  onClose?: () => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -18,21 +20,67 @@ const Dropdown: React.FC<DropdownProps> = ({
   className = "",
   onSelect,
   renderOption,
+  renderValue,
+  onClose,
   value,
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const selectedOption = options.find((option) => option.value === value);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // выходим сразу, если это dropdown для десктопа (нет renderValue)
+    if (!renderValue) {
+      return;
+    }
+
+    const handleTouchOutside = (event: TouchEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+        onClose?.();
+      }
+    };
+
+    document.addEventListener("touchstart", handleTouchOutside);
+    return () => {
+      document.removeEventListener("touchstart", handleTouchOutside);
+    };
+  }, [onClose, renderValue]);
+
   return (
     <div
-      className={`w-max bg-gray-500 rounded-lg shadow-lg overflow-hidden z-10 ${className}`}
+      ref={wrapperRef}
+      className={`${styles.dropdownWrapper} ${className}`}
+      onClick={
+        renderValue
+          ? () => {
+              setIsOpen((prev) => !prev);
+              if (isOpen) {
+                onClose?.();
+              }
+            }
+          : undefined
+      }
     >
-      {options.map((opt) => (
-        <div
-          key={opt.value}
-          onClick={() => onSelect?.(opt.value)}
-          className="px-4 py-1 hover:bg-gray-100"
-        >
-          {renderOption ? renderOption(opt, opt.value === value) : opt.label}
-        </div>
-      ))}
+      {renderValue && renderValue(selectedOption)}
+
+      {(renderValue ? isOpen : true) &&
+        options.map((opt) => (
+          <div
+            key={opt.value}
+            onClick={() => {
+              onSelect?.(opt.value);
+              setIsOpen(false);
+              onClose?.();
+            }}
+            className={styles.dropdownOption}
+          >
+            {renderOption ? renderOption(opt, opt.value === value) : opt.label}
+          </div>
+        ))}
     </div>
   );
 };

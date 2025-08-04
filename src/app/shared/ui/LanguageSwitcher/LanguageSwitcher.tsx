@@ -1,10 +1,14 @@
 // app/shared/ui/LanguageSwitcher/LanguageSwitcher.tsx
 "use client";
 
+import React from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import Dropdown from "@/app/shared/ui/Dropdown/Dropdown";
+import GlobeIcon from "@/app/shared/Icons/globe.svg";
+import Button from "@/app/shared/ui/Button/Button";
+import styles from "./LanguageSwitcher.module.css";
 
 const locales = ["fr", "en", "ru"];
 
@@ -18,20 +22,33 @@ export function LanguageSwitcher() {
   const query = searchParams.toString();
   const href = `${pathname}${query ? `?${query}` : ""}`;
 
+  const localeOptions = locales.map((locale) => ({
+    value: locale,
+    label: locale.toLocaleUpperCase(),
+  }));
+
   return (
-    <div className="relative group inline-block">
-      <span>{currentLocale.toLocaleUpperCase()}</span>
+    <div className={styles.languageSwitcher}>
+      <div className={styles.languageSwitcherButton}>
+        <Button variant="secondary">
+          <GlobeIcon />
+        </Button>
+      </div>
+
       <Dropdown
-        className="hidden group-hover:block absolute top-full  "
-        options={locales.map((l) => ({ value: l, label: l.toUpperCase() }))}
+        className={styles.dropdown}
+        options={localeOptions}
         value={currentLocale}
-        onSelect={(newLocale) => router.push(href, { locale: newLocale })}
-        // Триггер: показываем текущую локаль
-        renderValue={(opt) => <span>{opt?.label}</span>}
-        // Пункты меню: подсвечиваем активную локаль
-        renderOption={(opt, isActive) => (
-          <span className={`${isActive ? "font-semibold " : ""}`}>
-            {opt.label}
+        onSelect={(newLocale) => {
+          router.push(href, { locale: newLocale });
+        }}
+        renderOption={(option, isActive) => (
+          <span
+            className={`${styles.dropdownOption} ${
+              isActive ? styles.active : ""
+            }`}
+          >
+            {option.label}
           </span>
         )}
       />

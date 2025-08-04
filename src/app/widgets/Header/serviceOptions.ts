@@ -1,14 +1,22 @@
+// app/widgets/Header/serviceOptions.ts
+"use client";
+
+import { useTranslations } from "next-intl";
+
 export interface ServiceOptions {
   value: string;
   label: string;
 }
 
 export function getServiceOptions(): ServiceOptions[] {
+  const t = useTranslations("getServiceOptions");
+
   return [
-    { value: "Option 1", label: "Option 1" },
-    { value: "Option 2", label: "Option 2" },
-    { value: "Option 3", label: "Option 3" },
-    { value: "Option 4", label: "Option 4" },
-    { value: "Option 5", label: "Option 5" },
+    { value: "bodyRepair", label: t("bodyRepair") },
+    { value: "spotTouchUp", label: t("spotTouchUp") },
+    { value: "paintlessDentRemoval", label: t("paintlessDentRemoval") },
+    { value: "scratchBuffing", label: t("scratchBuffing") },
+    { value: "glassCrackRepair", label: t("glassCrackRepair") },
+    { value: "restorativePolish", label: t("restorativePolish") },
   ];
 }

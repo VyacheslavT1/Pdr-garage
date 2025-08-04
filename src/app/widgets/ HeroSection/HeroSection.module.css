@@ -1,0 +1,67 @@
+.heroSection {
+  position: relative;
+  height: 100vh;
+}
+.heroSection .heroImage {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.heroSection .overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.heroSection .overlay .overlayContent {
+  max-width: 1440px;
+  width: 100%;
+  padding: 0 2rem;
+}
+@media (min-width: 1200px) {
+  .heroSection .overlay .overlayContent {
+    padding-inline: 5rem;
+  }
+}
+@media (min-width: 1600px) {
+  .heroSection .overlay .overlayContent {
+    padding-inline: 0;
+    margin-inline: auto;
+  }
+}
+.heroSection .overlay .overlayContent .title {
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+@media (min-width: 768px) {
+  .heroSection .overlay .overlayContent .title {
+    font-size: 2.5rem;
+  }
+}
+.heroSection .overlay .overlayContent .subtitle {
+  font-size: 1rem;
+  font-weight: 100;
+  text-align: center;
+  padding: 2rem 0 4rem 0;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  color: var(--color-grey-10);
+}
+@media (min-width: 768px) {
+  .heroSection .overlay .overlayContent .subtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+  }
+}
+.heroSection .overlay .overlayContent .actions {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+.heroSection .overlay .overlayContent .actions button {
+  width: 15rem;
+}/*# sourceMappingURL=HeroSection.module.css.map */

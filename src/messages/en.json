@@ -1,12 +1,68 @@
 {
   "Header": {
-    "services": "Services",
+    "services": "Our services",
     "about": "About us",
     "blog": "Blog",
-    "contacts": "Contacts",
-    "button": "Request"
+    "store": "Store",
+    "contacts": "Contact Us",
+    "requestQuoteButton": "Submit an application"
   },
-  "HomePage": {
-    "title": " Title"
+  "HeroSection": {
+    "title": "Paintless dent removal without repainting from 30 minutes.",
+    "subtitle": "PDR STUDIO is proud to offer you high-quality dent repair services for dents of any complexity. We’ll remove them quickly and seamlessly—no repainting required! No advance payment needed. We service vehicles of all makes.",
+    "mainPictureAlt": "Image: work in the garage",
+    "allServicesButton": "All services",
+    "detailsButton": "Details"
+  },
+  "getServiceOptions": {
+    "bodyRepair": "Body Repair & Painting",
+    "spotTouchUp": "Spot Touch-Up",
+    "paintlessDentRemoval": "Paintless Dent Removal",
+    "scratchBuffing": "Scratch & Scuff Buffing",
+    "glassCrackRepair": "Glass Crack & Chip Repair",
+    "restorativePolish": "Restorative Paint Polishing"
+  },
+  "AboutUs": {
+    "fewWords": "A Few Words",
+    "aboutPdrStudio": "About PDR STUDIO",
+    "about1": "Every day, we restore vehicles to their original shine and delight owners with flawlessly executed work. Our specialty is professional paintless dent removal (PDR) of any complexity—no repainting required.",
+    "about2": "We give every car our full attention, whether it’s an exclusive premium sedan or a practical city hatchback. Beyond dent removal, our technicians grind and polish glass, restore headlight clarity, apply protective and decorative films to both exterior panels and the interior, and flawlessly refurbish rims and mirrors.",
+    "about3": "We use only proven techniques and professional-grade equipment, ensuring precise, long-lasting results without wasting your time or money. No advance payments—you pay only once you’re satisfied with the quality of our work.",
+    "about4": "Trusted by major dealerships and service centers, countless “repaired” cars are already bringing joy to their owners. Browse our portfolio and see for yourself that with PDR Studio, your vehicle will always look impeccable!",
+    "detailsButton": "Details",
+    "beforeImageAlt": "Before image of a car dent",
+    "afterImageAlt": "After image of a car dent"
+  },
+  "Services": {
+    "weOffer": "We offer you the following",
+    "serviceTypes": "services",
+
+    "bodyRepair": "Body Repair & Painting",
+    "spotTouchUp": "Spot Touch-Up",
+    "paintlessDentRemoval": "Paintless Dent Removal",
+    "scratchBuffing": "Scratch & Scuff Buffing",
+    "glassCrackRepair": "Glass Crack & Chip Repair",
+    "restorativePolish": "Restorative Paint Polishing",
+
+    "bodyRepairDesc": "Technicians at PDR STUDIO’s auto service expertly carry out body repair and painting on any area of the vehicle, restoring the bodywork to its factory-fresh condition. ",
+    "spotTouchUpDesc": "At PDR STUDIO, our specialists perform precise spot touch-ups using high-quality automotive enamels and modern equipment.",
+    "paintlessDentRemovalDesc": "At PDR STUDIO, we offer professional paintless dent removal (PDR) of any complexity—from small hail dents to deep door creases.",
+    "scratchBuffingDesc": "Professional buffing of scratches and scuffs at PDR STUDIO restores your paintwork’s original gloss and color depth. ",
+    "glassCrackRepairDesc": "At PDR STUDIO, we carry out precise repair of chips and cracks in automotive glass of any complexity, restoring both transparency and strength.",
+    "restorativePolishDesc": "Our comprehensive restorative polishing service at PDR STUDIO brings vehicles back to showroom condition, even after years of use.",
+
+    "detailsButton": "Read more"
+  },
+  "Footer": {
+    "motto": "restores vehicles to an impeccable appearance: gently removes dents without repainting and brings bodywork and glass back to factory-perfect condition!",
+    "services": "Our services",
+    "usefulLinks": "Useful links",
+    "about": "About us",
+    "contactUs": "Contact us",
+    "contactsInfo": "Contact Information",
+    "businessHours": "Schedule",
+    "socialTitle": "our social networks",
+
+    "copyright": "Paintless removal of dents, scratches, and chips, spot painting polishing glass repair for chips and cracks."
   }
 }

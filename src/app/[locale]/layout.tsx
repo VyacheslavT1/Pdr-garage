@@ -5,6 +5,8 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Header from "@/app/widgets/Header/Header";
+import Footer from "@/app/widgets/Footer/Footer";
+import ScrollToTopButton from "@/app/shared/ui/ScrollToTopButton/ScrollToTopButton";
 
 export default async function LocaleLayout({
   children,
@@ -25,7 +27,9 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider>
       <Header />
-      {children}
+      <main>{children}</main>
+      <ScrollToTopButton />
+      <Footer />
     </NextIntlClientProvider>
   );
 }

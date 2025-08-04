@@ -1,12 +1,68 @@
 {
   "Header": {
-    "services": "Services",
-    "about": "About us",
+    "services": "Nos services",
+    "about": "À propos",
     "blog": "Blog",
-    "contacts": "Contacts",
-    "button": "Request"
+    "store": "Magasin",
+    "contacts": "Contactez-nous",
+    "requestQuoteButton": "Déposer une demande"
   },
-  "HomePage": {
-    "title": " Titre"
+  "HeroSection": {
+    "title": "Débosselage sans peinture à partir de 30 minutes",
+    "subtitle": "Le service PDR STUDIO est heureux de vous proposer des prestations de débosselage de haute qualité pour tous types de bosses, quelle que soit leur complexité. Nous les supprimons rapidement et sans laisser de trace, sans aucune peinture! Aucun acompte n’est requis. Réparation de véhicules toutes marques.",
+    "mainPictureAlt": "Image: travail en atelier",
+    "allServicesButton": "Tous les services",
+    "detailsButton": "Savoir plus"
+  },
+  "getServiceOptions": {
+    "bodyRepair": "Réparation de la carrosserie et peinture",
+    "spotTouchUp": "Retouche peinture localisée",
+    "paintlessDentRemoval": "Débosselage sans peinture",
+    "scratchBuffing": "Polissage des rayures et éraflures",
+    "glassCrackRepair": "Réparation des fissures et éclats de verre",
+    "restorativePolish": "Polissage restauratif de la peinture"
+  },
+  "AboutUs": {
+    "fewWords": "Quelques Mots",
+    "aboutPdrStudio": "Sur PDR STUDIO",
+    "about1": "Chaque jour, nous redonnons aux véhicules leur éclat d’origine et offrons aux propriétaires le plaisir d’un travail parfaitement exécuté. Notre spécialité ? Le débosselage sans peinture (PDR) professionnel, quelle que soit la complexité des bosses.",
+    "about2": "Nous accordons la même attention à chaque voiture, qu’il s’agisse d’une berline premium exclusive ou d’une citadine pratique. Outre le débosselage, nos techniciens poncent et polissent les vitres, restaurent la transparence des phares, appliquent des films de protection et décoratifs sur la carrosserie et dans l’habitacle, et remettent impeccablement en état jantes et rétroviseurs.",
+    "about3": "Nous n’utilisons que des technologies éprouvées et du matériel professionnel, pour des résultats précis et durables, sans perdre votre temps ni votre argent. Aucun acompte : vous ne payez qu’après avoir jugé la qualité de notre travail.",
+    "about4": "Plébiscité par de grandes concessions et centres techniques, de nombreux véhicules « traités » ravissent déjà leurs propriétaires. Découvrez notre portfolio et constatez par vous-même qu’avec PDR Studio, votre véhicule restera toujours impeccable !",
+    "detailsButton": "Savoir plus",
+    "beforeImageAlt": "Avant débosselage d'une voiture",
+    "afterImageAlt": "Après débosselage d'une voiture"
+  },
+  "Services": {
+    "weOffer": "Trouvez ici tous nos",
+    "serviceTypes": "Types de services",
+
+    "bodyRepair": "Réparation de la carrosserie et peinture",
+    "spotTouchUp": "Retouche peinture localisée",
+    "paintlessDentRemoval": "Débosselage sans peinture",
+    "scratchBuffing": "Polissage des rayures et éraflures",
+    "glassCrackRepair": "Réparation des fissures et éclats de verre",
+    "restorativePolish": "Polissage restauratif de la peinture",
+
+    "bodyRepairDesc": "Les techniciens du service auto PDRGARAGE réalisent avec expertise la réparation de carrosserie et la peinture de n’importe quelle zone du véhicule, redonnant à la carrosserie son aspect d’origine. ",
+    "spotTouchUpDesc": "Chez PDRGARAGE, nos spécialistes réalisent des retouches ponctuelles de peinture avec des émaux haut de gamme et du matériel moderne. ",
+    "paintlessDentRemovalDesc": "Chez PDRGARAGE, nous proposons le débosselage sans peinture (PDR) pour tous types de bosses, des petites marques de grêle aux creux profonds sur les portières.",
+    "scratchBuffingDesc": "Le polissage professionnel des rayures et éraflures chez PDRGARAGE redonne à la peinture son éclat d’origine et la profondeur de sa couleur.",
+    "glassCrackRepairDesc": "Chez PDRGARAGE, nous effectuons la réparation précise des éclats et fissures sur tous types de vitrages, restaurant leur transparence et leur résistance.",
+    "restorativePolishDesc": "Notre service complet de polissage restaurateur chez PDRGARAGE redonne aux véhicules l’apparence d’usine, même après des années d’utilisation.",
+
+    "detailsButton": "Savoir plus"
+  },
+  "Footer": {
+    "motto": "redonne aux véhicules une apparence irréprochable : il élimine délicatement les bosses sans peinture et restaure la carrosserie ainsi que les vitres à leur état d’origine!",
+    "services": "Nos services",
+    "usefulLinks": "Liens utiles",
+    "about": "À propos",
+    "contactUs": "Contactez-nous",
+    "contactsInfo": "Nos coordonnées",
+    "businessHours": "Horaires d'Ouverture",
+    "socialTitle": "Nos réseaux sociaux",
+
+    "copyright": "Débosselage sans peinture des bosses, rayures et éclats, retouche locale de peinture, polissage, réparation des vitres, éclats et fissures."
   }
 }

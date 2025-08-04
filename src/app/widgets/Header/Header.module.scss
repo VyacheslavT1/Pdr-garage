@@ -1,0 +1,261 @@
+@use "../../shared/styles/variables" as *;
+@use "../../shared/styles/mixins" as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  padding: 0 1rem;
+  background-color: var(--color-dark);
+  box-shadow: #18181b 0px 4px 6px -1px, #0000000f 0px 2px 4px -1px;
+  @media (min-width: 576px) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 1050px) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 1200px) {
+    padding-inline: 5rem;
+  }
+
+  @media (min-width: 1600px) {
+    padding-inline: 0;
+    margin-inline: auto;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    justify-content: space-between;
+    max-width: 1440px;
+    margin-inline: auto;
+    .logoLink {
+      display: flex;
+      @media (max-width: 439px) {
+        padding: 0.5rem 0;
+      }
+
+      .logoIcon {
+        width: 6rem;
+        @media (min-width: 768px) {
+          width: 7rem;
+        }
+        @media (min-width: 1024px) {
+          width: 8rem;
+        }
+      }
+    }
+
+    .menuList {
+      display: none;
+      position: relative;
+      a {
+        position: relative;
+
+        &::before {
+          content: "";
+          position: absolute;
+          bottom: -0.5rem;
+          left: 50%;
+          width: 0;
+          height: 2px;
+          background-color: var(--color-green-main);
+          transition: width 0.5s ease-in-out, left 0.5s ease-in-out;
+        }
+        @include hover {
+          color: var(--color-green-main);
+          &::before {
+            width: 100%;
+            left: 0;
+          }
+        }
+      }
+
+      @media (min-width: 1024px) {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        color: var(--color-light);
+      }
+
+      .menuItem {
+        padding: 1.5rem 0;
+
+        .servicesLink {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          .chevronDownIcon {
+            display: block;
+          }
+
+          .chevronUpIcon {
+            display: none;
+          }
+        }
+
+        .servicesLink {
+          @include hover {
+            .chevronDownIcon {
+              display: none;
+            }
+            .chevronUpIcon {
+              display: block;
+            }
+          }
+        }
+
+        .serviceOptions {
+          position: absolute;
+          top: 100%;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+            rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+          z-index: 50;
+          transition: all 500ms ease-in-out;
+          opacity: 0;
+          transform: scaleY(0.75);
+          transform-origin: top;
+          visibility: hidden;
+          text-indent: 1rem;
+        }
+        @media (hover: hover) and (pointer: fine) {
+          @include hover {
+            .serviceOptions {
+              opacity: 1;
+              visibility: visible;
+              transform: scaleY(1);
+            }
+          }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+          &:focus-within .serviceOptions {
+            opacity: 1;
+            visibility: visible;
+            transform: scaleY(1);
+          }
+        }
+      }
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      gap: 1rem;
+      .requestQuoteButton {
+        display: none;
+        @media (440px <= width < 1024px) {
+          display: block;
+          padding: 0.5rem 0;
+        }
+        @media (min-width: 1024px) {
+          display: block;
+          order: 1;
+        }
+      }
+
+      .menuButton {
+        display: flex;
+
+        button {
+          padding: 0;
+          svg {
+            color: var(--color-light);
+            @media (min-width: 768px) {
+              width: 1.5rem;
+              height: 1.5rem;
+            }
+          }
+        }
+        @media (min-width: 1024px) {
+          display: none;
+        }
+      }
+    }
+
+    .mobileMenuOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      overflow: hidden;
+      background-color: var(--color-dark);
+      color: var(--color-light);
+      transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+
+      &--open {
+        height: 100vh;
+      }
+
+      &--closed {
+        height: 0;
+      }
+
+      .closeButtonWrapper {
+        display: flex;
+        justify-content: center;
+        padding-top: 2rem;
+        svg {
+          color: var(--color-error);
+        }
+      }
+
+      .mobileMenuList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 7.5rem;
+        a {
+          @include hover {
+            color: var(--color-green-main);
+          }
+        }
+
+        .mobileServiceItem {
+          position: relative;
+          width: 100%;
+          text-align: center;
+
+          .serviceOptionsIcon {
+            position: absolute;
+            margin-left: 1rem;
+          }
+          .serviceOptionsWrapper {
+            overflow: hidden;
+            transition: max-height 500ms ease-in-out;
+
+            &--open {
+              max-height: 500px;
+            }
+
+            &--closed {
+              max-height: 0;
+            }
+
+            .mobileServiceOption {
+              display: block;
+              width: 100%;
+              text-align: center;
+              @include hover {
+                color: var(--color-green-main);
+              }
+            }
+          }
+        }
+        .callToAction {
+          padding-top: 7.5rem;
+        }
+      }
+    }
+  }
+}

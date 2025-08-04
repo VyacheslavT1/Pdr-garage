@@ -1,0 +1,59 @@
+.heroSection {
+  position: relative;
+  height: 100vh;
+
+  .heroImage {
+    object-fit: cover;
+  }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .overlayContent {
+      max-width: 1440px;
+      width: 100%;
+      padding: 0 2rem;
+      @media (min-width: 1200px) {
+        padding-inline: 5rem;
+      }
+      @media (min-width: 1600px) {
+        padding-inline: 0;
+        margin-inline: auto;
+      }
+      .title {
+        font-size: 1.5rem;
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        line-height: 1.5;
+        @media (min-width: 768px) {
+          font-size: 2.5rem;
+        }
+      }
+      .subtitle {
+        font-size: 1rem;
+        font-weight: 100;
+        text-align: center;
+        padding: 2rem 0 4rem 0;
+        letter-spacing: 0.05em;
+        line-height: 1.5;
+        color: var(--color-grey-10);
+        @media (min-width: 768px) {
+          font-size: 1.25rem;
+          font-weight: 400;
+        }
+      }
+      .actions {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        button {
+          width: 15rem;
+        }
+      }
+    }
+  }
+}

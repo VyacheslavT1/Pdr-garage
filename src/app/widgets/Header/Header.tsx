@@ -1,61 +1,186 @@
 // app/widgets/Header/Header.tsx
 "use client";
 
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
+import LogoIcon from "@/app/shared/Icons/logo.svg";
+import ChevronDownIcon from "@/app/shared/Icons/chevron-down.svg";
+import ChevronUpIcon from "@/app/shared/Icons/chevron-up.svg";
+import MenuIcon from "@/app/shared/Icons/menu.svg";
+import CloseIcon from "@/app/shared/Icons/close.svg";
 import Button from "@/app/shared/ui/Button/Button";
 import Dropdown from "@/app/shared/ui/Dropdown/Dropdown";
 import { LanguageSwitcher } from "@/app/shared/ui/LanguageSwitcher/LanguageSwitcher";
 import { getServiceOptions } from "./serviceOptions";
+import { useTranslations } from "next-intl";
+import styles from "./Header.module.css";
 
-interface HeaderProps {}
+const Header: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
 
-const Header: React.FC<HeaderProps> = () => {
+  const serviceRefWrapper = useRef<HTMLLIElement>(null);
+
   const serviceOptions = getServiceOptions();
+  const t = useTranslations("Header");
+
+  useEffect(() => {
+    if (!isServicesOpen) return;
+    const handleOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        serviceRefWrapper.current &&
+        !serviceRefWrapper.current.contains(event.target as Node)
+      ) {
+        setIsServicesOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside);
+  }, [isServicesOpen]);
+
   return (
-    <header className="w-full bg-blue-500 shadow-sm">
-      <nav className="container mx-auto flex items-center justify-between py-4 px-6">
-        <Link href="/" className="text-xl font-semibold">
-          PDR Garage
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        {/* Логотип */}
+        <Link href="/" className={styles.logoLink}>
+          <LogoIcon className={styles.logoIcon} />
         </Link>
-        <ul className="flex space-x-8 items-center">
-          <li>
-            <LanguageSwitcher />
-          </li>
-          <li className="relative group">
-            <Link href="/#features" className="hover:text-green-500">
-              Services
+
+        {/* Десктоп-меню */}
+        <ul className={styles.menuList}>
+          <li className={styles.menuItem}>
+            <Link href="/#services" className={styles.servicesLink}>
+              {t("services").toLocaleUpperCase()}
+              <ChevronDownIcon className={styles.chevronDownIcon} />
+              <ChevronUpIcon className={styles.chevronUpIcon} />
             </Link>
+
             <Dropdown
-              className="hidden group-hover:block absolute top-full left-0"
+              className={styles.serviceOptions}
               options={serviceOptions}
             />
           </li>
-
           <li>
-            <Link href="/#about" className="hover:text-green-500">
-              About us
-            </Link>
-          </li>
-          {/* uncomment when store is ready */}
-          {/* <li>
-            <Link href="/#store" className="hover:text-green-500">
-              Store
-            </Link>
-          </li> */}
-          <li>
-            <Link href="/#blog" className="hover:text-green-500">
-              Blog
-            </Link>
+            <Link href="/#about">{t("about").toLocaleUpperCase()}</Link>
           </li>
           <li>
-            <Link href="/#contacts" className="hover:text-green-500">
-              Contacts
-            </Link>
+            <Link href="/#store">{t("store").toLocaleUpperCase()}</Link>
           </li>
           <li>
-            <Button variant="primary">Button</Button>
+            <Link href="/#blog">{t("blog").toLocaleUpperCase()}</Link>
+          </li>
+          <li>
+            <Link href="/#contacts">{t("contacts").toLocaleUpperCase()}</Link>
           </li>
         </ul>
+
+        {/* Десктопные контролы */}
+        <div className={styles.controls}>
+          <div className={styles.requestQuoteButton}>
+            <Button variant="primary">
+              {t("requestQuoteButton").toLocaleUpperCase()}
+            </Button>
+          </div>
+          <LanguageSwitcher />
+          {!isMenuOpen && (
+            <div className={styles.menuButton}>
+              <Button
+                variant="secondary"
+                onClick={() => setIsMenuOpen(true)}
+                aria-label="Open menu"
+              >
+                <MenuIcon />
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {/* Мобильное меню-оверлей */}
+        <div
+          className={`${styles.mobileMenuOverlay} ${
+            isMenuOpen
+              ? styles["mobileMenuOverlay--open"]
+              : styles["mobileMenuOverlay--closed"]
+          }`}
+        >
+          {/* Кнопка закрытия */}
+          <div className={styles.closeButtonWrapper}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsServicesOpen(false);
+              }}
+              aria-label="Close menu"
+            >
+              <CloseIcon />
+            </Button>
+          </div>
+
+          <ul className={styles.mobileMenuList}>
+            <li ref={serviceRefWrapper} className={styles.mobileServiceItem}>
+              {/* Триггер */}
+              <Link
+                href="/#services"
+                onClick={() => setIsServicesOpen((o) => !o)}
+              >
+                {t("services").toLocaleUpperCase()}
+                <span className={styles.serviceOptionsIcon}>
+                  {isServicesOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </span>
+              </Link>
+
+              {/* Обёртка с анимацией max-height */}
+              <div
+                className={`
+                  ${styles.serviceOptionsWrapper}
+                  ${
+                    isServicesOpen
+                      ? styles["serviceOptionsWrapper--open"]
+                      : styles["serviceOptionsWrapper--closed"]
+                  }
+                `}
+              >
+                <Dropdown
+                  options={serviceOptions}
+                  onClose={() => setIsServicesOpen(false)}
+                  onSelect={() => setIsServicesOpen(false)}
+                  renderOption={(opt) => (
+                    <span className={styles.mobileServiceOption}>
+                      {opt.label}
+                    </span>
+                  )}
+                />
+              </div>
+            </li>
+
+            <li>
+              <Link href="/#about" onClick={() => setIsMenuOpen(false)}>
+                {t("about").toLocaleUpperCase()}
+              </Link>
+            </li>
+            <li>
+              <Link href="/#store" onClick={() => setIsMenuOpen(false)}>
+                {t("store").toLocaleUpperCase()}
+              </Link>
+            </li>
+            <li>
+              <Link href="/#blog" onClick={() => setIsMenuOpen(false)}>
+                {t("blog").toLocaleUpperCase()}
+              </Link>
+            </li>
+            <li>
+              <Link href="/#contacts" onClick={() => setIsMenuOpen(false)}>
+                {t("contacts").toLocaleUpperCase()}{" "}
+              </Link>
+            </li>
+            <li className={styles.callToAction}>
+              <Button variant="primary">
+                {t("requestQuoteButton").toLocaleUpperCase()}
+              </Button>
+            </li>
+          </ul>
+        </div>
       </nav>
     </header>
   );

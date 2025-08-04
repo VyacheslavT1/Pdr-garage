@@ -1,5 +1,6 @@
 // app/layout.tsx
 import "./globals.css";
+import { montserrat } from "./shared/ui/fonts";
 
 export const metadata = {
   title: "PDR Garage",
@@ -13,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body className={`${montserrat.className}`}>{children}</body>
     </html>
   );
 }

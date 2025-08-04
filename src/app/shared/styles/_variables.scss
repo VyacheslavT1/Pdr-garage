@@ -1,0 +1,50 @@
+:root {
+  // Colors
+  --color-green-main: #00c950;
+
+  --color-light: #fafafa;
+  --color-light-semi-transparent: rgba(250, 250, 250, 0.8);
+  --color-dark: #222;
+
+  --color-error: #e7000b;
+
+  --color-grey-10: #d1d5db;
+  --color-grey-70: #505050;
+  --color-grey-80: #707070;
+  --color-grey-100: #5c5f6e;
+
+  // Borders
+  --border-radius: 0.5rem;
+  --border-radius-small: 0.25rem;
+
+  // Spacing (padding & margin)
+  --padding-large: 2rem;
+  --padding-small: 1rem;
+  --padding-xsmall: 0.5rem;
+
+  --padding-vertical: 1rem 0;
+  --padding-vertical-small: 0.75rem 0;
+  --padding-vertical-xsmall: 0.5rem 0;
+  --padding-custom-small: 1rem 0.5rem;
+
+  --margin-vertical: 1rem 0;
+  --margin-vertical-small: 0.5rem 0;
+  --margin-small: 1rem;
+  --margin-medium: 1.5rem;
+  --margin-large: 2rem;
+  --margin-xlarge: 4rem;
+  --margin-custom: 2rem 4rem;
+
+  // Gap (spacing between elements)
+  --gap-large: 2.5rem;
+  --gap-medium: 1.5rem;
+  --gap-small: 1rem;
+  --gap-xsmall: 0.5rem;
+
+  // Fonts
+  --font-size-small: 0.75rem;
+  --font-size-xsmall: 0.6rem;
+  --font-weight-bold: 700;
+
+  --line-height-medium: 1.2rem;
+}

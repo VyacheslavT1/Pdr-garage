@@ -1,0 +1,19 @@
+@use "../../styles/mixins" as *;
+
+.dropdownWrapper {
+  width: 100%;
+  z-index: 10;
+  background-color: #27272a;
+  overflow: hidden;
+
+  .dropdownOption {
+    width: 100%;
+    border-bottom: 1px solid #3f3f46;
+    color: var(--color-light);
+    padding: 0.7rem 0;
+    cursor: pointer;
+    @include hover {
+      color: var(--color-green-main);
+    }
+  }
+}
