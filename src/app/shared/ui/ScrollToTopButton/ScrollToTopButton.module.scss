@@ -1,9 +1,12 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
 .stickyButton {
   position: fixed;
   bottom: 0.5rem;
   right: 1rem;
   z-index: 100;
-  transition: all 500ms ease-in-out;
+  transition: all var(--transition);
   opacity: 0;
   pointer-events: none;
 
@@ -12,7 +15,6 @@
     pointer-events: auto;
   }
   svg {
-    width: 2rem;
-    height: 2rem;
+    @include size(2rem, 2rem);
   }
 }

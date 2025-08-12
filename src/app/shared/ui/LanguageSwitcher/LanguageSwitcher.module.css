@@ -19,12 +19,12 @@
 }
 @media (hover: hover) {
   .languageSwitcher .languageSwitcherButton button svg:hover, .languageSwitcher .languageSwitcherButton button svg.is-active {
-    color: var(--color-green-main);
+    color: var(--color-main);
   }
 }
 @media (hover: none) {
   .languageSwitcher .languageSwitcherButton button svg:active, .languageSwitcher .languageSwitcherButton button svg.is-active {
-    color: var(--color-green-main);
+    color: var(--color-main);
   }
 }
 .languageSwitcher .dropdown {
@@ -33,9 +33,9 @@
   width: 100%;
   z-index: 50;
   transition: all 500ms ease-in-out;
-  opacity: 0;
   transform: scaleY(0.75);
   transform-origin: top;
+  opacity: 0;
   visibility: hidden;
 }
 .languageSwitcher .dropdown .dropdownOption {
@@ -43,7 +43,7 @@
   justify-content: center;
 }
 .languageSwitcher .dropdown .dropdownOption.active {
-  font-weight: 600;
+  font-weight: var(--font-semi-bold);
   text-decoration: underline;
   text-underline-offset: 0.25rem;
 }

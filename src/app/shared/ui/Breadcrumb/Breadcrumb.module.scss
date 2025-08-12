@@ -1,0 +1,30 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.breadcrumbWrapper {
+  display: flex;
+  justify-content: center;
+  margin-block: var(--margin-large);
+  padding-inline: var(--padding-small);
+
+  .breadcrumbList {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+    line-height: var(--line-height-xlarge);
+
+    a {
+      @include hover {
+        color: var(--color-main);
+        transition: color var(--transition);
+      }
+    }
+    .disabled {
+      color: var(--color-main);
+    }
+    .separator {
+      padding-inline: var(--padding-small);
+    }
+  }
+}

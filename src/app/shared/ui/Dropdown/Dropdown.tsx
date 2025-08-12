@@ -1,5 +1,10 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { useLocale } from "next-intl";
 import styles from "./Dropdown.module.scss";
+
 interface Options {
   value: string;
   label: string;
@@ -13,6 +18,7 @@ export interface DropdownProps {
   renderOption?: (option: Options, isActive: boolean) => React.ReactNode;
   onSelect?: (newValue: string) => void;
   onClose?: () => void;
+  getHref?: (value: string) => string;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -22,18 +28,16 @@ const Dropdown: React.FC<DropdownProps> = ({
   renderOption,
   renderValue,
   onClose,
+  getHref,
   value,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const selectedOption = options.find((option) => option.value === value);
   const [isOpen, setIsOpen] = useState(false);
+  const locale = useLocale();
 
   useEffect(() => {
-    // выходим сразу, если это dropdown для десктопа (нет renderValue)
-    if (!renderValue) {
-      return;
-    }
-
+    if (!renderValue) return;
     const handleTouchOutside = (event: TouchEvent) => {
       if (
         wrapperRef.current &&
@@ -43,44 +47,68 @@ const Dropdown: React.FC<DropdownProps> = ({
         onClose?.();
       }
     };
-
     document.addEventListener("touchstart", handleTouchOutside);
     return () => {
       document.removeEventListener("touchstart", handleTouchOutside);
     };
   }, [onClose, renderValue]);
 
+  // Открываем/закрываем при клике по заголовку
+  const toggleOpen = () => {
+    setIsOpen((prev) => !prev);
+    if (isOpen) onClose?.();
+  };
+
   return (
     <div
       ref={wrapperRef}
       className={`${styles.dropdownWrapper} ${className}`}
-      onClick={
-        renderValue
-          ? () => {
-              setIsOpen((prev) => !prev);
-              if (isOpen) {
-                onClose?.();
-              }
-            }
-          : undefined
-      }
+      onClick={renderValue ? toggleOpen : undefined}
     >
       {renderValue && renderValue(selectedOption)}
 
       {(renderValue ? isOpen : true) &&
-        options.map((opt) => (
-          <div
-            key={opt.value}
-            onClick={() => {
-              onSelect?.(opt.value);
-              setIsOpen(false);
-              onClose?.();
-            }}
-            className={styles.dropdownOption}
-          >
-            {renderOption ? renderOption(opt, opt.value === value) : opt.label}
-          </div>
-        ))}
+        options.map((opt) => {
+          const isActive = opt.value === value;
+          const href = getHref
+            ? getHref(opt.value)
+            : `/${locale}/services/${opt.value}`;
+
+          // если передали renderOption, даём ему полную свободу
+          if (renderOption) {
+            const node = renderOption(opt, isActive);
+            // Подменяем клик, чтобы закрыть dropdown и вызвать onSelect
+            return (
+              <div
+                key={opt.value}
+                className={styles.dropdownOption}
+                onClick={() => {
+                  onSelect?.(opt.value);
+                  setIsOpen(false);
+                  onClose?.();
+                }}
+              >
+                {node}
+              </div>
+            );
+          }
+
+          // иначе — стандартный пункт со ссылкой
+          return (
+            <Link
+              key={opt.value}
+              href={href}
+              className={styles.dropdownOption}
+              onClick={() => {
+                onSelect?.(opt.value);
+                setIsOpen(false);
+                onClose?.();
+              }}
+            >
+              {opt.label}
+            </Link>
+          );
+        })}
     </div>
   );
 };

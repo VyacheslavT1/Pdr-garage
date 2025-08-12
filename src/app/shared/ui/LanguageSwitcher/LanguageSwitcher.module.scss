@@ -10,15 +10,13 @@
 
     button {
       svg {
-        width: 1rem;
-        height: 1rem;
+        @include size(1rem, 1rem);
         @media (min-width: 768px) {
-          width: 1.5rem;
-          height: 1.5rem;
+          @include size(1.5rem, 1.5rem);
         }
         color: var(--color-light);
         @include hover {
-          color: var(--color-green-main);
+          color: var(--color-main);
         }
       }
     }
@@ -27,13 +25,12 @@
   .dropdown {
     position: absolute;
     top: 100%;
-    // max-width: 3rem;
     width: 100%;
     z-index: 50;
     transition: all 500ms ease-in-out;
-    opacity: 0;
     transform: scaleY(0.75);
     transform-origin: top;
+    opacity: 0;
     visibility: hidden;
 
     .dropdownOption {
@@ -41,7 +38,7 @@
       justify-content: center;
 
       &.active {
-        font-weight: 600;
+        font-weight: var(--font-semi-bold);
         text-decoration: underline;
         text-underline-offset: 0.25rem;
       }

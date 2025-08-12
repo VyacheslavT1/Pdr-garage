@@ -1,14 +1,14 @@
 // app/[locale]/page.tsx
 import HeroSection from "@/app/widgets/ HeroSection/ HeroSection";
-import AboutUs from "@/app/widgets/About/About";
-import Services from "@/app/widgets/Services/Services";
+import ShortDescription from "@/app/widgets/ShortDescription/ShortDescription";
+import ServicesSwiper from "@/app/widgets/ServicesSwiper/ServicesSwiper";
 
-export default function HomePage() {
+export default function Page() {
   return (
-    <main>
+    <>
       <HeroSection />
-      <AboutUs />
-      <Services />
-    </main>
+      <ShortDescription />
+      <ServicesSwiper />
+    </>
   );
 }

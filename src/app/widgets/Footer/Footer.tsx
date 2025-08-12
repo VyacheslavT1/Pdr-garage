@@ -10,7 +10,7 @@ import EmailIcon from "@/app/shared/Icons/mail.svg";
 import MapPinIcon from "@/app/shared/Icons/map-pin.svg";
 import ClockIcon from "@/app/shared/Icons/clock.svg";
 import Link from "next/link";
-import { getServiceOptions } from "@/app/widgets/Header/serviceOptions";
+import { getServiceOptions } from "@/app/shared/data/serviceOptions";
 import { ebGaramond } from "@/app/shared/ui/fonts";
 import styles from "./Footer.module.css";
 import { FaInstagram, FaFacebookF, FaTelegram } from "react-icons/fa";
@@ -35,7 +35,7 @@ export default function Footer() {
           <ul>
             {options.map((opt) => (
               <li key={opt.value}>
-                <Link href={`#${opt.value}`}>
+                <Link href={`/services/${opt.value}`}>
                   <ScrewdriverWrenchIcon className={styles.icon} />
                   {opt.label}
                 </Link>

@@ -6,11 +6,14 @@
   align-items: center;
   justify-content: center;
   gap: var(--gap-xsmall);
-  padding: 0.7rem 1rem;
+  padding: var(--padding-button);
   border: none;
   border-radius: var(--border-radius);
   outline: none;
   cursor: pointer;
+  font-weight: var(--font-medium);
+  font-family: inherit;
+  font-size: var(--font-size-base);
 }
 
 .primary {
@@ -27,8 +30,8 @@
 
   @include hover {
     &:not(:disabled) {
-      color: var(--color-green-main);
-      border: 1px solid var(--color-green-main);
+      color: var(--color-main);
+      border: 1px solid var(--color-main);
     }
   }
   &:active {
@@ -38,7 +41,7 @@
 
 .secondary {
   background-color: transparent;
-  color: var(--color-light-constant);
+  color: var(--color-light);
   &:disabled {
     filter: brightness(0.6);
     cursor: not-allowed;

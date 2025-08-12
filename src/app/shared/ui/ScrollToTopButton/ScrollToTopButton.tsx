@@ -12,7 +12,6 @@ export default function ScrollToTopButton() {
     const onScroll = () => {
       const scrollY = window.scrollY;
       const threshold = window.innerHeight * 0.5;
-      console.log("scrollY:", scrollY, "threshold:", threshold);
       setIsVisible(scrollY > threshold);
     };
 

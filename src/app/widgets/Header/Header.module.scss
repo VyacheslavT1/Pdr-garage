@@ -6,41 +6,22 @@
   top: 0;
   z-index: 100;
   width: 100%;
-  padding: 0 1rem;
+  padding-inline: var(--padding-small);
   background-color: var(--color-dark);
-  box-shadow: #18181b 0px 4px 6px -1px, #0000000f 0px 2px 4px -1px;
-  @media (min-width: 576px) {
-    padding-inline: 1.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding-inline: 1rem;
-  }
-
-  @media (min-width: 1050px) {
-    padding-inline: 1.5rem;
-  }
-
-  @media (min-width: 1200px) {
-    padding-inline: 5rem;
-  }
-
-  @media (min-width: 1600px) {
-    padding-inline: 0;
-    margin-inline: auto;
-  }
+  box-shadow: var(--color-grey-dark) 0px 4px 6px -1px,
+    var(--color-overlay-dark) 0px 2px 4px -1px;
 
   .nav {
     display: flex;
     align-items: center;
     align-self: stretch;
     justify-content: space-between;
-    max-width: 1440px;
+    max-width: 1200px;
     margin-inline: auto;
     .logoLink {
       display: flex;
       @media (max-width: 439px) {
-        padding: 0.5rem 0;
+        padding-block: var(--padding-xsmall);
       }
 
       .logoIcon {
@@ -57,7 +38,9 @@
     .menuList {
       display: none;
       position: relative;
-      a {
+
+      .servicesLink,
+      .menuLink {
         position: relative;
 
         &::before {
@@ -67,11 +50,11 @@
           left: 50%;
           width: 0;
           height: 2px;
-          background-color: var(--color-green-main);
-          transition: width 0.5s ease-in-out, left 0.5s ease-in-out;
+          background-color: var(--color-main);
+          transition: width var(--transition), left var(--transition);
         }
         @include hover {
-          color: var(--color-green-main);
+          color: var(--color-main);
           &::before {
             width: 100%;
             left: 0;
@@ -82,17 +65,21 @@
       @media (min-width: 1024px) {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: var(--gap-small);
         color: var(--color-light);
       }
 
+      @media (min-width: 1200px) {
+        gap: var(--gap-medium);
+      }
+
       .menuItem {
-        padding: 1.5rem 0;
+        padding-block: var(--padding-medium);
 
         .servicesLink {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: var(--gap-xsmall);
 
           .chevronDownIcon {
             display: block;
@@ -117,15 +104,15 @@
         .serviceOptions {
           position: absolute;
           top: 100%;
-          box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
-            rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+          box-shadow: var(--color-grey-dark) 0px 4px 6px -1px,
+            var(--color-overlay-dark) 0px 2px 4px -1px;
           z-index: 50;
-          transition: all 500ms ease-in-out;
+          transition: all var(--transition);
           opacity: 0;
           transform: scaleY(0.75);
           transform-origin: top;
           visibility: hidden;
-          text-indent: 1rem;
+          text-indent: var(--text-indent-small);
         }
         @media (hover: hover) and (pointer: fine) {
           @include hover {
@@ -151,12 +138,12 @@
       display: flex;
       align-items: center;
       align-self: stretch;
-      gap: 1rem;
+      gap: var(--gap-small);
       .requestQuoteButton {
         display: none;
         @media (440px <= width < 1024px) {
           display: block;
-          padding: 0.5rem 0;
+          padding-block: var(--padding-xsmall);
         }
         @media (min-width: 1024px) {
           display: block;
@@ -172,8 +159,7 @@
           svg {
             color: var(--color-light);
             @media (min-width: 768px) {
-              width: 1.5rem;
-              height: 1.5rem;
+              @include size(1.5rem, 1.5rem);
             }
           }
         }
@@ -190,7 +176,7 @@
       overflow: hidden;
       background-color: var(--color-dark);
       color: var(--color-light);
-      transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+      transition: height var(--transition), background-color var(--transition);
 
       &--open {
         height: 100vh;
@@ -203,7 +189,7 @@
       .closeButtonWrapper {
         display: flex;
         justify-content: center;
-        padding-top: 2rem;
+        padding-top: var(--padding-large);
         svg {
           color: var(--color-error);
         }
@@ -213,11 +199,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
-        margin-top: 7.5rem;
+        gap: var(--gap-regular);
+        margin-top: var(--margin-xxl);
         a {
           @include hover {
-            color: var(--color-green-main);
+            color: var(--color-main);
           }
         }
 
@@ -228,11 +214,11 @@
 
           .serviceOptionsIcon {
             position: absolute;
-            margin-left: 1rem;
+            margin-left: var(--margin-small);
           }
           .serviceOptionsWrapper {
             overflow: hidden;
-            transition: max-height 500ms ease-in-out;
+            transition: max-height var(--transition);
 
             &--open {
               max-height: 500px;
@@ -241,21 +227,41 @@
             &--closed {
               max-height: 0;
             }
-
-            .mobileServiceOption {
-              display: block;
-              width: 100%;
-              text-align: center;
-              @include hover {
-                color: var(--color-green-main);
-              }
-            }
           }
         }
         .callToAction {
-          padding-top: 7.5rem;
+          padding-top: var(--padding-xxl);
         }
       }
     }
+  }
+}
+@media (min-width: 576px) {
+  .header {
+    padding-inline: var(--padding-medium);
+  }
+}
+
+@media (min-width: 1024px) {
+  .header {
+    padding-inline: var(--padding-small);
+  }
+}
+
+@media (min-width: 1050px) {
+  .header {
+    padding-inline: var(--padding-medium);
+  }
+}
+
+@media (min-width: 1200px) {
+  .header {
+    padding-inline: var(--padding-xlarge);
+  }
+}
+
+@media (min-width: 1440px) {
+  .header {
+    padding-inline: 0;
   }
 }

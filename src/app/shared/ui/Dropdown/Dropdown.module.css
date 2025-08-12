@@ -1,23 +1,25 @@
 .dropdownWrapper {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   z-index: 10;
-  background-color: #27272a;
+  background-color: var(--color-grey-charcoal);
   overflow: hidden;
 }
 .dropdownWrapper .dropdownOption {
   width: 100%;
-  border-bottom: 1px solid #3f3f46;
+  border-bottom: 1px solid var(--color-grey-slate);
   color: var(--color-light);
-  padding: 0.7rem 0;
+  padding-block: 0.7rem;
   cursor: pointer;
 }
 @media (hover: hover) {
   .dropdownWrapper .dropdownOption:hover, .dropdownWrapper .dropdownOption.is-active {
-    color: var(--color-green-main);
+    color: var(--color-main);
   }
 }
 @media (hover: none) {
   .dropdownWrapper .dropdownOption:active, .dropdownWrapper .dropdownOption.is-active {
-    color: var(--color-green-main);
+    color: var(--color-main);
   }
 }/*# sourceMappingURL=Dropdown.module.css.map */

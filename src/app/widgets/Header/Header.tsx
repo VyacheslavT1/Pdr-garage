@@ -3,6 +3,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import LogoIcon from "@/app/shared/Icons/logo.svg";
 import ChevronDownIcon from "@/app/shared/Icons/chevron-down.svg";
 import ChevronUpIcon from "@/app/shared/Icons/chevron-up.svg";
@@ -11,13 +12,14 @@ import CloseIcon from "@/app/shared/Icons/close.svg";
 import Button from "@/app/shared/ui/Button/Button";
 import Dropdown from "@/app/shared/ui/Dropdown/Dropdown";
 import { LanguageSwitcher } from "@/app/shared/ui/LanguageSwitcher/LanguageSwitcher";
-import { getServiceOptions } from "./serviceOptions";
+import { getServiceOptions } from "../../shared/data/serviceOptions";
 import { useTranslations } from "next-intl";
 import styles from "./Header.module.css";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const router = useRouter();
 
   const serviceRefWrapper = useRef<HTMLLIElement>(null);
 
@@ -49,7 +51,7 @@ const Header: React.FC = () => {
         {/* Десктоп-меню */}
         <ul className={styles.menuList}>
           <li className={styles.menuItem}>
-            <Link href="/#services" className={styles.servicesLink}>
+            <Link href="/services" className={styles.servicesLink}>
               {t("services").toLocaleUpperCase()}
               <ChevronDownIcon className={styles.chevronDownIcon} />
               <ChevronUpIcon className={styles.chevronUpIcon} />
@@ -61,16 +63,24 @@ const Header: React.FC = () => {
             />
           </li>
           <li>
-            <Link href="/#about">{t("about").toLocaleUpperCase()}</Link>
+            <Link href="/about" className={styles.menuLink}>
+              {t("about").toLocaleUpperCase()}
+            </Link>
           </li>
           <li>
-            <Link href="/#store">{t("store").toLocaleUpperCase()}</Link>
+            <Link href="/store" className={styles.menuLink}>
+              {t("store").toLocaleUpperCase()}
+            </Link>
           </li>
           <li>
-            <Link href="/#blog">{t("blog").toLocaleUpperCase()}</Link>
+            <Link href="/blog" className={styles.menuLink}>
+              {t("blog").toLocaleUpperCase()}
+            </Link>
           </li>
           <li>
-            <Link href="/#contacts">{t("contacts").toLocaleUpperCase()}</Link>
+            <Link href="/contacts" className={styles.menuLink}>
+              {t("contacts").toLocaleUpperCase()}
+            </Link>
           </li>
         </ul>
 
@@ -121,11 +131,20 @@ const Header: React.FC = () => {
             <li ref={serviceRefWrapper} className={styles.mobileServiceItem}>
               {/* Триггер */}
               <Link
-                href="/#services"
-                onClick={() => setIsServicesOpen((o) => !o)}
+                href="/services"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                }}
               >
                 {t("services").toLocaleUpperCase()}
-                <span className={styles.serviceOptionsIcon}>
+                <span
+                  className={styles.serviceOptionsIcon}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsServicesOpen((o) => !o);
+                  }}
+                >
                   {isServicesOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </span>
               </Link>
@@ -144,33 +163,33 @@ const Header: React.FC = () => {
                 <Dropdown
                   options={serviceOptions}
                   onClose={() => setIsServicesOpen(false)}
-                  onSelect={() => setIsServicesOpen(false)}
-                  renderOption={(opt) => (
-                    <span className={styles.mobileServiceOption}>
-                      {opt.label}
-                    </span>
-                  )}
+                  onSelect={() => setIsMenuOpen(false)}
+                  // renderOption={(opt) => (
+                  //   <span className={styles.mobileServiceOption}>
+                  //     {opt.label}
+                  //   </span>
+                  // )}
                 />
               </div>
             </li>
 
             <li>
-              <Link href="/#about" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/about" onClick={() => setIsMenuOpen(false)}>
                 {t("about").toLocaleUpperCase()}
               </Link>
             </li>
             <li>
-              <Link href="/#store" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/store" onClick={() => setIsMenuOpen(false)}>
                 {t("store").toLocaleUpperCase()}
               </Link>
             </li>
             <li>
-              <Link href="/#blog" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/blog" onClick={() => setIsMenuOpen(false)}>
                 {t("blog").toLocaleUpperCase()}
               </Link>
             </li>
             <li>
-              <Link href="/#contacts" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/contacts" onClick={() => setIsMenuOpen(false)}>
                 {t("contacts").toLocaleUpperCase()}{" "}
               </Link>
             </li>

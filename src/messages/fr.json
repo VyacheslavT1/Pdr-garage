@@ -11,8 +11,8 @@
     "title": "Débosselage sans peinture à partir de 30 minutes",
     "subtitle": "Le service PDR STUDIO est heureux de vous proposer des prestations de débosselage de haute qualité pour tous types de bosses, quelle que soit leur complexité. Nous les supprimons rapidement et sans laisser de trace, sans aucune peinture! Aucun acompte n’est requis. Réparation de véhicules toutes marques.",
     "mainPictureAlt": "Image: travail en atelier",
-    "allServicesButton": "Tous les services",
-    "detailsButton": "Savoir plus"
+    "allServicesLink": "Tous les services",
+    "detailsLink": "Savoir plus"
   },
   "getServiceOptions": {
     "bodyRepair": "Réparation de la carrosserie et peinture",
@@ -29,14 +29,40 @@
     "about2": "Nous accordons la même attention à chaque voiture, qu’il s’agisse d’une berline premium exclusive ou d’une citadine pratique. Outre le débosselage, nos techniciens poncent et polissent les vitres, restaurent la transparence des phares, appliquent des films de protection et décoratifs sur la carrosserie et dans l’habitacle, et remettent impeccablement en état jantes et rétroviseurs.",
     "about3": "Nous n’utilisons que des technologies éprouvées et du matériel professionnel, pour des résultats précis et durables, sans perdre votre temps ni votre argent. Aucun acompte : vous ne payez qu’après avoir jugé la qualité de notre travail.",
     "about4": "Plébiscité par de grandes concessions et centres techniques, de nombreux véhicules « traités » ravissent déjà leurs propriétaires. Découvrez notre portfolio et constatez par vous-même qu’avec PDR Studio, votre véhicule restera toujours impeccable !",
-    "detailsButton": "Savoir plus",
+    "detailsLink": "Savoir plus",
     "beforeImageAlt": "Avant débosselage d'une voiture",
     "afterImageAlt": "Après débosselage d'une voiture"
   },
-  "Services": {
+  "ServicesSwiper": {
     "weOffer": "Trouvez ici tous nos",
-    "serviceTypes": "Types de services",
+    "serviceTypes": "Types de services"
+  },
+  "Footer": {
+    "motto": "redonne aux véhicules une apparence irréprochable : il élimine délicatement les bosses sans peinture et restaure la carrosserie ainsi que les vitres à leur état d’origine!",
+    "services": "Nos services",
+    "usefulLinks": "Liens utiles",
+    "about": "À propos",
+    "contactUs": "Contactez-nous",
+    "contactsInfo": "Nos coordonnées",
+    "businessHours": "Horaires d'Ouverture",
+    "socialTitle": "Nos réseaux sociaux",
 
+    "copyright": "Débosselage sans peinture des bosses, rayures et éclats, retouche locale de peinture, polissage, réparation des vitres, éclats et fissures."
+  },
+  "ServicesOverview": {
+    "mainTitle": "Nos services"
+  },
+  "Breadcrumb": {
+    "homePage": "Accueil",
+    "services": "Nos services",
+    "bodyRepair": "Réparation de la carrosserie et peinture",
+    "spotTouchUp": "Retouche peinture localisée",
+    "paintlessDentRemoval": "Débosselage sans peinture",
+    "scratchBuffing": "Polissage des rayures et éraflures",
+    "glassCrackRepair": "Réparation des fissures et éclats de verre",
+    "restorativePolish": "Polissage restauratif de la peinture"
+  },
+  "ServiceCard": {
     "bodyRepair": "Réparation de la carrosserie et peinture",
     "spotTouchUp": "Retouche peinture localisée",
     "paintlessDentRemoval": "Débosselage sans peinture",
@@ -51,18 +77,77 @@
     "glassCrackRepairDesc": "Chez PDRGARAGE, nous effectuons la réparation précise des éclats et fissures sur tous types de vitrages, restaurant leur transparence et leur résistance.",
     "restorativePolishDesc": "Notre service complet de polissage restaurateur chez PDRGARAGE redonne aux véhicules l’apparence d’usine, même après des années d’utilisation.",
 
+    "bodyRepairFull1": "Dans notre atelier PDRSTUDIO, nos spécialistes réalisent des réparations de carrosserie de haute qualité et à moindre coût, quelle que soit leur complexité. Nous prenons en charge des véhicules de toutes marques et modèles, en proposant des solutions globales pour restaurer l’aspect visuel et l’état technique. Même en cas de dommages importants, lorsque le véhicule semble irréparable à première vue, nous trouvons une solution optimale et économique pour éliminer tous les défauts.",
+    "bodyRepairFull2": "La réparation de carrosserie comprend le redressage des bosses, le soudage des fissures, la suppression des éclats et autres dommages, suivis de la finition et de la peinture. Une fois les travaux terminés, les défauts deviennent pratiquement invisibles, même lors d’une inspection attentive. En fonction de la nature et de l’ampleur des dommages, nous utilisons différentes techniques — de la méthode indolore PDR (réparation de bosses sans peinture) jusqu’au redressage sur banc et à la peinture complète de la carrosserie.",
+    "bodyRepairFull3": "Dans nos centres de service, nous employons des bancs de redressage modernes, un équipement de soudage professionnel et des matériaux de peinture et de revêtement certifiés. Nous n’imposons jamais de services superflus : si la restauration peut se faire par un simple polissage local ou une retouche de peinture ciblée, vous obtiendrez exactement ce dont vous avez besoin, sans dépenses excessives.",
+    "bodyRepairFull4": "Nous garantissons une qualité irréprochable des travaux réalisés et la durabilité des résultats. Votre sécurité et votre confort sur la route seront toujours assurés de manière fiable.",
+
+    "spotTouchUpFull1": "Tout propriétaire de voiture est inévitablement confronté à des rayures, éraflures, éclats, bosses et autres défauts de carrosserie. Il est essentiel de les traiter rapidement, car dans la plupart des cas, il ne s’agit pas seulement d’imperfections esthétiques, mais aussi d’un risque de conséquences plus graves pour l’intégrité du véhicule.",
+    "spotTouchUpFull2": "Si la peinture est endommagée jusqu’au métal, la corrosion commencera presque immédiatement et le coût des réparations peut augmenter considérablement. Les automobilistes souhaitent que la réparation des défauts soit réalisée dans les plus brefs délais et à un prix abordable. Dans ce cas, la retouche locale ou la peinture partielle est la solution optimale.",
+    "spotTouchUpFull3": "La retouche locale comprend une préparation minutieuse de la zone endommagée : élimination de la corrosion et de l’ancienne couche de peinture, nivellement de la surface par ponçage et mastic, application d’une couche d’apprêt et de plusieurs couches de peinture parfaitement assorties à la teinte d’origine du véhicule. L’étape finale consiste à appliquer une couche de vernis transparent et à polir pour une finition parfaite. Ainsi, les défauts sont complètement dissimulés, et le temps passé en atelier ne dépasse généralement pas une journée.",
+    "spotTouchUpFull4": "En plus de la rapidité et du coût maîtrisé, la retouche locale permet de préserver la peinture d’usine sur le reste de la carrosserie et d’éviter une peinture complète onéreuse. Grâce aux technologies modernes de correspondance des couleurs et aux matériaux professionnels, le résultat est pratiquement indiscernable de la finition d’usine — même en l’examinant de près, vous ne remarquerez pas où la restauration a été effectuée.",
+
+    "paintlessDentRemovalFull1": "Cette technologie permet de restaurer rapidement et avec précision la surface d’origine des éléments de carrosserie sans recourir aux travaux de tôlerie et de peinture traditionnels. Grâce à des outils et des méthodes spécialisés, un technicien corrige délicatement les bosses de toute complexité – des petits chocs de porte aux déformations plus importantes du coffre – tout en préservant la peinture et le vernis d’usine. Le véhicule retrouve ainsi son aspect initial en quelques heures, vous faisant gagner du temps et de l'argent.",
+    "paintlessDentRemovalFull2": "Cependant, si le dommage affecte la couche de peinture et nécessite une retouche localisée, notre studio propose le service de « redressage de haute précision » en préparation à la peinture. Ce service comprend une préparation minimale de la surface : redressage précis du métal sur un banc de redressage au dixième de millimètre, élimination des microfissures et des éclats, suivi de l’application d’une couche d’apprêt et de peinture parfaitement assortie à la teinte d’origine. Une fine couche de peinture et de vernis transparent est appliquée en plusieurs passes pour s’intégrer parfaitement à la finition existante et protéger le métal de la corrosion.",
+    "paintlessDentRemovalFull3": "La technique PDR (Paintless Dent Repair) consiste à restaurer la forme d’un élément de carrosserie sans utiliser de mastic ni de peinture. Les techniciens insèrent soigneusement des crochets et des tiges plates spéciaux derrière la tôle et font doucement ressortir la bosse vers l’extérieur, en contrôlant l’avancement à l’aide d’une règle de reflet ou d’un miroir. Cela permet de préserver la structure de la peinture d’usine, d’éviter un éclat « plastique » et de maintenir la protection anticorrosion d’origine.",
+    "paintlessDentRemovalFull4": "La méthode PDR convient aux éléments en acier, en aluminium et en plastique – ailes, portières, capots et même pare-chocs. Grâce à la contrainte mécanique minimale et à l’absence de chauffage des pièces de carrosserie, le risque de fissures et de défauts cachés est supprimé. Les économies sur les matériaux et le temps réduit passé en atelier font du PDR une solution à la fois douce et économique.",
+
+    "scratchBuffingFull1": "Nous effectuons la réparation des rayures selon notre propre méthode, perfectionnée au fil des années et développée par notre maître principal fort de plus de vingt ans d’expérience. Le processus est conçu pour restaurer la surface avec précision, sans opérations inutiles.",
+    "scratchBuffingFull2": "Le retrait des rayures sans peinture est notre spécialité. Au fil du temps, nous avons tout vu : traces de clés ou de clous, marques laissées par des grattoirs, conséquences de stationnements ratés, coups de portières voisines sur les parkings, frottements de pare‑chocs — la liste est longue.",
+    "scratchBuffingFull3": "Et ce n’est là qu’une partie des dommages typiques que nous réparons avec succès depuis de nombreuses années, en préservant la texture d’usine et l’épaisseur d’origine de la peinture.",
+
+    "scratchBuffingFullLi11": "La clé principale d’une réparation réussie, c’est la grande expérience de nos artisans.",
+    "scratchBuffingFullLi12": "Nous commençons les réparations uniquement lorsque nous sommes pleinement confiants dans un résultat positif.",
+    "scratchBuffingFullLi13": "Nous éliminons les rayures sans peinture, alors que d’autres ateliers proposent de repeindre.",
+
+    "scratchBuffingFullTitle1": "Suppression des rayures sans peinture — méthodes de réparation :",
+
+    "scratchBuffingFullLi21": "La suppression des rayures sans peinture consiste en un polissage abrasif en trois étapes des zones endommagées de la carrosserie.",
+    "scratchBuffingLi21strong": "Ce procédé supprime les rayures superficielles lorsque seul le vernis est touché.",
+
+    "scratchBuffingFullLi22": "Nous comblons la rayure avec un apprêt, procédons à un séchage intermédiaire ; après séchage, nous appliquons la peinture et le vernis, puis, après 30 minutes de séchage, nous polissons la zone réparée.",
+    "scratchBuffingLi22strong": "Suppression des rayures profondes sans peinture par la méthode de retouche.",
+
+    "scratchBuffingFullLi23": "La rayure devient invisible et le métal ne rouillera pas à l’avenir. Bien sûr, personne ne souhaite repeindre une pièce entière pour une simple rayure — lors de la revente, il est difficile de prouver que la pièce n’a été repeinte que pour cela. C’est pourquoi ce type de réparation reste très pertinent.",
+    "scratchBuffingLi23strong": "Notre réparation restaure environ 80 % de l’état initial de la peinture de la pièce endommagée.",
+
+    "scratchBuffingFullLi24": "(Peinture partielle du capot, du pare‑chocs, de la porte) — lors d’une réparation locale, la pièce n’est pas démontée, seule la zone endommagée est peinte. Cette technique de réparation locale permet de corriger rapidement et à moindre coût les rayures, frottements et éclats. Après l’intervention, il ne restera aucune trace et le revêtement aura l’aspect d’origine.",
+    "scratchBuffingFullLi24strong": "Peinture locale des rayures.",
+
+    "scratchBuffingFullTitle2": "Suppression et peinture des rayures sur un véhicule",
+
+    "scratchBuffingFull4": "Une atteinte à la peinture jusqu’au métal déclenche la corrosion ; ignorer le problème peut conduire plus tard à",
+    "scratchBuffingFull4strong1": "Tout propriétaire de voiture est tôt ou tard confronté à des rayures, frottements, éclats ou bosses. Ces défauts doivent être traités le plus rapidement possible",
+    "scratchBuffingFull4strong2": "afin d’éviter un coût de réparation élevé et une baisse de la valeur du véhicule à la revente.",
+
+    "scratchBuffingFull5": "Nous retirons les restes de l’ancien vernis, égalisons la surface et l’amenons progressivement à un brillant parfait. Les rayures plus importantes sont réparées par retouche : application minutieuse d’un apprêt, séchage, puis peinture et vernis, suivis d’un polissage pour se fondre avec la finition d’origine.",
+    "scratchBuffingFull5strong": "Pour les rayures superficielles touchant uniquement le vernis, nous utilisons un polissage abrasif en trois étapes.",
+
+    "scratchBuffingFull6": "La zone est protégée avec du ruban, l’artisan effectue un redressage au banc avec une précision au dixième de millimètre, élimine les microfissures, applique un apprêt, plusieurs couches de peinture, puis un vernis transparent et un polissage final. Cette approche réduit considérablement le temps d’immobilisation et évite une peinture complète, tout en conservant l’épaisseur et la texture d’origine du revêtement.",
+    "scratchBuffingFull6strong": "Si les dommages atteignent le métal ou nécessitent une intervention plus profonde, nous proposons une peinture locale sans démontage des pièces :",
+
+    "scratchBuffingFull7": "Grâce à notre technologie unique PDR (Paintless Dent Repair) et à de nombreuses années d’expérience, les spécialistes de PDRSTUDIO redonnent à la voiture son aspect d’origine sans frais inutiles ni perte du revêtement d’usine. Nous garantissons qu’après notre intervention,",
+    "scratchBuffingFull7strong": "les défauts deviennent pratiquement invisibles, le métal reste protégé contre la corrosion et vous obtenez un résultat de qualité dans les plus brefs délais.",
+
+    "glassCrackRepairFull": "Nous réparons rapidement et professionnellement les éclats de toute complexité sur les pare-brise et autres vitrages automobiles. Nous redonnons à votre voiture ou moto un aspect impeccable et attrayant. Grâce aux nombreuses années d’expérience de nos spécialistes, à l’utilisation des bonnes techniques et à des polymères innovants, il est pratiquement impossible de détecter l’endroit réparé.",
+    "glassCrackRepairFulLi1": "Nettoyer la zone de l’éclat de la poussière et des saletés. Éliminer les impuretés à l’aide de lingettes, d’une tige en carbure ou de produits chimiques automobiles spéciaux, puis sécher soigneusement.",
+    "glassCrackRepairFulLi2": "Choisir le polymère (verre liquide) en fonction de sa densité et de sa teinte. En présence d’un réseau de fines fissures et de micro-fractures, utiliser une colle à faible viscosité à haute capacité de pénétration. Les gros défauts ouverts sont réparés avec des polymères plus visqueux et denses afin d’assurer une résistance maximale.",
+    "glassCrackRepairFulLi3": "Dans un éclat rond ou en demi-lune, retirer toutes les inclusions d’air à l’aide d’un équipement spécial (en plusieurs cycles). Remplir le défaut avec du polymère, sceller la zone de réparation avec un film thermique et traiter aux ultraviolets pendant 10 à 20 minutes pour durcir. Pendant ce temps, le film se dissout et les résidus sont facilement éliminés avec une lame.",
+    "glassCrackRepairFulLi4": "Pour un éclat en forme d’étoile, percer d’abord au point d’impact principal. Visser le pont injecteur afin que l’anneau d’étanchéité soit fixé autour du centre de l’éclat. Ensuite, en vissant et dévissant alternativement l’injecteur, retirer l’air et remplir l’éclat de polymère. Lors du perçage, préserver la structure multicouche du verre.",
+    "glassCrackRepairFulLi5": "Enlever l’excédent de polymère à l’aide d’une lame, puis réparer le verre selon la technique appropriée au type de dommage et polir.",
+
+    "restorativePolishFull": "Polissage de la carrosserie pour éliminer les rayures et redonner de l’éclat à la peinture du véhicule.",
+    "restorativePolishFullLi1": "Préparation du véhicule au polissage :",
+    "restorativePolishFullLi2": "Nettoyage de la carrosserie des taches de goudron, résines, etc.",
+    "restorativePolishFullLi3": "Nettoyage mécanique de la carrosserie à l’aide d’une clay synthétique",
+    "restorativePolishFullLi4": "Masquage des pièces en plastique et en caoutchouc avec un ruban de protection",
+    "restorativePolishFullLi5": "Polissage avec un disque en laine et une pâte abrasive (pour éliminer les rayures de taille moyenne)",
+    "restorativePolishFullLi6": "Polissage avec un disque en mousse pour apporter brillance et profondeur de couleur",
+
     "detailsButton": "Savoir plus"
   },
-  "Footer": {
-    "motto": "redonne aux véhicules une apparence irréprochable : il élimine délicatement les bosses sans peinture et restaure la carrosserie ainsi que les vitres à leur état d’origine!",
-    "services": "Nos services",
-    "usefulLinks": "Liens utiles",
-    "about": "À propos",
-    "contactUs": "Contactez-nous",
-    "contactsInfo": "Nos coordonnées",
-    "businessHours": "Horaires d'Ouverture",
-    "socialTitle": "Nos réseaux sociaux",
 
-    "copyright": "Débosselage sans peinture des bosses, rayures et éclats, retouche locale de peinture, polissage, réparation des vitres, éclats et fissures."
+  "BodyRepair": {
+    "mainTitle": "Réparation de la carrosserie et peinture"
   }
 }

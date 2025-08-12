@@ -1,0 +1,33 @@
+.cardWrapper {
+  padding-block: 1.5rem;
+
+  .cardImage {
+    position: relative;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 3 / 2;
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      border-radius: var(--border-radius);
+    }
+  }
+  .cardTitle {
+    margin-top: var(--margin-small);
+    font-size: var(--font-size-medium);
+    color: var(--color-cool-silver);
+    font-weight: var(--font-bold);
+  }
+  .cardDescription {
+    padding-block: var(--padding-small);
+    letter-spacing: --letter-spacing-small;
+  }
+  .cardLink {
+    margin-top: auto;
+    a {
+      width: 100%;
+    }
+  }
+}

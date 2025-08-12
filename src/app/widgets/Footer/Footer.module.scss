@@ -2,14 +2,18 @@
 @use "../../shared/styles/mixins" as *;
 
 .footer {
-  background-color: #18181b;
-  padding-block: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--color-grey-dark);
 
   .footerContent {
     display: flex;
     flex-direction: column;
-    max-width: 1440px;
-    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: var(--padding-small);
 
     .motto {
       .logoLink {
@@ -21,14 +25,14 @@
         }
       }
       .mottoText {
-        font-size: 1.25rem;
+        font-size: var(--font-size-regular);
         font-style: italic;
-        font-weight: 400;
-        line-height: 1.75rem;
-        padding: 1rem 0;
+        line-height: var(--line-height-xlarge);
+        letter-spacing: var(--letter-spacing-xsmall);
+        padding-block: var(--padding-small);
         text-align: center;
         strong {
-          color: var(--color-green-main);
+          color: var(--color-main);
         }
       }
     }
@@ -36,32 +40,32 @@
     .services,
     .usefulLinks,
     .contacts {
-      margin-block: 2rem;
+      margin-block: var(--margin-large);
 
       h3 {
-        padding-bottom: 1rem;
-        font-size: 1rem;
+        padding-bottom: var(--padding-small);
+        font-size: var(--font-size-normal);
         text-align: center;
         text-decoration: underline;
-        text-decoration-color: var(--color-green-main);
-        text-underline-offset: 0.5rem;
+        text-decoration-color: var(--color-main);
+        text-underline-offset: var(--text-underline-offset-small);
       }
       > ul {
         > li {
-          padding: 0.5rem 0;
-          font-size: 0.875rem;
+          padding-block: var(--padding-xsmall);
+          font-size: var(--font-size-base);
 
           > a {
             display: flex;
             align-items: center;
 
             @include hover {
-              color: var(--color-green-main);
+              color: var(--color-main);
             }
           }
 
           .icon {
-            margin-right: 0.5rem;
+            margin-right: var(--margin-xsmall);
           }
         }
       }
@@ -70,7 +74,7 @@
     .contacts {
       li {
         .icon {
-          color: var(--color-green-main);
+          color: var(--color-main);
         }
       }
 
@@ -83,34 +87,34 @@
       }
       .socialList {
         display: flex;
-        gap: 1.5rem;
-        padding-inline: 0.25rem;
+        gap: var(--gap-medium);
+        padding-inline: var(--padding-mini);
 
         .socialItem {
-          margin-inline: 0.25rem;
+          margin-inline: var(--margin-mini);
 
           a {
             position: relative;
-            text-decoration: none;
+            top: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            top: 1rem;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 0.5rem;
+            @include size(2rem, 2rem);
+            gap: var(--gap-xsmall);
+
+            border-radius: var(--border-radius);
             background-color: var(--color-light);
+            text-decoration: none;
 
             transform: rotate(-30deg) skew(25deg) translate(0, 0);
-            transition: background-color 0.5s ease, transform 0.5s ease,
-              box-shadow 0.5s ease;
+            transition: background-color var(--transition),
+              transform var(--transition), box-shadow var(--transition);
             box-shadow: -1px 1px 0 var(--color-grey-70),
               -2px 2px 0 var(--color-grey-70), -3px 3px 0 var(--color-grey-70),
               -4px 4px 0 var(--color-grey-70), -5px 5px 0 var(--color-grey-70);
 
             svg {
-              color: #262626;
+              color: var(--color-grey-dark);
             }
 
             @include hover {
@@ -123,26 +127,35 @@
 
           // Facebook (1)
           &:nth-child(1) a:hover {
-            background-color: #3382ea;
-            box-shadow: -1px 1px 0 #1166d4, -2px 2px 0 #1166d4,
-              -3px 3px 0 #1166d4, -4px 4px 0 #1166d4, -5px 5px 0 #1166d4,
-              -20px 20px 10px #1166d4;
+            background-color: var(--facebook-color);
+            box-shadow: -1px 1px 0 var(--facebook-shadow-color),
+              -2px 2px 0 var(--facebook-shadow-color),
+              -3px 3px 0 var(--facebook-shadow-color),
+              -4px 4px 0 var(--facebook-shadow-color),
+              -5px 5px 0 var(--facebook-shadow-color),
+              -20px 20px 10px var(--facebook-shadow-color);
           }
 
           // Instagram (2)
           &:nth-child(2) a:hover {
-            background-color: #fc3b64;
-            box-shadow: -1px 1px 0 #d93155, -2px 2px 0 #d93155,
-              -3px 3px 0 #d93155, -4px 4px 0 #d93155, -5px 5px 0 #d93155,
-              -20px 20px 10px #d93155;
+            background-color: var(--instagram-color);
+            box-shadow: -1px 1px 0 var(--instagram-shadow-color),
+              -2px 2px 0 var(--instagram-shadow-color),
+              -3px 3px 0 var(--instagram-shadow-color),
+              -4px 4px 0 var(--instagram-shadow-color),
+              -5px 5px 0 var(--instagram-shadow-color),
+              -20px 20px 10px var(--instagram-shadow-color);
           }
 
           // Telegram (3)
           &:nth-child(3) a:hover {
-            background-color: rgb(31, 162, 226);
-            box-shadow: -1px 1px 0 #1084be, -2px 2px 0 #1084be,
-              -3px 3px 0 #1084be, -4px 4px 0 #1084be, -5px 5px 0 #1084be,
-              -20px 20px 10px #1084be;
+            background-color: var(--telegram-color);
+            box-shadow: -1px 1px 0 var(--telegram-shadow-color),
+              -2px 2px 0 var(--telegram-shadow-color),
+              -3px 3px 0 var(--telegram-shadow-color),
+              -4px 4px 0 var(--telegram-shadow-color),
+              -5px 5px 0 var(--telegram-shadow-color),
+              -20px 20px 10px var(--telegram-shadow-color);
           }
         }
       }
@@ -154,17 +167,17 @@
     background-color: var(--color-grey-70);
   }
   .copyright {
-    padding: 1rem 1rem 0 1rem;
+    padding: var(--padding-small);
     text-align: center;
-    font-size: 0.8rem;
+    font-size: var(--font-size-small);
   }
 }
 @media (min-width: 576px) {
   .footer {
     .footerContent {
+      padding-inline: var(--padding-medium);
       flex-wrap: wrap;
       flex-direction: row;
-      padding-inline: 1.5rem;
 
       .services,
       .usefulLinks,
@@ -206,16 +219,17 @@
 
 @media (768px <= width < 1200px) {
   .footerContent {
-    gap: 1rem;
+    gap: var(--gap-small);
   }
 }
 @media (min-width: 1200px) {
   .footer {
+    padding-inline: var(--padding-xlarge);
     .footerContent {
-      padding-inline: 5rem;
+      padding-inline: 0;
       .motto {
         flex: 1;
-        padding-right: 2rem;
+        padding-right: var(--padding-large);
       }
     }
   }
@@ -223,17 +237,10 @@
 @media (min-width: 1440px) {
   .footer {
     .footerContent {
-      .motto {
-        padding-right: 5rem;
-      }
-    }
-  }
-}
-@media (min-width: 1600px) {
-  .footer {
-    .footerContent {
       padding-inline: 0;
-      margin-inline: auto;
+      .motto {
+        padding-right: var(--padding-xlarge);
+      }
     }
   }
 }

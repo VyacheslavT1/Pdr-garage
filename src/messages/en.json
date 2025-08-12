@@ -11,8 +11,8 @@
     "title": "Paintless dent removal without repainting from 30 minutes.",
     "subtitle": "PDR STUDIO is proud to offer you high-quality dent repair services for dents of any complexity. We’ll remove them quickly and seamlessly—no repainting required! No advance payment needed. We service vehicles of all makes.",
     "mainPictureAlt": "Image: work in the garage",
-    "allServicesButton": "All services",
-    "detailsButton": "Details"
+    "allServicesLink": "All services",
+    "detailsLink": "Details"
   },
   "getServiceOptions": {
     "bodyRepair": "Body Repair & Painting",
@@ -29,14 +29,40 @@
     "about2": "We give every car our full attention, whether it’s an exclusive premium sedan or a practical city hatchback. Beyond dent removal, our technicians grind and polish glass, restore headlight clarity, apply protective and decorative films to both exterior panels and the interior, and flawlessly refurbish rims and mirrors.",
     "about3": "We use only proven techniques and professional-grade equipment, ensuring precise, long-lasting results without wasting your time or money. No advance payments—you pay only once you’re satisfied with the quality of our work.",
     "about4": "Trusted by major dealerships and service centers, countless “repaired” cars are already bringing joy to their owners. Browse our portfolio and see for yourself that with PDR Studio, your vehicle will always look impeccable!",
-    "detailsButton": "Details",
+    "detailsLink": "Details",
     "beforeImageAlt": "Before image of a car dent",
     "afterImageAlt": "After image of a car dent"
   },
-  "Services": {
+  "ServicesSwiper": {
     "weOffer": "We offer you the following",
-    "serviceTypes": "services",
+    "serviceTypes": "services"
+  },
+  "Footer": {
+    "motto": "restores vehicles to an impeccable appearance: gently removes dents without repainting and brings bodywork and glass back to factory-perfect condition!",
+    "services": "Our services",
+    "usefulLinks": "Useful links",
+    "about": "About us",
+    "contactUs": "Contact us",
+    "contactsInfo": "Contact Information",
+    "businessHours": "Schedule",
+    "socialTitle": "our social networks",
+    "copyright": "Paintless removal of dents, scratches, and chips, spot painting polishing glass repair for chips and cracks."
+  },
 
+  "ServicesOverview": {
+    "mainTitle": "Our services"
+  },
+  "Breadcrumb": {
+    "homePage": "Home page",
+    "services": "Our services",
+    "bodyRepair": "Body Repair & Painting",
+    "spotTouchUp": "Spot Touch-Up",
+    "paintlessDentRemoval": "Paintless Dent Removal",
+    "scratchBuffing": "Scratch & Scuff Buffing",
+    "glassCrackRepair": "Glass Crack & Chip Repair",
+    "restorativePolish": "Restorative Paint Polishing"
+  },
+  "ServiceCard": {
     "bodyRepair": "Body Repair & Painting",
     "spotTouchUp": "Spot Touch-Up",
     "paintlessDentRemoval": "Paintless Dent Removal",
@@ -51,18 +77,76 @@
     "glassCrackRepairDesc": "At PDR STUDIO, we carry out precise repair of chips and cracks in automotive glass of any complexity, restoring both transparency and strength.",
     "restorativePolishDesc": "Our comprehensive restorative polishing service at PDR STUDIO brings vehicles back to showroom condition, even after years of use.",
 
+    "bodyRepairFull1": "At PDRSTUDIO auto service, our specialists carry out high-quality and cost-effective body repairs of any complexity. We service vehicles of all makes and models, offering comprehensive solutions to restore both appearance and technical condition. Even in cases of severe damage, when a car seems beyond repair at first glance, we will find an optimal and economical way to eliminate all defects.",
+    "bodyRepairFull2": "Body repair includes panel beating, crack welding, removal of chips and other damage, followed by finishing and painting. Upon completion of the work, defects become virtually invisible even on close inspection. Depending on the nature and extent of the damage, we employ various techniques—from the painless PDR method (Paintless Dent Repair) to frame straightening and complete body painting.",
+    "bodyRepairFull3": "In our service centers, we use modern frame racks, professional welding equipment, and certified paint and coating materials. We never push unnecessary services: if restoration can be achieved with local polishing or spot painting, you’ll receive exactly what is needed without extra expense.",
+    "bodyRepairFull4": "We guarantee the highest quality of workmanship and long-lasting results. Your safety and comfort on the road will always be reliably protected.",
+
+    "spotTouchUpFull1": "Every car owner inevitably encounters scratches, scuffs, chips, dents, and other body defects. They must be addressed as quickly as possible, because in most cases we are not just dealing with cosmetic imperfections but with the risk of more serious consequences to the vehicle’s structural integrity.",
+    "spotTouchUpFull2": "If the paintwork is damaged down to the bare metal, corrosion will start almost immediately and repair costs can increase severalfold. Vehicle owners want defect removal to be carried out in the shortest possible time and at an affordable price. In such situations, local or spot paint repair is the optimal solution.",
+    "spotTouchUpFull3": "Spot paint repair involves thorough preparation of the damaged area: removing corrosion and the old paint layer, leveling the surface through sanding and filling, applying primer, and spraying several coats of paint precisely matched to the vehicle’s original color. The final step is applying a clear coat and polishing for a perfect finish. As a result, defects are completely hidden, and the car’s time in the service center usually does not exceed one day.",
+    "spotTouchUpFull4": "In addition to speed and cost-effectiveness, spot paint repair preserves the factory paint finish on the rest of the vehicle’s body and avoids the expense of a full repaint. Thanks to modern color-matching technologies and professional materials, the result is virtually indistinguishable from the factory finish—even on close inspection, you won’t notice where the restoration was performed.",
+
+    "paintlessDentRemovalFull1": "This technology enables you to quickly and precisely restore the original surface of body panels without traditional metalwork and painting. Using specialized tools and techniques, a technician gently repairs dents of any complexity – from minor door dings to significant deformations on the trunk lid – while preserving the factory paint and clear coat. As a result, the vehicle regains its original appearance in just a few hours, saving you time and money.",
+    "paintlessDentRemovalFull2": "However, if the damage affects the paint coating and requires localized refinishing, our studio offers a “high-precision straightening” service for painting preparation. This service includes minimal surface prep: precision metal straightening on a frame rack to within tenths of a millimeter, removal of micro-cracks and chips, followed by application of primer and paint perfectly matched to the original shade. A thin layer of paint and clear coat is applied in multiple passes to seamlessly blend with the existing finish and protect the metal from corrosion.",
+    "paintlessDentRemovalFull3": "The PDR (Paintless Dent Repair) technique involves restoring a body panel’s shape without using filler or paint. Technicians carefully insert specialized hooks and flat rods behind the panel and gently massage the dent outwards, monitoring progress with a reflecting line board or mirror. This preserves the factory paint structure, avoids “plastic” gloss, and maintains the original anti-corrosion protection.",
+    "paintlessDentRemovalFull4": "The PDR method is suitable for steel, aluminum, and plastic panels – fenders, doors, hoods, and even bumpers. Because of minimal mechanical stress and no heating of body parts, the risk of cracks and hidden defects is eliminated. Savings on materials and reduced time in the service center make PDR both a gentle and cost-effective solution.",
+
+    "scratchBuffingFull1": "We provide scratch repair using our own method, honed over years of practice and developed by our leading master with more than twenty years of experience. The process is designed to restore the surface precisely, without unnecessary operations.",
+    "scratchBuffingFull2": "Scratch removal without painting is our specialty. Over the years, we have seen every possible scenario: marks from keys and nails, streaks from scrapers, consequences of failed parking, hits from neighboring doors in parking lots, scuffs from bumpers — the list goes on.",
+    "scratchBuffingFull3": "And this is only part of the typical damage we have successfully repaired for many years, preserving the factory texture and the original thickness of the paintwork.",
+
+    "scratchBuffingFullLi11": "The main key to successful repair is the extensive experience of our craftsmen.",
+    "scratchBuffingFullLi12": "We start repairs only when fully confident in a positive result.",
+    "scratchBuffingFullLi13": "We remove scratches without painting, while other workshops may suggest repainting.",
+
+    "scratchBuffingFullTitle1": "Scratch removal without painting — repair methods:",
+
+    "scratchBuffingFullLi21": "The method of scratch removal without painting involves a three-stage abrasive polishing of the damaged areas of the car body.",
+    "scratchBuffingLi21strong": "This method removes shallow scratches when only the clear coat is damaged.",
+
+    "scratchBuffingFullLi22": "We fill the scratch with primer, then perform intermediate drying; after drying, we fill the scratch with paint and clear coat, and after 30 minutes of drying, we polish the repaired area.",
+    "scratchBuffingLi22strong": "Removal of deep scratches without painting by the touch-up method.",
+
+    "scratchBuffingFullLi23": "The scratch becomes invisible, and the metal will not rust in the future. Of course, no one wants to repaint a whole part because of a scratch — during resale it will be hard to prove that the part was painted only for that reason. That’s why this type of repair is relevant in many cases.",
+    "scratchBuffingLi23strong": "Our repair restores about 80% of the damaged part’s paintwork.",
+
+    "scratchBuffingFullLi24": "(Partial painting of the hood, bumper, door) — during local repair, the part is not removed, only the damaged area is painted. The local body repair method allows you to fix scratches, scuffs, and chips quickly and cost‑effectively. After local repair, scratches, dents, and chips will disappear, and the finish will look factory‑new.",
+    "scratchBuffingFullLi24strong": "Local scratch painting.",
+
+    "scratchBuffingFullTitle2": "Scratch removal and painting on a car",
+
+    "scratchBuffingFull4": "Since damage to the paintwork down to the metal triggers corrosion, ignoring the problem can later lead to",
+    "scratchBuffingFull4strong1": "Every car owner sooner or later faces scratches, scuffs, chips, and dents. These defects should be eliminated as soon as possible",
+    "scratchBuffingFull4strong2": "to serious repair costs and a drop in resale value.",
+
+    "scratchBuffingFull5": "We remove the remains of old clear coat, level the surface, and gradually bring it to a perfect shine. More serious scratches are repaired by touch‑up: primer is carefully applied into the scratch, then after intermediate drying — paint and clear coat, followed by polishing to blend with the factory finish.",
+    "scratchBuffingFull5strong": "For shallow scratches affecting only the clear coat, we use a three‑stage abrasive polishing.",
+
+    "scratchBuffingFull6": "The area is masked with tape, the master performs dent correction on a stand with accuracy down to tenths of a millimeter, removes microcracks, applies primer, several layers of paint, then a clear coat and final polishing. This approach significantly reduces the time the car spends in the shop and avoids a full repaint, preserving the original thickness and texture of the coating.",
+    "scratchBuffingFull6strong": "If the damage reaches the metal or requires deeper intervention, we offer local painting without dismantling parts:",
+
+    "scratchBuffingFull7": "Thanks to our unique PDR (Paintless Dent Repair) technology and many years of experience, PDRSTUDIO specialists restore the car to its original appearance without extra costs or loss of the original coating. We guarantee that after our work,",
+    "scratchBuffingFull7strong": "defects become virtually invisible, the metal remains protected from corrosion, and you receive a high‑quality result in the shortest possible time.",
+
+    "glassCrackRepairFull": "We quickly and professionally repair chips of any complexity on windshields and other automotive glass. We restore the flawless and attractive appearance of your car or motorcycle. Thanks to the many years of experience of our specialists, the use of proper techniques, and innovative polymers, it is virtually impossible to detect the repair site.",
+    "glassCrackRepairFulLi1": "Clean the chip area from dust and dirt. Remove contaminants using wipes, a carbide rod, or special automotive chemicals, and dry thoroughly.",
+    "glassCrackRepairFulLi2": "Select the polymer (liquid glass) according to density and shade. If the chip has a network of fine cracks and thin fractures, use a low-viscosity adhesive with high penetrating ability. Large open defects are repaired with more viscous, dense polymers to ensure maximum strength.",
+    "glassCrackRepairFulLi3": "In a round chip or half-moon chip, remove all air inclusions using special equipment (in several cycles). Fill the defect with polymer, seal the repair site with thermal film, and treat with ultraviolet light for 10–20 minutes to cure. During this time, the film dissolves, and any residue is easily removed with a blade.",
+    "glassCrackRepairFulLi4": "For a star-shaped chip, first drill into the point of the main impact. Screw in the injector bridge so that the sealing ring is fixed around the chip’s center. Then, alternately screwing and unscrewing the injector, remove air and fill the chip with polymer. During drilling, preserve the multilayer structure of the glass.",
+    "glassCrackRepairFulLi5": "Remove excess polymer with a blade, then repair the glass according to the technology appropriate for the type of damage, and polish.",
+
+    "restorativePolishFull": "Body polishing to remove scratches and restore the shine of the vehicle's paintwork.",
+    "restorativePolishFullLi1": "Preparing the car for polishing:",
+    "restorativePolishFullLi2": "Cleaning the body from tar stains, resins, etc.",
+    "restorativePolishFullLi3": "Mechanical cleaning of the body from contaminants using synthetic clay",
+    "restorativePolishFullLi4": "Masking plastic and rubber body parts with protective tape",
+    "restorativePolishFullLi5": "Polishing with a wool pad and abrasive paste (to remove medium-sized scratches)",
+    "restorativePolishFullLi6": "Polishing with a foam pad to add shine and depth of color",
+
     "detailsButton": "Read more"
   },
-  "Footer": {
-    "motto": "restores vehicles to an impeccable appearance: gently removes dents without repainting and brings bodywork and glass back to factory-perfect condition!",
-    "services": "Our services",
-    "usefulLinks": "Useful links",
-    "about": "About us",
-    "contactUs": "Contact us",
-    "contactsInfo": "Contact Information",
-    "businessHours": "Schedule",
-    "socialTitle": "our social networks",
-
-    "copyright": "Paintless removal of dents, scratches, and chips, spot painting polishing glass repair for chips and cracks."
+  "BodyRepair": {
+    "mainTitle": "Body Repair & Painting"
   }
 }

@@ -1,0 +1,60 @@
+@charset "UTF-8";
+.allServices {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding: var(--padding-all-medium);
+}
+@media (min-width: 576px) {
+  .allServices {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1200px) {
+  .allServices {
+    padding-inline: var(--padding-xlarge);
+  }
+}
+@media (min-width: 1600px) {
+  .allServices {
+    padding-inline: 0;
+  }
+}
+.allServices .mainTitle {
+  margin-bottom: var(--margin-large);
+  text-align: center;
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--letter-spacing-xsmall);
+  line-height: var(--line-height-regular);
+}
+@media (min-width: 768px) {
+  .allServices .mainTitle {
+    font-size: var(--font-size-large);
+  }
+}
+.allServices .optionsWrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* разрешаем переносить карточки */
+  max-width: 1440px;
+}
+@media (min-width: 1600px) {
+  .allServices .optionsWrapper {
+    margin-inline: auto;
+  }
+}
+.allServices .serviceCard {
+  flex: 0 1 100%;
+}
+@media (min-width: 768px) {
+  .allServices .serviceCard {
+    flex: 0 1 calc(50% - 1.5rem);
+  }
+}
+@media (min-width: 1024px) {
+  .allServices .serviceCard {
+    flex: 0 1 calc(33.333% - 2rem);
+  }
+}/*# sourceMappingURL=ServicesOverview.module.css.map */

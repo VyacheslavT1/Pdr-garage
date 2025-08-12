@@ -1,37 +1,77 @@
 :root {
-  --color-green-main: #00c950;
+  --color-main: #00c950;
+  --color-accent-dark: #006529;
+  --gradient-color: linear-gradient(to right, #25b425, #104e10);
+  --gradient-color-light: linear-gradient(to right, #d4d4d8, #25b425);
+  --gradient-color-dark: linear-gradient(to right, #1b941b, #0a300a);
   --color-light: #fafafa;
-  --color-light-semi-transparent: rgba(250, 250, 250, 0.8);
+  --color-light-semi-transparent: #fafafae6;
   --color-dark: #222;
+  --color-overlay-dark: #000000bf;
   --color-error: #e7000b;
   --color-grey-10: #d1d5db;
+  --color-grey-60: #4a4f63;
   --color-grey-70: #505050;
   --color-grey-80: #707070;
   --color-grey-100: #5c5f6e;
+  --color-grey-slate: #3f3f46;
+  --color-grey-charcoal: #27272a;
+  --color-cool-silver: #d4d4d8;
+  --color-grey-cool: #6b7280;
+  --color-grey-cool-light: #9ca3af;
+  --color-grey-dark: #18181b;
+  --facebook-color: #3382ea;
+  --facebook-shadow-color: #1166d4;
+  --instagram-color: #fc3b64;
+  --instagram-shadow-color: #d93155;
+  --telegram-color: #1fa2e2;
+  --telegram-shadow-color: #1084be;
   --border-radius: 0.5rem;
   --border-radius-small: 0.25rem;
+  --padding-xxl: 7.5rem;
+  --padding-xlarge: 5rem;
   --padding-large: 2rem;
+  --padding-medium: 1.5rem;
   --padding-small: 1rem;
   --padding-xsmall: 0.5rem;
-  --padding-vertical: 1rem 0;
-  --padding-vertical-small: 0.75rem 0;
-  --padding-vertical-xsmall: 0.5rem 0;
-  --padding-custom-small: 1rem 0.5rem;
-  --margin-vertical: 1rem 0;
-  --margin-vertical-small: 0.5rem 0;
+  --padding-mini: 0.25rem;
+  --padding-all-medium: 2rem 1rem;
+  --padding-button: 0.7rem 1rem;
+  --padding-block-large: 2rem 4rem;
+  --margin-mini: 0.25rem;
+  --margin-xsmall: 0.5rem;
   --margin-small: 1rem;
   --margin-medium: 1.5rem;
   --margin-large: 2rem;
-  --margin-xlarge: 4rem;
-  --margin-custom: 2rem 4rem;
+  --margin-xlarge: 5rem;
+  --margin-xxl: 7.5rem;
+  --margin-all-medium: 2rem 1rem;
+  --text-indent-small: 1rem;
   --gap-large: 2.5rem;
+  --gap-regular: 2rem;
   --gap-medium: 1.5rem;
   --gap-small: 1rem;
   --gap-xsmall: 0.5rem;
+  --font-size-large: 2.5rem;
+  --font-size-medium: 1.5rem;
+  --font-size-regular: 1.25rem;
+  --font-size-normal: 1rem;
+  --font-size-base: 0.85rem;
   --font-size-small: 0.75rem;
   --font-size-xsmall: 0.6rem;
-  --font-weight-bold: 700;
+  --font-thin: 100;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semi-bold: 600;
+  --font-bold: 700;
   --line-height-medium: 1.2rem;
+  --line-height-regular: 1.5;
+  --line-height-xlarge: 1.7rem;
+  --text-underline-offset-large: 1.5rem;
+  --text-underline-offset-small: 0.5rem;
+  --letter-spacing-small: 0.1em;
+  --letter-spacing-xsmall: 0.05em;
+  --transition: 500ms ease-in-out;
 }
 
 .header {
@@ -39,42 +79,16 @@
   top: 0;
   z-index: 100;
   width: 100%;
-  padding: 0 1rem;
+  padding-inline: var(--padding-small);
   background-color: var(--color-dark);
-  box-shadow: #18181b 0px 4px 6px -1px, rgba(0, 0, 0, 0.0588235294) 0px 2px 4px -1px;
-}
-@media (min-width: 576px) {
-  .header {
-    padding-inline: 1.5rem;
-  }
-}
-@media (min-width: 1024px) {
-  .header {
-    padding-inline: 1rem;
-  }
-}
-@media (min-width: 1050px) {
-  .header {
-    padding-inline: 1.5rem;
-  }
-}
-@media (min-width: 1200px) {
-  .header {
-    padding-inline: 5rem;
-  }
-}
-@media (min-width: 1600px) {
-  .header {
-    padding-inline: 0;
-    margin-inline: auto;
-  }
+  box-shadow: var(--color-grey-dark) 0px 4px 6px -1px, var(--color-overlay-dark) 0px 2px 4px -1px;
 }
 .header .nav {
   display: flex;
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
-  max-width: 1440px;
+  max-width: 1200px;
   margin-inline: auto;
 }
 .header .nav .logoLink {
@@ -82,7 +96,7 @@
 }
 @media (max-width: 439px) {
   .header .nav .logoLink {
-    padding: 0.5rem 0;
+    padding-block: var(--padding-xsmall);
   }
 }
 .header .nav .logoLink .logoIcon {
@@ -102,33 +116,43 @@
   display: none;
   position: relative;
 }
-.header .nav .menuList a {
+.header .nav .menuList .servicesLink,
+.header .nav .menuList .menuLink {
   position: relative;
 }
-.header .nav .menuList a::before {
+.header .nav .menuList .servicesLink::before,
+.header .nav .menuList .menuLink::before {
   content: "";
   position: absolute;
   bottom: -0.5rem;
   left: 50%;
   width: 0;
   height: 2px;
-  background-color: var(--color-green-main);
-  transition: width 0.5s ease-in-out, left 0.5s ease-in-out;
+  background-color: var(--color-main);
+  transition: width var(--transition), left var(--transition);
 }
 @media (hover: hover) {
-  .header .nav .menuList a:hover, .header .nav .menuList a.is-active {
-    color: var(--color-green-main);
+  .header .nav .menuList .servicesLink:hover, .header .nav .menuList .servicesLink.is-active,
+  .header .nav .menuList .menuLink:hover,
+  .header .nav .menuList .menuLink.is-active {
+    color: var(--color-main);
   }
-  .header .nav .menuList a:hover::before, .header .nav .menuList a.is-active::before {
+  .header .nav .menuList .servicesLink:hover::before, .header .nav .menuList .servicesLink.is-active::before,
+  .header .nav .menuList .menuLink:hover::before,
+  .header .nav .menuList .menuLink.is-active::before {
     width: 100%;
     left: 0;
   }
 }
 @media (hover: none) {
-  .header .nav .menuList a:active, .header .nav .menuList a.is-active {
-    color: var(--color-green-main);
+  .header .nav .menuList .servicesLink:active, .header .nav .menuList .servicesLink.is-active,
+  .header .nav .menuList .menuLink:active,
+  .header .nav .menuList .menuLink.is-active {
+    color: var(--color-main);
   }
-  .header .nav .menuList a:active::before, .header .nav .menuList a.is-active::before {
+  .header .nav .menuList .servicesLink:active::before, .header .nav .menuList .servicesLink.is-active::before,
+  .header .nav .menuList .menuLink:active::before,
+  .header .nav .menuList .menuLink.is-active::before {
     width: 100%;
     left: 0;
   }
@@ -137,17 +161,22 @@
   .header .nav .menuList {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: var(--gap-small);
     color: var(--color-light);
   }
 }
+@media (min-width: 1200px) {
+  .header .nav .menuList {
+    gap: var(--gap-medium);
+  }
+}
 .header .nav .menuList .menuItem {
-  padding: 1.5rem 0;
+  padding-block: var(--padding-medium);
 }
 .header .nav .menuList .menuItem .servicesLink {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--gap-xsmall);
 }
 .header .nav .menuList .menuItem .servicesLink .chevronDownIcon {
   display: block;
@@ -174,14 +203,14 @@
 .header .nav .menuList .menuItem .serviceOptions {
   position: absolute;
   top: 100%;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  box-shadow: var(--color-grey-dark) 0px 4px 6px -1px, var(--color-overlay-dark) 0px 2px 4px -1px;
   z-index: 50;
-  transition: all 500ms ease-in-out;
+  transition: all var(--transition);
   opacity: 0;
   transform: scaleY(0.75);
   transform-origin: top;
   visibility: hidden;
-  text-indent: 1rem;
+  text-indent: var(--text-indent-small);
 }
 @media (hover: hover) and (pointer: fine) and (hover: hover) {
   .header .nav .menuList .menuItem:hover .serviceOptions, .header .nav .menuList .menuItem.is-active .serviceOptions {
@@ -208,7 +237,7 @@
   display: flex;
   align-items: center;
   align-self: stretch;
-  gap: 1rem;
+  gap: var(--gap-small);
 }
 .header .nav .controls .requestQuoteButton {
   display: none;
@@ -216,7 +245,7 @@
 @media (440px <= width < 1024px) {
   .header .nav .controls .requestQuoteButton {
     display: block;
-    padding: 0.5rem 0;
+    padding-block: var(--padding-xsmall);
   }
 }
 @media (min-width: 1024px) {
@@ -252,7 +281,7 @@
   overflow: hidden;
   background-color: var(--color-dark);
   color: var(--color-light);
-  transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+  transition: height var(--transition), background-color var(--transition);
 }
 .header .nav .mobileMenuOverlay--open {
   height: 100vh;
@@ -263,7 +292,7 @@
 .header .nav .mobileMenuOverlay .closeButtonWrapper {
   display: flex;
   justify-content: center;
-  padding-top: 2rem;
+  padding-top: var(--padding-large);
 }
 .header .nav .mobileMenuOverlay .closeButtonWrapper svg {
   color: var(--color-error);
@@ -272,17 +301,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  margin-top: 7.5rem;
+  gap: var(--gap-regular);
+  margin-top: var(--margin-xxl);
 }
 @media (hover: hover) {
   .header .nav .mobileMenuOverlay .mobileMenuList a:hover, .header .nav .mobileMenuOverlay .mobileMenuList a.is-active {
-    color: var(--color-green-main);
+    color: var(--color-main);
   }
 }
 @media (hover: none) {
   .header .nav .mobileMenuOverlay .mobileMenuList a:active, .header .nav .mobileMenuOverlay .mobileMenuList a.is-active {
-    color: var(--color-green-main);
+    color: var(--color-main);
   }
 }
 .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem {
@@ -292,11 +321,11 @@
 }
 .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsIcon {
   position: absolute;
-  margin-left: 1rem;
+  margin-left: var(--margin-small);
 }
 .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper {
   overflow: hidden;
-  transition: max-height 500ms ease-in-out;
+  transition: max-height var(--transition);
 }
 .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper--open {
   max-height: 500px;
@@ -304,21 +333,32 @@
 .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper--closed {
   max-height: 0;
 }
-.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption {
-  display: block;
-  width: 100%;
-  text-align: center;
-}
-@media (hover: hover) {
-  .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption:hover, .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption.is-active {
-    color: var(--color-green-main);
-  }
-}
-@media (hover: none) {
-  .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption:active, .header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem .serviceOptionsWrapper .mobileServiceOption.is-active {
-    color: var(--color-green-main);
-  }
-}
 .header .nav .mobileMenuOverlay .mobileMenuList .callToAction {
-  padding-top: 7.5rem;
+  padding-top: var(--padding-xxl);
+}
+
+@media (min-width: 576px) {
+  .header {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1024px) {
+  .header {
+    padding-inline: var(--padding-small);
+  }
+}
+@media (min-width: 1050px) {
+  .header {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1200px) {
+  .header {
+    padding-inline: var(--padding-xlarge);
+  }
+}
+@media (min-width: 1440px) {
+  .header {
+    padding-inline: 0;
+  }
 }/*# sourceMappingURL=Header.module.css.map */

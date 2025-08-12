@@ -25,3 +25,8 @@
   white-space: nowrap !important;
   border: 0 !important;
 }
+
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
