@@ -3,7 +3,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
-import { useRouter } from "next/navigation";
 import LogoIcon from "@/app/shared/Icons/logo.svg";
 import ChevronDownIcon from "@/app/shared/Icons/chevron-down.svg";
 import ChevronUpIcon from "@/app/shared/Icons/chevron-up.svg";
@@ -19,10 +18,7 @@ import styles from "./Header.module.css";
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const router = useRouter();
-
   const serviceRefWrapper = useRef<HTMLLIElement>(null);
-
   const serviceOptions = getServiceOptions();
   const t = useTranslations("Header");
 
@@ -52,7 +48,7 @@ const Header: React.FC = () => {
         <ul className={styles.menuList}>
           <li className={styles.menuItem}>
             <Link href="/services" className={styles.servicesLink}>
-              {t("services").toLocaleUpperCase()}
+              {t("services")}
               <ChevronDownIcon className={styles.chevronDownIcon} />
               <ChevronUpIcon className={styles.chevronUpIcon} />
             </Link>
@@ -63,23 +59,23 @@ const Header: React.FC = () => {
             />
           </li>
           <li>
-            <Link href="/about" className={styles.menuLink}>
-              {t("about").toLocaleUpperCase()}
+            <Link href="/aboutUs" className={styles.menuLink}>
+              {t("about")}
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/store" className={styles.menuLink}>
-              {t("store").toLocaleUpperCase()}
+              {t("store")}
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link href="/blog" className={styles.menuLink}>
-              {t("blog").toLocaleUpperCase()}
+              {t("blog")}
             </Link>
           </li>
           <li>
             <Link href="/contacts" className={styles.menuLink}>
-              {t("contacts").toLocaleUpperCase()}
+              {t("contacts")}
             </Link>
           </li>
         </ul>
@@ -87,9 +83,7 @@ const Header: React.FC = () => {
         {/* Десктопные контролы */}
         <div className={styles.controls}>
           <div className={styles.requestQuoteButton}>
-            <Button variant="primary">
-              {t("requestQuoteButton").toLocaleUpperCase()}
-            </Button>
+            <Button variant="primary">{t("requestQuoteButton")}</Button>
           </div>
           <LanguageSwitcher />
           {!isMenuOpen && (
@@ -136,7 +130,7 @@ const Header: React.FC = () => {
                   setIsMenuOpen(false);
                 }}
               >
-                {t("services").toLocaleUpperCase()}
+                {t("services")}
                 <span
                   className={styles.serviceOptionsIcon}
                   onClick={(e) => {
@@ -164,39 +158,32 @@ const Header: React.FC = () => {
                   options={serviceOptions}
                   onClose={() => setIsServicesOpen(false)}
                   onSelect={() => setIsMenuOpen(false)}
-                  // renderOption={(opt) => (
-                  //   <span className={styles.mobileServiceOption}>
-                  //     {opt.label}
-                  //   </span>
-                  // )}
                 />
               </div>
             </li>
 
             <li>
-              <Link href="/about" onClick={() => setIsMenuOpen(false)}>
-                {t("about").toLocaleUpperCase()}
+              <Link href="/aboutUs" onClick={() => setIsMenuOpen(false)}>
+                {t("about")}
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/store" onClick={() => setIsMenuOpen(false)}>
-                {t("store").toLocaleUpperCase()}
+                {t("store")}
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/blog" onClick={() => setIsMenuOpen(false)}>
-                {t("blog").toLocaleUpperCase()}
+                {t("blog")}
               </Link>
             </li>
             <li>
               <Link href="/contacts" onClick={() => setIsMenuOpen(false)}>
-                {t("contacts").toLocaleUpperCase()}{" "}
+                {t("contacts")}
               </Link>
             </li>
             <li className={styles.callToAction}>
-              <Button variant="primary">
-                {t("requestQuoteButton").toLocaleUpperCase()}
-              </Button>
+              <Button variant="primary">{t("requestQuoteButton")}</Button>
             </li>
           </ul>
         </div>

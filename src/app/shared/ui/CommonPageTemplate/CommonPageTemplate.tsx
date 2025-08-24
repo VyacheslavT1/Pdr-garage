@@ -3,42 +3,35 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { getServiceOptions } from "../../data/serviceOptions";
-import Link from "next/link";
+import SideMenuList, {
+  SideMenuItem,
+} from "@/app/shared/ui/SideMenuList/SideMenuList";
+import { ContentData } from "../../types/page.types";
 import styles from "./CommonPageTemplate.module.css";
 
-interface ServiceData {
-  src: string;
-  alt: string;
-  titleKey: string;
-  descKey: string;
-  fullDesc1?: string;
-  fullDesc2?: string;
-  fullDesc3?: string;
-  fullDesc4?: string;
-}
-
 interface CommonPageTemplateProps {
-  serviceData: ServiceData;
+  contentData: ContentData;
   customContent?: React.ReactNode;
+  sideMenuItems: SideMenuItem[];
 }
 
 export function CommonPageTemplate({
-  serviceData,
+  contentData,
   customContent,
+  sideMenuItems,
 }: CommonPageTemplateProps) {
-  const t = useTranslations("ServiceCard");
-  const options = getServiceOptions();
+  const t = useTranslations("CommonTemplateData");
+
   return (
-    <section className={styles.contentWrapper}>
+    <div className={styles.contentWrapper}>
       <div className={styles.serviceContainer}>
-        <h1 className={styles.mainTitle}>{t(serviceData.titleKey)}</h1>
+        <h1 className={styles.mainTitle}>{t(contentData.titleKey)}</h1>
         <div className={styles.contentRow}>
           <div className={styles.mediaSection}>
             <div className={styles.imageContainer}>
               <Image
-                src={serviceData.src}
-                alt={serviceData.alt}
+                src={contentData.src}
+                alt={contentData.alt}
                 fill
                 priority
                 className={styles.serviceImage}
@@ -49,24 +42,17 @@ export function CommonPageTemplate({
               <div className={styles.fullDesc}>{customContent}</div>
             ) : (
               <div className={styles.fullDesc}>
-                {serviceData.fullDesc1 && <p>{t(serviceData.fullDesc1)}</p>}
-                {serviceData.fullDesc2 && <p>{t(serviceData.fullDesc2)}</p>}
-                {serviceData.fullDesc3 && <p>{t(serviceData.fullDesc3)}</p>}
-                {serviceData.fullDesc4 && <p>{t(serviceData.fullDesc4)}</p>}
+                {contentData.fullDesc1 && <p>{t(contentData.fullDesc1)}</p>}
+                {contentData.fullDesc2 && <p>{t(contentData.fullDesc2)}</p>}
+                {contentData.fullDesc3 && <p>{t(contentData.fullDesc3)}</p>}
+                {contentData.fullDesc4 && <p>{t(contentData.fullDesc4)}</p>}
+                {contentData.fullDesc5 && <p>{t(contentData.fullDesc5)}</p>}
               </div>
             )}
           </div>
-          <aside className={styles.sideMenu}>
-            <ul>
-              {options.map((opt) => (
-                <li key={opt.value} className={styles.menuItem}>
-                  <Link href={`/services/${opt.value}`}>{opt.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <SideMenuList items={sideMenuItems} />
         </div>
       </div>
-    </section>
+    </div>
   );
 }

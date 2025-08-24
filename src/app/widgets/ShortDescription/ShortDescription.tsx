@@ -5,7 +5,7 @@ import ArrowRight from "@/app/shared/Icons/arrow-right-long.svg";
 import styles from "./ShortDescription.module.css";
 
 export default function AboutUs() {
-  const t = useTranslations("AboutUs");
+  const t = useTranslations("ShortDescription");
   const beforeImageUrl = "https://picsum.photos/id/133/600/400";
   const afterImageUrl = "https://picsum.photos/id/133/600/400";
   return (

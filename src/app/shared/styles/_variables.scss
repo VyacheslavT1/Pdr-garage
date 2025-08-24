@@ -2,8 +2,14 @@
   // Colors
   --color-main: #00c950;
   --color-accent-dark: #006529;
-  --gradient-color: linear-gradient(to right, #25b425, #104e10);
-  --gradient-color-light: linear-gradient(to right, #d4d4d8, #25b425);
+  --gradient-color: linear-gradient(to right, #104e10, #00cc00, #104e10);
+  --gradient-color-light: linear-gradient(
+    to right,
+    #8a8a8a,
+    #f2f2f2,
+    #ffffff,
+    #8a8a8a
+  );
   --gradient-color-dark: linear-gradient(to right, #1b941b, #0a300a);
 
   --color-light: #fafafa;
@@ -12,6 +18,7 @@
   --color-overlay-dark: #000000bf;
 
   --color-error: #e7000b;
+  --color-accent: oklch(80% 0.18 53.371);
 
   --color-grey-10: #d1d5db;
   --color-grey-60: #4a4f63;

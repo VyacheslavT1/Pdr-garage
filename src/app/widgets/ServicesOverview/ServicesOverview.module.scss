@@ -1,4 +1,6 @@
-.allServices {
+// ServicesOverview.module.scss
+
+.contentWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -13,45 +15,48 @@
     padding-inline: var(--padding-xlarge);
   }
 
-  @media (min-width: 1600px) {
+  @media (min-width: 1440px) {
     padding-inline: 0;
   }
 
   .mainTitle {
     margin-bottom: var(--margin-large);
     text-align: center;
-    font-size: var(--font-size-medium);
-    font-weight: var(--font-bold);
-    letter-spacing: var(--letter-spacing-xsmall);
+    font-size: var(--font-size-normal);
+    font-weight: var(--font-normal);
     line-height: var(--line-height-regular);
+    letter-spacing: var(--letter-spacing-small);
+    text-transform: uppercase;
+
     @media (min-width: 768px) {
-      font-size: var(--font-size-large);
+      font-size: var(--font-size-medium);
     }
   }
-  .optionsWrapper {
+
+  .optionsContainer {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap; /* разрешаем переносить карточки */
-    max-width: 1440px;
+    flex-wrap: wrap;
+    max-width: 1200px;
 
-    @media (min-width: 1600px) {
+    @media (min-width: 1440px) {
       margin-inline: auto;
     }
-  }
 
-  .serviceCard {
-    flex: 0 1 100%;
-  }
-
-  @media (min-width: 768px) {
-    .serviceCard {
-      flex: 0 1 calc(50% - 1.5rem);
+    > div {
+      flex: 0 1 100%;
     }
-  }
 
-  @media (min-width: 1024px) {
-    .serviceCard {
-      flex: 0 1 calc(33.333% - 2rem);
+    @media (min-width: 768px) {
+      > div {
+        flex: 0 1 calc(50% - 1.5rem);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      > div {
+        flex: 0 1 calc(33.333% - 2rem);
+      }
     }
   }
 }

@@ -22,7 +22,8 @@
         h3 {
           margin-bottom: var(--margin-small);
           font-size: var(--font-size-regular);
-          color: var(--color-grey-cool); /* Tailwind's zinc-500 */
+          font-weight: var(--font-normal);
+          color: var(--color-grey-cool);
 
           @media (min-width: 992px) {
             font-size: var(--font-size-medium);
@@ -31,7 +32,7 @@
         h2 {
           padding-bottom: var(--padding-small);
           font-size: var(--font-size-medium);
-          font-weight: var(--font-bold);
+          font-weight: var(--font-medium);
           letter-spacing: var(--letter-spacing-small);
           text-transform: uppercase;
           text-decoration: underline;

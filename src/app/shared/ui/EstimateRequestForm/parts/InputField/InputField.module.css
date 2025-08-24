@@ -1,0 +1,133 @@
+.inputField {
+  margin-block: var(--margin-small);
+  /* FILE INPUT (button + placeholder + list) */
+  /* Button (label) */
+  /* default file-input */
+  /* placeholder */
+  /* Files list */
+}
+.inputField .inputContainer:not(.fileMode) {
+  position: relative;
+}
+.inputField .inputContainer:not(.fileMode):focus-within .label, .inputField .inputContainer:not(.fileMode):has(input:not(:placeholder-shown)) .label, .inputField .inputContainer:not(.fileMode):has(input:valid) .label, .inputField .inputContainer:not(.fileMode):has(input:-webkit-autofill) .label {
+  transform: translate(0.5rem, -2.3rem);
+  background-color: var(--color-dark);
+  color: var(--color-grey-10);
+  text-indent: 0;
+  padding-inline: var(--padding-xsmall);
+  font-weight: var(--font-medium);
+}
+.inputField .inputContainer:not(.fileMode) .label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-size-base);
+  text-indent: 1rem;
+  color: var(--color-grey-cool-light);
+  transition: all var(--transition);
+}
+.inputField .inputContainer:not(.fileMode) .input {
+  width: 100%;
+  padding-block: var(--padding-small);
+  text-align: left;
+  background-color: inherit;
+  outline: none;
+  border: 1px solid var(--color-grey-80);
+  text-indent: 1rem;
+  color: var(--color-light);
+  font-size: var(--font-size-normal);
+  letter-spacing: var(--letter-spacing-small);
+  /* autofill */
+}
+.inputField .inputContainer:not(.fileMode) .input:focus, .inputField .inputContainer:not(.fileMode) .input:active {
+  border: 1px solid var(--color-accent);
+}
+.inputField .inputContainer:not(.fileMode) .input.error {
+  border: 1px solid var(--color-error);
+}
+.inputField .inputContainer:not(.fileMode) .input:-webkit-autofill, .inputField .inputContainer:not(.fileMode) .input:-webkit-autofill:hover, .inputField .inputContainer:not(.fileMode) .input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-grey-10) !important;
+  caret-color: var(--color-grey-10);
+  box-shadow: 0 0 0 1000px var(--color-dark) inset;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-dark) inset;
+}
+.inputField .inputContainer:not(.fileMode) .input:-moz-autofill {
+  box-shadow: 0 0 0 1000px var(--color-dark) inset;
+  -webkit-text-fill-color: var(--color-grey-10);
+  caret-color: var(--color-grey-10);
+}
+.inputField .inputContainer.fileMode {
+  position: relative;
+  display: grid;
+  grid-template-areas: "button" "hint" "list";
+  align-items: start;
+  gap: var(--gap-xsmall);
+  width: -moz-max-content;
+  width: max-content;
+}
+.inputField .inputContainer.fileMode .label {
+  grid-area: button;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xsmall);
+  padding: var(--padding-button);
+  border: 1px solid var(--color-grey-80);
+  border-radius: var(--border-radius);
+  outline: none;
+  cursor: pointer;
+  font-weight: var(--font-medium);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+}
+@media (hover: hover) {
+  .inputField .inputContainer.fileMode .label:hover, .inputField .inputContainer.fileMode .label.is-active {
+    border-color: var(--color-accent);
+  }
+}
+@media (hover: none) {
+  .inputField .inputContainer.fileMode .label:active, .inputField .inputContainer.fileMode .label.is-active {
+    border-color: var(--color-accent);
+  }
+}
+.inputField .inputContainer.fileMode .label:active {
+  box-shadow: 0px 0px 10px 0px var(--color-accent) inset;
+}
+.inputField .inputContainer.fileMode .input[type=file] {
+  display: none;
+}
+.inputField .inputContainer.fileMode .placeholder {
+  grid-area: hint;
+  padding-left: var(--padding-small);
+  padding-top: var(--padding-small);
+  color: var(--color-grey-cool-light);
+  font-size: var(--font-size-small);
+  pointer-events: none;
+}
+.inputField .fileList {
+  grid-area: list;
+  display: flex;
+  flex-direction: column;
+}
+.inputField .fileList .uploadedFileBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xsmall);
+  padding-top: var(--padding-xsmall);
+  font-size: var(--font-size-base);
+}
+@media (hover: hover) {
+  .inputField .fileList .uploadedFileBadge svg:hover, .inputField .fileList .uploadedFileBadge svg.is-active {
+    color: var(--color-error);
+  }
+}
+@media (hover: none) {
+  .inputField .fileList .uploadedFileBadge svg:active, .inputField .fileList .uploadedFileBadge svg.is-active {
+    color: var(--color-error);
+  }
+}
+.inputField .errorMessage {
+  padding-top: var(--padding-xsmall);
+  font-size: var(--font-size-small);
+  color: var(--color-error);
+}/*# sourceMappingURL=InputField.module.css.map */

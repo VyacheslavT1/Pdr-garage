@@ -1,9 +1,8 @@
 "use client";
 
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import LinkButton from "../LinkButton/LinkButton";
-import styles from "./ServiceCard.module.css";
-import { useTranslations } from "next-intl";
+import BaseCard from "@/app/shared/ui/BaseCard/BaseCard";
 
 interface ServiceCardProps {
   src: StaticImageData;
@@ -11,7 +10,6 @@ interface ServiceCardProps {
   titleKey: string;
   descKey: string;
   detailsUrl: string;
-  className?: string;
 }
 
 export default function ServiceCard({
@@ -20,21 +18,18 @@ export default function ServiceCard({
   titleKey,
   descKey,
   detailsUrl,
-  className = "",
 }: ServiceCardProps) {
-  const t = useTranslations("ServiceCard");
-
   return (
-    <div className={`${styles.cardWrapper} ${className}`}>
-      <div className={styles.cardImage}>
-        <div className={styles.image}></div>
-        <Image src={src} alt={alt} fill priority />
-      </div>
-      <h2 className={styles.cardTitle}>{t(titleKey)}</h2>
-      <p className={styles.cardDescription}>{t(descKey)}</p>
-      <div className={styles.cardLink}>
-        <LinkButton href={detailsUrl}>{t("detailsButton")}</LinkButton>
-      </div>
-    </div>
+    <BaseCard
+      src={src}
+      alt={alt}
+      titleKey={titleKey}
+      descKey={descKey}
+      detailsUrl={detailsUrl}
+      tNamespace="CommonTemplateData"
+      linkLabelKey="detailsButton"
+      LinkWrapper={LinkButton}
+      imagePriority={false}
+    />
   );
 }

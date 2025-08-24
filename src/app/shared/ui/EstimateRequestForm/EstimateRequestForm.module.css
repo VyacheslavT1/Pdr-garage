@@ -1,0 +1,22 @@
+.formContainer {
+  display: flex;
+  justify-content: center;
+}
+.formContainer .form {
+  padding: var(--padding-small);
+  border: 1px solid var(--color-grey-70);
+  border-radius: var(--border-radius);
+  box-shadow: var(--color-grey-dark) 0px 0px 18px 10px;
+}
+.formContainer .form .formTitle {
+  padding-bottom: var(--padding-small);
+  text-align: center;
+}
+.formContainer .form .formFieldset {
+  display: flex;
+  gap: var(--gap-regular);
+  border: none;
+}
+.formContainer .form .actions button {
+  width: 100%;
+}/*# sourceMappingURL=EstimateRequestForm.module.css.map */

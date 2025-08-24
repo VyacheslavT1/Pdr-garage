@@ -114,7 +114,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <hr />
+      {/* <hr /> */}
       <p className={styles.copyright}>© PDR STUDIO - {t("copyright")} 2025</p>
     </footer>
   );

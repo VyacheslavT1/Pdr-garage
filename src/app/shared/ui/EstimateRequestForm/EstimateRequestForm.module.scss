@@ -1,0 +1,26 @@
+.formContainer {
+  display: flex;
+  justify-content: center;
+
+  .form {
+    padding: var(--padding-small);
+    border: 1px solid var(--color-grey-70);
+    border-radius: var(--border-radius);
+    box-shadow: var(--color-grey-dark) 0px 0px 18px 10px;
+
+    .formTitle {
+      padding-bottom: var(--padding-small);
+      text-align: center;
+    }
+    .formFieldset {
+      display: flex;
+      gap: var(--gap-regular);
+      border: none;
+    }
+    .actions {
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -3,7 +3,6 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import Button from "@/app/shared/ui/Button/Button";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";

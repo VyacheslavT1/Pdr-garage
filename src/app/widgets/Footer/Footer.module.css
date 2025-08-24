@@ -1,14 +1,21 @@
 :root {
   --color-main: #00c950;
   --color-accent-dark: #006529;
-  --gradient-color: linear-gradient(to right, #25b425, #104e10);
-  --gradient-color-light: linear-gradient(to right, #d4d4d8, #25b425);
+  --gradient-color: linear-gradient(to right, #104e10, #00cc00, #104e10);
+  --gradient-color-light: linear-gradient(
+    to right,
+    #8a8a8a,
+    #f2f2f2,
+    #ffffff,
+    #8a8a8a
+  );
   --gradient-color-dark: linear-gradient(to right, #1b941b, #0a300a);
   --color-light: #fafafa;
   --color-light-semi-transparent: #fafafae6;
   --color-dark: #222;
   --color-overlay-dark: #000000bf;
   --color-error: #e7000b;
+  --color-accent: oklch(80% 0.18 53.371);
   --color-grey-10: #d1d5db;
   --color-grey-60: #4a4f63;
   --color-grey-70: #505050;
@@ -86,7 +93,7 @@
   flex-direction: column;
   max-width: 1200px;
   margin-inline: auto;
-  padding: var(--padding-small);
+  padding: var(--padding-medium);
 }
 .footer .footerContent .motto .logoLink {
   display: flex;
@@ -229,15 +236,11 @@
   background-color: var(--telegram-color);
   box-shadow: -1px 1px 0 var(--telegram-shadow-color), -2px 2px 0 var(--telegram-shadow-color), -3px 3px 0 var(--telegram-shadow-color), -4px 4px 0 var(--telegram-shadow-color), -5px 5px 0 var(--telegram-shadow-color), -20px 20px 10px var(--telegram-shadow-color);
 }
-.footer hr {
-  border: none;
-  height: 1px;
-  background-color: var(--color-grey-70);
-}
 .footer .copyright {
   padding: var(--padding-small);
   text-align: center;
   font-size: var(--font-size-small);
+  border-top: 1px solid var(--color-grey-70);
 }
 
 @media (min-width: 576px) {

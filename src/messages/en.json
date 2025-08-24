@@ -22,7 +22,7 @@
     "glassCrackRepair": "Glass Crack & Chip Repair",
     "restorativePolish": "Restorative Paint Polishing"
   },
-  "AboutUs": {
+  "ShortDescription": {
     "fewWords": "A Few Words",
     "aboutPdrStudio": "About PDR STUDIO",
     "about1": "Every day, we restore vehicles to their original shine and delight owners with flawlessly executed work. Our specialty is professional paintless dent removal (PDR) of any complexity—no repainting required.",
@@ -55,20 +55,31 @@
   "Breadcrumb": {
     "homePage": "Home page",
     "services": "Our services",
-    "bodyRepair": "Body Repair & Painting",
-    "spotTouchUp": "Spot Touch-Up",
-    "paintlessDentRemoval": "Paintless Dent Removal",
-    "scratchBuffing": "Scratch & Scuff Buffing",
-    "glassCrackRepair": "Glass Crack & Chip Repair",
-    "restorativePolish": "Restorative Paint Polishing"
-  },
-  "ServiceCard": {
+    "aboutUs": "About us",
+    "blog": "Blog",
     "bodyRepair": "Body Repair & Painting",
     "spotTouchUp": "Spot Touch-Up",
     "paintlessDentRemoval": "Paintless Dent Removal",
     "scratchBuffing": "Scratch & Scuff Buffing",
     "glassCrackRepair": "Glass Crack & Chip Repair",
     "restorativePolish": "Restorative Paint Polishing",
+    "whatIsPDR": "What is PDR repair and why is it better than traditional painting",
+    "pdrMyths": "5 myths about paintless dent repair",
+    "preservePaint": "How to preserve the car’s factory paintwork",
+    "afterPDRCare": "How to care for your car body after PDR repair",
+    "parkingDamage": "What to do if your car door is damaged in a parking lot",
+    "hailPDR": "PDR after hail: restoring a car without painting",
+    "contacts": "Contact Us"
+  },
+  "CommonTemplateData": {
+    "bodyRepair": "Body Repair & Painting",
+    "spotTouchUp": "Spot Touch-Up",
+    "paintlessDentRemoval": "Paintless Dent Removal",
+    "scratchBuffing": "Scratch & Scuff Buffing",
+    "glassCrackRepair": "Glass Crack & Chip Repair",
+    "restorativePolish": "Restorative Paint Polishing",
+
+    "aboutUs": "About us",
 
     "bodyRepairDesc": "Technicians at PDR STUDIO’s auto service expertly carry out body repair and painting on any area of the vehicle, restoring the bodywork to its factory-fresh condition. ",
     "spotTouchUpDesc": "At PDR STUDIO, our specialists perform precise spot touch-ups using high-quality automotive enamels and modern equipment.",
@@ -144,9 +155,127 @@
     "restorativePolishFullLi5": "Polishing with a wool pad and abrasive paste (to remove medium-sized scratches)",
     "restorativePolishFullLi6": "Polishing with a foam pad to add shine and depth of color",
 
-    "detailsButton": "Read more"
+    "detailsButton": "Read more",
+
+    "whatIsPDR": "What is PDR repair and why is it better than traditional painting",
+    "pdrMyths": "5 myths about paintless dent repair",
+    "preservePaint": "How to preserve the car’s factory paintwork",
+    "afterPDRCare": "How to care for your car body after PDR repair",
+    "parkingDamage": "What to do if your car door is damaged in a parking lot",
+    "hailPDR": "PDR after hail: restoring a car without painting",
+
+    "whatIsPDRFull1": "PDR repair (Paintless Dent Repair) is a modern technology for restoring a car body without the use of filler or painting. The method is based on precision metal reshaping with special tools. The technician carefully returns the deformed area to its factory form without damaging the paintwork. This approach is especially valuable when preserving the original condition of the car is important.",
+    "whatIsPDRFull2": "Unlike traditional painting, PDR eliminates lengthy processes such as sanding, priming, color matching, and painting. This significantly reduces repair time: most small dents are fixed in just a few hours instead of several days. In addition, the cost of PDR is lower since it does not require consumables or a paint booth.",
+    "whatIsPDRFull3": "The main advantage of PDR repair is the preservation of the factory finish. The original paint provides the best corrosion protection and maintains the vehicle’s showroom appearance. After repainting, even with perfect color matching, differences are often visible or traces of repair appear over time. With PDR, the body remains ‘honest,’ and the car retains higher resale value.",
+    "whatIsPDRFull4": "Today, PDR is increasingly chosen by car owners after hail damage, minor parking lot accidents, and everyday dents. This technology is recognized by global car manufacturers and is officially used in premium brand service centers. When faced with a choice between repainting or paintless dent repair, PDR is usually the faster, more cost-effective, and safer option for your car.",
+
+    "pdrMythsFull": "Paintless Dent Repair (PDR) has long proven itself as an effective body repair technology, but there are still many myths surrounding it. Let’s look at the most common misconceptions and explain why they are not true.",
+    "pdrMythsFull1": "In reality, the technology allows not only the removal of small dents but also fairly large ones. It all depends on the location of the damage and the condition of the paintwork. In skilled hands, PDR tools can restore even complex areas to their factory shape.",
+    "pdrMythsFull2": "High-quality paintless dent repair fully preserves the factory finish and leaves no traces of intervention. The result depends solely on the technician’s skills. There are no streaks, no color mismatches, and no filler marks left on the surface.",
+    "pdrMythsFull3": "Repainting lowers the resale value of a car, as the original factory paint is considered more reliable and durable. PDR preserves the original paint, eliminating the risk of color mismatches and future corrosion.",
+    "pdrMythsFull4": "In practice, PDR is faster and cheaper than traditional painting. Small dents are repaired within a few hours without consumables or a paint booth. The savings in time and money are obvious.",
+    "pdrMythsFull5": "This method is recognized by leading automakers and is used in official service centers worldwide. The repaired area requires no additional care and lasts as long as the rest of the body.",
+    "pdrMythsFull6": "Conclusion: Paintless Dent Repair is a modern, reliable, and cost-effective alternative to traditional painting. By debunking myths, we can confidently state: PDR repair is the best solution for those who value originality and care about their car’s resale value.",
+
+    "pdrMythsTitle1": "Myth #1. PDR is only suitable for small dents.",
+    "pdrMythsTitle2": "Myth #2. PDR always leaves traces.",
+    "pdrMythsTitle3": "Myth #3. It’s easier to just repaint the part.",
+    "pdrMythsTitle4": "Myth #4. It is long and expensive.",
+    "pdrMythsTitle5": "Myth #5. PDR is only a temporary solution.",
+
+    "preservePaintFull1": "A car’s factory paintwork is not only about aesthetics but also reliable protection of the body against corrosion and external impacts. Preserving it therefore directly affects the vehicle’s longevity and resale value. Unlike repainted panels, the original finish has the ideal thickness and uniformity guaranteed by the manufacturer.",
+    "preservePaintFull2": "The first rule of care is regular washing. Road dust, de‑icing chemicals and grime gradually degrade the clear coat. Use gentle shampoos and microfiber wash mitts, avoiding stiff brushes and aggressive chemicals. Be sure to rinse wheel arches and sills thoroughly—these are the most vulnerable areas for dirt and moisture buildup.",
+    "preservePaintFull3": "The second rule is protective coatings. Applying wax, liquid glass or a ceramic coating creates an extra barrier against UV, chemicals and moisture. These products help the clear coat keep its gloss longer and prevent fading. Choose the coating according to usage conditions: wax is sufficient for city driving, while ceramic is better for long‑term protection.",
+    "preservePaintFull4": "An equally important aspect is parking. Avoid leaving the car under trees where branches and sap may fall, and avoid direct sun, which bleaches paint over time. Whenever possible, use covered parking or a car cover.",
+    "preservePaintFull5": "And finally, PDR repair (paintless dent repair) allows you to preserve the factory finish even after damage. Unlike traditional repainting, this method removes defects without filler or paint, keeping the original layer intact. That is why PDR is the optimal choice for those who want to keep the body in perfect condition.",
+
+    "afterPDRCareFull1": "Paintless Dent Repair (PDR) preserves the car’s factory paintwork, but for long-lasting results it is important to care for the body properly. Such maintenance not only keeps the shine and protection of the surface but also ensures the durability of the restored areas.",
+    "afterPDRCareFull2": "The first thing to remember: regular washing. Even if the car looks clean, dust, road salt, and chemical residues accumulate on the surface. They must be removed in time to prevent damage to the clear coat. Use pH-neutral shampoos and soft washing accessories — microfiber mitts and cloths.",
+    "afterPDRCareFull3": "The second step is applying protective coatings. After PDR, it is recommended to treat the body with wax or a ceramic coating. These products form an extra layer that protects the paint from UV rays, acid rain, and minor mechanical damage. This is especially important if the car is frequently used in the city or stored outdoors.",
+    "afterPDRCareFull4": "The third rule is careful operation. Avoid physical impacts: do not lean on the car body or place objects on the hood or roof. In parking lots, choose spots away from crowded rows to reduce the risk of new dents and scratches.",
+    "afterPDRCareFull5": "Finally, for maximum results it is useful to undergo periodic professional body inspections. Experts can detect minor defects early and fix them before they turn into serious problems. PDR keeps the car in pristine condition, but proper care reinforces this effect for years.",
+
+    "parkingDamageFull": "Finding a dent or chip on your car door in a parking lot is a common situation. Wrong actions in the first minutes can make the damage worse, so it is important to know the right steps to minimize harm and restore the body quickly.",
+    "parkingDamageFull1": "Immediately photograph the dent and the scene. If surveillance cameras or witnesses are available, try to secure that data. It may be useful when contacting the insurance company or in case of disputes.",
+    "parkingDamageFull2": "If the paintwork is not broken, PDR (Paintless Dent Repair) is the best solution. This technology quickly restores the door to its factory shape without repainting. If there are deep scratches or chips down to the metal, the technician will suggest a combined approach.",
+    "parkingDamageFull3": "Do not try to fix the dent yourself — it can worsen the deformation. Professionals use special tools to repair damage without harming the paint. In addition, service repairs usually take just a few hours compared to days of repainting.",
+    "parkingDamageFull4": "To reduce the risk of repeat damage, try to park away from cars with wide doors, especially in shopping centers. Using door moldings or protective strips also helps avoid minor impacts.",
+    "parkingDamageFull5": "Conclusion: a dented door in a parking lot is unpleasant, but not a catastrophe. In most cases the problem can be fixed without repainting and long repairs. PDR restores the car to perfect condition, keeping the factory paint and market value.",
+    "parkingDamageTitle1": "Step 1. Record the damage.",
+    "parkingDamageTitle2": "Step 2. Assess the extent of damage.",
+    "parkingDamageTitle3": "Step 3. Go to a specialized service.",
+    "parkingDamageTitle4": "Step 4. Think about prevention.",
+
+    "hailPDRFull1": "Hail is one of the most unpleasant natural events for car owners. Even a short storm with large hailstones can leave dozens of dents on the roof, hood, and doors. The traditional method of fixing such damage involves filler and repainting, which takes time and costs a lot. But there is an alternative — PDR (Paintless Dent Repair).",
+    "hailPDRFull2": "PDR technology removes hail damage without filler or painting. Using special tools, the technician carefully straightens the metal from the inside, returning it to its factory shape. The original paintwork is fully preserved, which is especially important for corrosion protection and for maintaining the car’s market value.",
+    "hailPDRFull3": "The main advantage of this method is speed and cost-effectiveness. While repainting the body can take a week, most hail dents can be repaired with PDR in 1–2 days. There is no need for color matching or complex painting, which reduces costs.",
+    "hailPDRFull4": "PDR after hail is especially popular with owners of new and expensive cars, where preserving the original finish is critical. Even on the used market, cars repaired with PDR are valued higher than repainted ones. This means investing in quality repair fully pays off.",
+    "hailPDRFull5": "Therefore, if your car has suffered from hail, don’t rush to accept repainting. PDR allows you to restore the vehicle’s appearance quickly, safely, and cost-effectively. It is a modern solution that has proven its effectiveness and has become the standard in top service centers worldwide."
   },
   "BodyRepair": {
     "mainTitle": "Body Repair & Painting"
+  },
+  "AboutUs": {
+    "aboutUsP1": "PDR STUDIO is not just a workshop — it’s a place where every car is treated as if it were the only one and the most valuable. We believe every detail matters and every customer deserves a perfect result.",
+    "aboutUsP2": "We specialize in PDR (Paintless Dent Repair) technology — no repainting, no unnecessary talk, just precise work and respect for the car’s original appearance. It’s important to us to preserve the factory finish, and therefore the history of your car, because behind every dent is a moment, and behind every restored curve is our pride.",
+    "aboutUsP3": "At PDR STUDIO, our craftsmen know everything about car bodies. We’ve seen hundreds of complex cases and always found a solution. Modern equipment, precise hands, and attention to every detail — that’s the secret that sets us apart.",
+    "aboutUsP4": "But most importantly, it’s about trust. We openly explain the process, agree on every detail, and always work so that the result is better than you expected. Our goal is simple: to return your car without any trace of damage and bring back that smile when you fall in love with it again.",
+    "aboutUsP5": "Our mission is to make the automotive world more beautiful and safer, preserving its uniqueness and value. We value honesty, craftsmanship, and responsibility. Every day we prove that repairs can be fast, high-quality, and transparent, and that the work of craftsmen is a true art."
+  },
+  "Blog": {
+    "mainTitle": "Blog",
+    "whatIsPDR": "What is PDR repair and why it is better than traditional painting",
+    "pdrMyths": "5 myths about paintless dent repair",
+    "preservePaint": "How to preserve your car’s factory paint",
+    "afterPDRCare": "How to take care of the body after PDR repair",
+    "parkingDamage": "What to do if your car door was damaged in a parking lot",
+    "hailPDR": "PDR after hail: restoring a car without repainting",
+
+    "whatIsPDRDesc": "Learn how paintless dent repair (PDR) helps restore a car body while preserving the original paintwork and reducing repair time.",
+    "pdrMythsDesc": "We debunk the most common myths about PDR repair and explain its real advantages for car owners.",
+    "preservePaintDesc": "Practical tips on body care to help preserve your car’s original paintwork in perfect condition.",
+    "afterPDRCareDesc": "Step-by-step recommendations to protect restored body areas after paintless dent repair for a long-lasting result.",
+    "parkingDamageDesc": "A guide for drivers: what to do when your car door is damaged in a parking lot and how to quickly restore the body.",
+    "hailPDRDesc": "Effective body restoration after hail damage without repainting, preserving the original finish and appearance.",
+
+    "readMoreLink": "Read more..."
+  },
+
+  "EstimateRequestForm": {
+    "formTitle": "Request a Repair Quote",
+    "isRequired": "This field is required",
+
+    "genderMale": "Mr.",
+    "genderFemale": "Ms.",
+
+    "firstNameLabel": "First name *",
+    "lastNameLabel": "Last name *",
+    "phoneLabel": "Phone number *",
+    "messageLabel": "Describe the damage",
+    "consentPrivacyText": "I agree with the",
+    "consentPrivacyLink": "privacy policy",
+    "submitPending": "Sending...",
+    "submitLabel": "Send",
+    "submitSuccess": "Your request has been submitted successfully",
+
+    "placeholderText": "No file chosen",
+    "uploadButtonLabel": "Upload photo",
+    "removeFileAriaLabel": "Remove file",
+
+    "validationGenderInvalid": "Please select a title",
+    "validationFirstNameRequired": "First name is required",
+    "validationFirstNameMax": "First name cannot exceed 60 characters",
+    "validationFirstNameSymbols": "First name can only contain letters",
+    "validationLastNameRequired": "Last name is required",
+    "validationLastNameMax": "Last name cannot exceed 60 characters",
+    "validationLastNameSymbols": "Last name can only contain letters",
+    "validationPhoneRequired": "Phone number is required",
+    "validationPhoneInvalid": "Enter a valid phone number",
+    "validationEmailRequired": "Email address is required",
+    "validationEmailInvalid": "Enter a valid email address",
+    "validationMessageRequired": "Damage description is required",
+    "validationMessageMin": "Description must be at least 10 characters",
+    "validationMessageMax": "Description cannot exceed 2000 characters",
+    "validationAttachmentRequired": "Please attach a photo of the damage"
   }
 }

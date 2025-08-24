@@ -22,7 +22,7 @@
     "glassCrackRepair": "Réparation des fissures et éclats de verre",
     "restorativePolish": "Polissage restauratif de la peinture"
   },
-  "AboutUs": {
+  "ShortDescription": {
     "fewWords": "Quelques Mots",
     "aboutPdrStudio": "Sur PDR STUDIO",
     "about1": "Chaque jour, nous redonnons aux véhicules leur éclat d’origine et offrons aux propriétaires le plaisir d’un travail parfaitement exécuté. Notre spécialité ? Le débosselage sans peinture (PDR) professionnel, quelle que soit la complexité des bosses.",
@@ -60,15 +60,26 @@
     "paintlessDentRemoval": "Débosselage sans peinture",
     "scratchBuffing": "Polissage des rayures et éraflures",
     "glassCrackRepair": "Réparation des fissures et éclats de verre",
-    "restorativePolish": "Polissage restauratif de la peinture"
+    "restorativePolish": "Polissage restauratif de la peinture",
+    "aboutUs": "À propos",
+    "blog": "Blog",
+    "whatIsPDR": "Qu’est-ce que la réparation PDR et pourquoi est-elle meilleure que la peinture traditionnelle",
+    "pdrMyths": "5 mythes sur la réparation de bosses sans peinture",
+    "preservePaint": "Comment préserver la peinture d’origine de votre voiture",
+    "afterPDRCare": "Comment entretenir la carrosserie après une réparation PDR",
+    "parkingDamage": "Que faire si la porte de votre voiture est endommagée sur un parking",
+    "hailPDR": "PDR après la grêle : restaurer une voiture sans peinture",
+    "contacts": "Contactez-nous"
   },
-  "ServiceCard": {
+  "CommonTemplateData": {
     "bodyRepair": "Réparation de la carrosserie et peinture",
     "spotTouchUp": "Retouche peinture localisée",
     "paintlessDentRemoval": "Débosselage sans peinture",
     "scratchBuffing": "Polissage des rayures et éraflures",
     "glassCrackRepair": "Réparation des fissures et éclats de verre",
     "restorativePolish": "Polissage restauratif de la peinture",
+
+    "aboutUs": "À propos",
 
     "bodyRepairDesc": "Les techniciens du service auto PDRGARAGE réalisent avec expertise la réparation de carrosserie et la peinture de n’importe quelle zone du véhicule, redonnant à la carrosserie son aspect d’origine. ",
     "spotTouchUpDesc": "Chez PDRGARAGE, nos spécialistes réalisent des retouches ponctuelles de peinture avec des émaux haut de gamme et du matériel moderne. ",
@@ -144,10 +155,128 @@
     "restorativePolishFullLi5": "Polissage avec un disque en laine et une pâte abrasive (pour éliminer les rayures de taille moyenne)",
     "restorativePolishFullLi6": "Polissage avec un disque en mousse pour apporter brillance et profondeur de couleur",
 
-    "detailsButton": "Savoir plus"
+    "detailsButton": "Savoir plus",
+
+    "whatIsPDR": "Qu’est-ce que la réparation PDR et pourquoi est-elle meilleure que la peinture traditionnelle",
+    "pdrMyths": "5 mythes sur la réparation de bosses sans peinture",
+    "preservePaint": "Comment préserver la peinture d’origine de votre voiture",
+    "afterPDRCare": "Comment entretenir la carrosserie après une réparation PDR",
+    "parkingDamage": "Que faire si la porte de votre voiture est endommagée sur un parking",
+    "hailPDR": "PDR après la grêle : restaurer une voiture sans peinture",
+
+    "whatIsPDRFull1": "La réparation PDR (Paintless Dent Repair) est une technologie moderne de restauration de carrosserie automobile sans utilisation de mastic ni de peinture. La méthode repose sur le redressage précis du métal à l’aide d’outils spéciaux. Le technicien ramène soigneusement la zone déformée à sa forme d’usine sans endommager la peinture. Cette approche est particulièrement précieuse lorsque la conservation de l’état d’origine du véhicule est essentielle.",
+    "whatIsPDRFull2": "Contrairement à la peinture traditionnelle, le PDR évite les processus longs tels que le ponçage, l’apprêt, la recherche de teinte et la mise en peinture. Cela réduit considérablement le temps de réparation : la plupart des petites bosses sont corrigées en quelques heures au lieu de plusieurs jours. De plus, le coût du PDR est inférieur puisqu’il ne nécessite ni consommables ni cabine de peinture.",
+    "whatIsPDRFull3": "Le principal avantage de la réparation PDR est la préservation de la peinture d’origine. La peinture d’usine offre une meilleure protection contre la corrosion et conserve l’apparence commerciale du véhicule. Après avoir repeint, même avec une correspondance parfaite des couleurs, des différences sont souvent visibles ou apparaissent avec le temps. Grâce au PDR, la carrosserie reste « authentique » et la voiture conserve une valeur de revente plus élevée.",
+    "whatIsPDRFull4": "Aujourd’hui, la méthode PDR est de plus en plus choisie par les propriétaires après un épisode de grêle, de petits accrochages sur un parking ou des dommages du quotidien. Cette technologie est reconnue par les constructeurs automobiles du monde entier et officiellement utilisée dans les ateliers des marques premium. Face au choix entre une peinture traditionnelle et une réparation sans peinture, le PDR s’avère le plus souvent plus rapide, plus économique et plus sûr pour votre voiture.",
+
+    "pdrMythsFull": "La réparation de bosses sans peinture (PDR) s’est depuis longtemps imposée comme une technologie efficace de restauration de carrosserie, mais de nombreux mythes persistent encore. Examinons les idées reçues les plus courantes et expliquons pourquoi elles sont fausses.",
+    "pdrMythsFull1": "En réalité, la technologie permet de corriger non seulement de petits défauts, mais aussi des bosses relativement grandes. Tout dépend de l’emplacement des dommages et de l’état de la peinture. Entre des mains expérimentées, les outils PDR redonnent même aux zones complexes leur forme d’usine.",
+    "pdrMythsFull2": "Une réparation de bosses sans peinture de qualité préserve totalement la peinture d’origine et ne laisse aucune trace d’intervention. Le résultat dépend uniquement de la qualification du technicien. Aucune trace, aucune différence de couleur, aucun résidu de mastic.",
+    "pdrMythsFull3": "La repeindre réduit la valeur de revente d’un véhicule, car la peinture d’origine est considérée comme plus fiable et durable. Le PDR conserve la peinture « d’usine », éliminant le risque de différences de teinte et de corrosion future.",
+    "pdrMythsFull4": "En pratique, le PDR est plus rapide et moins coûteux qu’une peinture traditionnelle. Les petites bosses sont corrigées en quelques heures, sans consommables ni cabine de peinture. Les économies de temps et d’argent sont évidentes.",
+    "pdrMythsFull5": "Cette méthode est reconnue par les principaux constructeurs automobiles et utilisée dans les ateliers officiels du monde entier. La zone réparée ne nécessite aucun entretien supplémentaire et dure aussi longtemps que le reste de la carrosserie.",
+    "pdrMythsFull6": "Conclusion : la réparation de bosses sans peinture est une alternative moderne, fiable et économique à la peinture traditionnelle. En déconstruisant les mythes, on peut affirmer avec certitude : le PDR est la meilleure solution pour ceux qui apprécient l’authenticité et souhaitent préserver la valeur de leur véhicule.",
+
+    "pdrMythsTitle1": "Mythe n°1. Le PDR ne convient qu’aux petits dommages.",
+    "pdrMythsTitle2": "Mythe n°2. Après un PDR, il reste toujours des traces.",
+    "pdrMythsTitle3": "Mythe n°3. Il est plus simple de repeindre directement la pièce.",
+    "pdrMythsTitle4": "Mythe n°4. C’est long et coûteux.",
+    "pdrMythsTitle5": "Mythe n°5. Le PDR est une solution temporaire.",
+
+    "preservePaintFull1": "La peinture d’origine d’un véhicule n’est pas seulement une question d’esthétique : elle protège efficacement la carrosserie contre la corrosion et les agressions extérieures. Sa conservation influe donc directement sur la longévité du véhicule et sur sa valeur de revente. Contrairement aux éléments repeints, la finition d’usine présente une épaisseur et une uniformité idéales garanties par le constructeur.",
+    "preservePaintFull2": "La première règle d’entretien est le lavage régulier. La poussière de route, les produits antigel et la saleté détériorent progressivement le vernis. Utilisez des shampoings doux et des gants en microfibre, en évitant les brosses dures et les produits agressifs. Pensez à rincer soigneusement les passages de roue et les bas de caisse — zones particulièrement exposées à l’accumulation de saletés et d’humidité.",
+    "preservePaintFull3": "La deuxième règle concerne les protections. L’application d’une cire, d’un « liquid glass » ou d’un revêtement céramique crée une barrière supplémentaire contre les UV, les produits chimiques et l’humidité. Ces traitements aident le vernis à conserver son brillant plus longtemps et à éviter la décoloration. Choisissez le revêtement selon l’usage : une cire suffit en ville, tandis qu’une céramique offre une protection durable.",
+    "preservePaintFull4": "Un autre point essentiel est le stationnement. Évitez de laisser la voiture sous les arbres (chute de branches, coulées de sève) et en plein soleil, qui décolore la peinture avec le temps. Dans la mesure du possible, privilégiez un parking couvert ou une housse de protection.",
+    "preservePaintFull5": "Enfin, la réparation PDR (réparation de bosses sans peinture) permet de préserver la peinture d’origine même après un dommage. Contrairement à la peinture traditionnelle, cette méthode élimine les défauts sans rebouchage et repeindre tout en conservant la couche d’origine. C’est pourquoi le PDR est considéré comme le choix optimal pour ceux qui veulent garder le corps en parfait état.",
+
+    "afterPDRCareFull1": "La réparation PDR (réparation de bosses sans peinture) permet de préserver la peinture d’origine du véhicule, mais pour un résultat durable il est essentiel d’entretenir correctement la carrosserie. Cet entretien conserve non seulement la brillance et la protection de la surface, mais assure aussi la longévité des zones restaurées.",
+    "afterPDRCareFull2": "Première règle : le lavage régulier. Même si la voiture semble propre, la poussière, le sel et les produits chimiques routiers s’accumulent sur la surface. Il faut les éliminer rapidement pour éviter que le vernis ne soit attaqué. Utilisez des shampoings au pH neutre et des accessoires doux — gants et chiffons en microfibre.",
+    "afterPDRCareFull3": "Deuxième étape : l’application de protections. Après un PDR, il est recommandé de traiter la carrosserie avec de la cire ou un revêtement céramique. Ces produits créent une couche supplémentaire qui protège la peinture des UV, des pluies acides et des micro-rayures. Cela est particulièrement important si la voiture circule souvent en ville ou reste à l’extérieur.",
+    "afterPDRCareFull4": "Troisième règle : une utilisation soigneuse. Évitez les impacts physiques : ne vous appuyez pas sur la carrosserie et ne posez pas d’objets sur le capot ou le toit. Sur les parkings, choisissez des emplacements plus isolés pour limiter le risque de nouvelles bosses et rayures.",
+    "afterPDRCareFull5": "Enfin, pour un résultat durable, il est utile de faire contrôler régulièrement la carrosserie par un professionnel. Les experts peuvent détecter à temps les petits défauts et les corriger avant qu’ils ne deviennent graves. Le PDR maintient le véhicule en état d’origine, mais c’est l’entretien approprié qui prolonge cet effet pendant des années.",
+
+    "parkingDamageFull": "Une bosse ou un éclat sur la porte de voiture sur un parking est une situation fréquente. Des réactions incorrectes dans les premières minutes peuvent aggraver les dégâts, il est donc important de connaître les bonnes étapes pour limiter le problème et restaurer rapidement la carrosserie.",
+    "parkingDamageFull1": "Prenez immédiatement des photos de la bosse et du lieu de l’incident. S’il y a des caméras de surveillance ou des témoins, essayez de conserver ces informations. Elles pourront être utiles auprès de l’assurance ou en cas de litige.",
+    "parkingDamageFull2": "Si la peinture n’est pas abîmée, la réparation PDR (réparation de bosses sans peinture) est la meilleure solution. Cette technologie permet de redonner rapidement à la porte sa forme d’origine sans repeindre. En cas de rayures profondes ou d’éclats jusqu’au métal, le technicien proposera une solution combinée.",
+    "parkingDamageFull3": "Ne tentez pas de redresser la porte par vous-même, cela pourrait aggraver la déformation. Les artisans professionnels utilisent des outils spéciaux pour enlever les dommages sans risque d’endommager le vernis. De plus, le service de réparation ne prendra que quelques heures au lieu de longues journées d’attente après la peinture.",
+    "parkingDamageFull4": "Pour réduire les risques de récidive, essayez de vous garer loin des voitures à larges portières, notamment dans les centres commerciaux. L’utilisation de baguettes ou de protections de porte aide aussi à éviter les petits chocs.",
+    "parkingDamageFull5": "Conclusion : une porte abîmée sur un parking est désagréable, mais ce n’est pas une catastrophe. Dans la plupart des cas, la situation peut être résolue sans repeindre et sans longs délais. Le PDR permet de redonner à la carrosserie son aspect parfait tout en conservant la peinture d’origine et la valeur du véhicule.",
+    "parkingDamageTitle1": "Étape 1. Constatez les dégâts.",
+    "parkingDamageTitle2": "Étape 2. Évaluez l’ampleur des dommages.",
+    "parkingDamageTitle3": "Étape 3. Adressez-vous à un service spécialisé.",
+    "parkingDamageTitle4": "Étape 4. Pensez à la prévention.",
+
+    "hailPDRFull1": "La grêle est l'un des phénomènes naturels les plus irritants pour les propriétaires de voitures. Même une averse à court terme avec une grosse grêle peut laisser des dizaines de bosses sur le toit, le capot et les portes de la voiture. La façon traditionnelle de réparer de tels dommages est de rembourrer et de repeindre complètement les pièces, ce qui prend beaucoup de temps et coûte cher. Cependant, il existe une autre option : la réparation PDR (réparation de dent sans peinture).",
+    "hailPDRFull2": "La technologie PDR permet d’éliminer les dégâts de grêle sans mastic ni peinture. Grâce à des outils spécifiques, le technicien redresse soigneusement le métal de l’intérieur, lui redonnant sa forme d’origine. La peinture d’usine est totalement préservée, ce qui est essentiel pour protéger la carrosserie contre la corrosion et maintenir la valeur du véhicule.",
+    "hailPDRFull3": "Le principal avantage de cette méthode est la rapidité et l’économie. Si la peinture du corps peut prendre une semaine, l’élimination des bosses avec PDR dans la plupart des cas est effectuée en 1-2 jours. De plus, il n’y a pas besoin de préparation de peinture et de travaux de peinture complexes, ce qui réduit le coût de la réparation.",
+    "hailPDRFull4": "Le PDR après grêle est particulièrement apprécié des propriétaires de voitures neuves ou haut de gamme, où la préservation de la peinture d’origine est cruciale. Même sur le marché de l’occasion, les véhicules réparés par PDR se vendent plus cher que ceux repeints. L’investissement dans une réparation de qualité est donc pleinement justifié.",
+    "hailPDRFull5": "Donc, si votre voiture a été endommagée par la grêle, ne vous précipitez pas pour accepter la peinture traditionnelle. La réparation des bosses sans peinture vous permet de rendre rapidement, en toute sécurité et de manière rentable l’apparence d’origine de la voiture. PDR est une solution moderne qui a déjà prouvé son efficacité et est devenue la norme sur les meilleurs services dans le monde entier."
   },
 
   "BodyRepair": {
     "mainTitle": "Réparation de la carrosserie et peinture"
+  },
+  "AboutUs": {
+    "aboutUsP1": "PDR STUDIO n’est pas seulement un atelier, c’est un lieu où chaque voiture est traitée comme si elle était unique et la plus précieuse. Nous croyons que chaque détail compte et que chaque client mérite un résultat parfait.",
+    "aboutUsP2": "Nous sommes spécialisés dans la technologie PDR (Paintless Dent Repair) — sans peinture, sans discours superflu, seulement un travail précis et le respect de l’apparence d’origine de la voiture. Il est important pour nous de préserver la peinture d’usine et donc l’histoire de votre véhicule, car derrière chaque bosse se cache un moment et derrière chaque courbe restaurée — notre fierté.",
+    "aboutUsP3": "Chez PDR STUDIO, travaillent des artisans qui connaissent tout sur la carrosserie automobile. Nous avons vu des centaines de cas complexes et trouvé une solution à chaque fois. Équipements modernes, gestes précis et attention à chaque détail — voilà le secret qui nous distingue.",
+    "aboutUsP4": "Mais le plus important, c’est la confiance. Nous expliquons ouvertement le processus, validons chaque détail et travaillons toujours pour que le résultat soit meilleur que ce que vous attendiez. Notre objectif est simple : vous rendre votre voiture sans traces de dommages et vous redonner ce sourire lorsque vous retombez amoureux de votre véhicule.",
+    "aboutUsP5": "Notre mission est de rendre le monde automobile plus beau et plus sûr, tout en préservant son caractère unique et sa valeur. Nous valorisons l’honnêteté, le savoir-faire et la responsabilité. Chaque jour, nous prouvons que la réparation peut être rapide, de qualité et transparente, et que le travail des artisans est un véritable art."
+  },
+  "Blog": {
+    "mainTitle": "Blog",
+    "whatIsPDR": "Qu’est-ce que la réparation PDR et pourquoi est-elle meilleure que la peinture traditionnelle",
+    "pdrMyths": "5 mythes sur la réparation de bosses sans peinture",
+    "preservePaint": "Comment préserver la peinture d’origine de votre voiture",
+    "afterPDRCare": "Comment entretenir la carrosserie après une réparation PDR",
+    "parkingDamage": "Que faire si la porte de votre voiture est endommagée sur un parking",
+    "hailPDR": "PDR après la grêle : restauration d’une voiture sans repeindre",
+
+    "whatIsPDRDesc": "Découvrez comment la réparation de bosses sans peinture (PDR) aide à restaurer la carrosserie d’un véhicule tout en préservant la peinture d’usine et en réduisant le temps de réparation.",
+    "pdrMythsDesc": "Nous déconstruisons les mythes les plus répandus sur la réparation PDR et expliquons ses véritables avantages pour les automobilistes.",
+    "preservePaintDesc": "Conseils pratiques pour l’entretien de la carrosserie afin de conserver la peinture d’origine de votre voiture en parfait état.",
+    "afterPDRCareDesc": "Recommandations étape par étape pour protéger les zones réparées après une réparation de bosses sans peinture et garantir un résultat durable.",
+    "parkingDamageDesc": "Guide pour les conducteurs : que faire si la porte de votre voiture est endommagée sur un parking et comment restaurer rapidement la carrosserie.",
+    "hailPDRDesc": "Restauration efficace de la carrosserie après un épisode de grêle sans repeindre, en préservant la finition et l’apparence d’origine.",
+
+    "readMoreLink": "Lire la suite..."
+  },
+
+  "EstimateRequestForm": {
+    "formTitle": "Demande de devis pour réparation",
+    "isRequired": "Ce champ est obligatoire",
+
+    "genderMale": "M.",
+    "genderFemale": "Mme",
+
+    "firstNameLabel": "Prénom *",
+    "lastNameLabel": "Nom *",
+    "phoneLabel": "Numéro de téléphone *",
+    "messageLabel": "Décrivez les dommages",
+    "consentPrivacyText": "J’accepte la",
+    "consentPrivacyLink": "politique de confidentialité",
+    "submitPending": "Envoi...",
+    "submitLabel": "Envoyer",
+    "submitSuccess": "Votre demande a été envoyée avec succès",
+
+    "placeholderText": "Aucun fichier sélectionné",
+    "uploadButtonLabel": "Télécharger une photo",
+    "removeFileAriaLabel": "Supprimer le fichier",
+
+    "validationGenderInvalid": "Veuillez sélectionner une civilité",
+    "validationFirstNameRequired": "Le prénom est obligatoire",
+    "validationFirstNameMax": "Le prénom ne peut pas dépasser 60 caractères",
+    "validationFirstNameSymbols": "Le prénom ne peut contenir que des lettres",
+    "validationLastNameRequired": "Le nom est obligatoire",
+    "validationLastNameMax": "Le nom ne peut pas dépasser 60 caractères",
+    "validationLastNameSymbols": "Le nom ne peut contenir que des lettres",
+    "validationPhoneRequired": "Le numéro de téléphone est obligatoire",
+    "validationPhoneInvalid": "Veuillez entrer un numéro de téléphone valide",
+    "validationEmailRequired": "L’adresse e-mail est obligatoire",
+    "validationEmailInvalid": "Veuillez entrer une adresse e-mail valide",
+    "validationMessageRequired": "La description des dommages est obligatoire",
+    "validationMessageMin": "La description doit contenir au moins 10 caractères",
+    "validationMessageMax": "La description ne peut pas dépasser 2000 caractères",
+    "validationAttachmentRequired": "Veuillez joindre une photo des dommages"
   }
 }

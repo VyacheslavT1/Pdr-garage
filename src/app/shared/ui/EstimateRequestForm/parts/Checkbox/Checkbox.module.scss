@@ -1,0 +1,31 @@
+@use "../../../../styles/mixins" as *;
+@use "../../../../styles/variables" as *;
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: var(--margin-small);
+
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .icon {
+    display: inline-flex;
+    color: var(--color-main);
+    cursor: pointer;
+  }
+  .text {
+    text-indent: 0.5rem;
+    font-size: var(--font-size-small);
+  }
+  a {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}

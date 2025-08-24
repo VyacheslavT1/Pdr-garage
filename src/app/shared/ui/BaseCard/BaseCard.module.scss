@@ -1,0 +1,36 @@
+// BaseCard.module.scss
+@use "../../styles/variables" as *;
+
+.cardWrapper {
+  margin-bottom: var(--margin-large);
+  border-bottom: 1px solid var(--color-grey-70);
+  .cardImage {
+    position: relative;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 3 / 2;
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      border-radius: var(--border-radius);
+    }
+  }
+  .cardTitle {
+    margin-top: var(--margin-small);
+    font-size: var(--font-size-medium);
+    color: var(--color-cool-silver);
+    font-weight: var(--font-medium);
+  }
+  .cardDescription {
+    padding-block: var(--padding-small);
+    letter-spacing: --letter-spacing-small;
+  }
+  .cardLink {
+    padding-bottom: var(--padding-large);
+    a {
+      width: 100%;
+    }
+  }
+}
