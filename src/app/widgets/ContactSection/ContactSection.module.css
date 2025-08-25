@@ -1,1 +1,95 @@
-/*# sourceMappingURL=ContactSection.module.css.map */
+@charset "UTF-8";
+.wrapper {
+  width: 100%;
+  padding-inline: var(--padding-small);
+}
+.wrapper .mainTitle {
+  margin-bottom: var(--margin-large);
+  text-align: center;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-normal);
+  line-height: var(--line-height-regular);
+  letter-spacing: var(--letter-spacing-small);
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .wrapper .mainTitle {
+    font-size: var(--font-size-medium);
+  }
+}
+.wrapper .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-block: var(--padding-medium);
+}
+.wrapper .container .info {
+  /* TEAM: по умолчанию — столбец, по центру */
+}
+.wrapper .container .info .contactSectionTitle {
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-normal);
+  letter-spacing: var(--letter-spacing-xsmall);
+  line-height: var(--line-height-regular);
+}
+.wrapper .container .info .contactSectionTitle span {
+  color: var(--color-main);
+  font-weight: var(--font-bold);
+}
+.wrapper .container .info .geolocation {
+  width: 100%;
+  padding-block: var(--padding-small);
+}
+.wrapper .container .info .geolocation iframe {
+  border-radius: var(--border-radius);
+}
+.wrapper .container .info .geolocation .getDirection {
+  margin-block: var(--margin-medium);
+  color: var(--color-main);
+}
+.wrapper .container .info .team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-small);
+}
+.wrapper .container .info .team img {
+  border-radius: var(--border-radius);
+}
+
+/* ≥576px: твоя текущая паддинговая настройка */
+@media (min-width: 576px) {
+  .wrapper {
+    padding-inline: var(--padding-medium);
+  }
+}
+/* ≥768px: TEAM в ряд c space-between */
+@media (min-width: 768px) {
+  .wrapper .container .info .team {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+/* ≥1024px: INFO слева, ФОРМА справа (две колонки) */
+@media (min-width: 1024px) {
+  .wrapper .container {
+    flex-direction: row;
+    gap: var(--gap-small);
+    align-items: start;
+  }
+}
+@media (min-width: 1200px) {
+  .wrapper {
+    padding-inline: var(--padding-xlarge);
+  }
+  .wrapper .container {
+    gap: var(--gap-large);
+  }
+}
+@media (min-width: 1440px) {
+  .wrapper {
+    padding-inline: 0;
+  }
+}/*# sourceMappingURL=ContactSection.module.css.map */

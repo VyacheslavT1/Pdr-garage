@@ -1,5 +1,5 @@
-import EstimateRequestForm from "@/app/shared/ui/EstimateRequestForm/EstimateRequestForm";
+import ContactSection from "@/app/widgets/ContactSection/ContactSection";
 
 export default function Page() {
-  return <EstimateRequestForm />;
+  return <ContactSection />;
 }

@@ -1,0 +1,111 @@
+.wrapper {
+  width: 100%;
+  padding-inline: var(--padding-small);
+
+  .mainTitle {
+    margin-bottom: var(--margin-large);
+    text-align: center;
+    font-size: var(--font-size-normal);
+    font-weight: var(--font-normal);
+    line-height: var(--line-height-regular);
+    letter-spacing: var(--letter-spacing-small);
+    text-transform: uppercase;
+
+    @media (min-width: 768px) {
+      font-size: var(--font-size-medium);
+    }
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-block: var(--padding-medium);
+
+    .info {
+      .contactSectionTitle {
+        font-size: var(--font-size-medium);
+        font-weight: var(--font-normal);
+        letter-spacing: var(--letter-spacing-xsmall);
+        line-height: var(--line-height-regular);
+        span {
+          color: var(--color-main);
+          font-weight: var(--font-bold);
+        }
+      }
+
+      .geolocation {
+        width: 100%;
+        padding-block: var(--padding-small);
+        iframe {
+          border-radius: var(--border-radius);
+        }
+
+        .getDirection {
+          margin-block: var(--margin-medium);
+          color: var(--color-main);
+        }
+      }
+
+      /* TEAM: по умолчанию — столбец, по центру */
+      .team {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--gap-small);
+        img {
+          border-radius: var(--border-radius);
+        }
+      }
+    }
+  }
+}
+
+/* ≥576px: твоя текущая паддинговая настройка */
+@media (min-width: 576px) {
+  .wrapper {
+    padding-inline: var(--padding-medium);
+  }
+}
+
+/* ≥768px: TEAM в ряд c space-between */
+// если будут широкие фотографии минимальную ширину поменяй на 992px
+@media (min-width: 768px) {
+  .wrapper {
+    .container {
+      .info {
+        .team {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+}
+
+/* ≥1024px: INFO слева, ФОРМА справа (две колонки) */
+@media (min-width: 1024px) {
+  .wrapper {
+    .container {
+      flex-direction: row;
+      gap: var(--gap-small);
+      align-items: start;
+    }
+  }
+}
+@media (min-width: 1200px) {
+  .wrapper {
+    padding-inline: var(--padding-xlarge);
+    .container {
+      gap: var(--gap-large);
+    }
+  }
+}
+
+@media (min-width: 1440px) {
+  .wrapper {
+    padding-inline: 0;
+  }
+}

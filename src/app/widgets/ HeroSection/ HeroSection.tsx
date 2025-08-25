@@ -17,14 +17,12 @@ export default function HeroSection() {
       />
       <div className={styles.overlay}>
         <div className={styles.overlayContent}>
-          <h1 className={styles.title}>{t("title").toLocaleUpperCase()}</h1>
+          <h1 className={styles.title}>{t("title")}</h1>
           <h3 className={styles.subtitle}>{t("subtitle")}</h3>
           <div className={styles.actions}>
-            <LinkButton href="/services">
-              {t("allServicesLink").toLocaleUpperCase()}
-            </LinkButton>
+            <LinkButton href="/services">{t("allServicesLink")}</LinkButton>
             <LinkButton href="/services/paintlessDentRemoval">
-              {t("detailsLink").toLocaleUpperCase()}
+              {t("detailsLink")}
             </LinkButton>
           </div>
         </div>

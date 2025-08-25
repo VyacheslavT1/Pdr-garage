@@ -114,4 +114,26 @@
 }
 .cardWrapper .cardLink a {
   width: 100%;
+  background: var(--gradient-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 100%;
+  color: transparent;
+}
+@media (hover: hover) {
+  .cardWrapper .cardLink a:hover, .cardWrapper .cardLink a.is-active {
+    animation: shine 1s linear infinite;
+  }
+}
+@media (hover: none) {
+  .cardWrapper .cardLink a:active, .cardWrapper .cardLink a.is-active {
+    animation: shine 1s linear infinite;
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% 0;
+  }
 }/*# sourceMappingURL=BaseCard.module.css.map */

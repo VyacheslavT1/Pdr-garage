@@ -242,7 +242,7 @@
   },
 
   "EstimateRequestForm": {
-    "formTitle": "Request a Repair Quote",
+    "formTitle": "Quote request",
     "isRequired": "This field is required",
 
     "genderMale": "Mr.",
@@ -276,6 +276,12 @@
     "validationMessageRequired": "Damage description is required",
     "validationMessageMin": "Description must be at least 10 characters",
     "validationMessageMax": "Description cannot exceed 2000 characters",
-    "validationAttachmentRequired": "Please attach a photo of the damage"
+    "validationAttachmentRequired": "Please attach a photo of the damage",
+    "disclaimerEstimateApprox": "The estimate is approximate and may vary after a full vehicle inspection."
+  },
+  "ContactSection": {
+    "mainTitle": "Contact Us",
+    "contactSectionTitle": "Paintless restoration of the body for dents, scratches, and scrapes. Local painting, polishing. Repair of windscreen: scrapes, cracks.",
+    "getDirection": "Get directions"
   }
 }

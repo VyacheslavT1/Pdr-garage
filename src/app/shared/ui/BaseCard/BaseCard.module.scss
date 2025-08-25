@@ -1,5 +1,6 @@
 // BaseCard.module.scss
 @use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
 
 .cardWrapper {
   margin-bottom: var(--margin-large);
@@ -31,6 +32,20 @@
     padding-bottom: var(--padding-large);
     a {
       width: 100%;
+      background: var(--gradient-color);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 100%;
+      color: transparent;
+      @include hover {
+        animation: shine 1s linear infinite;
+      }
     }
+  }
+}
+@keyframes shine {
+  to {
+    background-position: 200% 0;
   }
 }

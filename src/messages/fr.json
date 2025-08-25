@@ -243,7 +243,7 @@
   },
 
   "EstimateRequestForm": {
-    "formTitle": "Demande de devis pour réparation",
+    "formTitle": "Demande de devis",
     "isRequired": "Ce champ est obligatoire",
 
     "genderMale": "M.",
@@ -260,7 +260,7 @@
     "submitSuccess": "Votre demande a été envoyée avec succès",
 
     "placeholderText": "Aucun fichier sélectionné",
-    "uploadButtonLabel": "Télécharger une photo",
+    "uploadButtonLabel": "Joindre une photo",
     "removeFileAriaLabel": "Supprimer le fichier",
 
     "validationGenderInvalid": "Veuillez sélectionner une civilité",
@@ -277,6 +277,12 @@
     "validationMessageRequired": "La description des dommages est obligatoire",
     "validationMessageMin": "La description doit contenir au moins 10 caractères",
     "validationMessageMax": "La description ne peut pas dépasser 2000 caractères",
-    "validationAttachmentRequired": "Veuillez joindre une photo des dommages"
+    "validationAttachmentRequired": "Veuillez joindre une photo des dommages",
+    "disclaimerEstimateApprox": "Le devis est approximatif et peut varier après une inspection complète du véhicule."
+  },
+  "ContactSection": {
+    "mainTitle": "Contactez-nous",
+    "contactSectionTitle": "restauration sans peinture de la carrosserie pour bosses, rayures et éraflures. Peinture locale, polissage. Réparation de pare-brise : éraflures, fissures.",
+    "getDirection": "Itinéraire"
   }
 }

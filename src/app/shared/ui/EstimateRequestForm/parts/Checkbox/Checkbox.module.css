@@ -83,8 +83,9 @@
 
 .label {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: var(--margin-small);
+  gap: var(--gap-xsmall);
 }
 .label input[type=checkbox] {
   appearance: none;
@@ -100,10 +101,27 @@
   cursor: pointer;
 }
 .label .text {
-  text-indent: 0.5rem;
+  flex: 1 1 auto;
+  min-width: 0;
   font-size: var(--font-size-small);
+  line-height: var(--line-height-medium);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
-.label a {
+.label .text a {
   text-decoration: underline;
   text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+@media (hover: hover) {
+  .label .text a:hover, .label .text a.is-active {
+    color: var(--color-main);
+  }
+}
+@media (hover: none) {
+  .label .text a:active, .label .text a.is-active {
+    color: var(--color-main);
+  }
 }/*# sourceMappingURL=Checkbox.module.css.map */

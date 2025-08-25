@@ -10,7 +10,6 @@ import styles from "./ServicesOverview.module.css";
 
 const ServicesOverview: React.FC = () => {
   const t = useTranslations("ServicesOverview");
-  const locale = useLocale();
 
   return (
     <div className={styles.contentWrapper}>

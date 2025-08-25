@@ -229,6 +229,7 @@ export default function EstimateRequestForm() {
               {t("submitSuccess")}
             </div>
           )}
+        <p className={styles.disclaimer}>{t("disclaimerEstimateApprox")}</p>
       </form>
     </div>
   );

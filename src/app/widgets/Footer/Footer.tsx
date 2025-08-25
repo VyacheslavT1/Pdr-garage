@@ -9,7 +9,8 @@ import PhoneIcon from "@/app/shared/Icons/phone.svg";
 import EmailIcon from "@/app/shared/Icons/mail.svg";
 import MapPinIcon from "@/app/shared/Icons/map-pin.svg";
 import ClockIcon from "@/app/shared/Icons/clock.svg";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { COMPANY_ADDRESS } from "@/app/shared/constants/siteInfo";
 import { getServiceOptions } from "@/app/shared/data/serviceOptions";
 import { ebGaramond } from "@/app/shared/ui/fonts";
 import styles from "./Footer.module.css";
@@ -48,13 +49,13 @@ export default function Footer() {
           <h3>{t("usefulLinks")}</h3>
           <ul>
             <li>
-              <Link href="#about">
+              <Link href="/aboutUs">
                 <InfoIcon className={styles.icon} />
                 {t("about")}
               </Link>
             </li>
             <li>
-              <Link href="#contactUs">
+              <Link href="/contacts">
                 <ContactFormIcon className={styles.icon} />
                 {t("contactUs")}
               </Link>
@@ -79,7 +80,9 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="https://www.google.com/maps?q=1234+Placeholder+St,+City,+Country"
+                href={`https://www.google.com/maps?q=${encodeURIComponent(
+                  COMPANY_ADDRESS
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

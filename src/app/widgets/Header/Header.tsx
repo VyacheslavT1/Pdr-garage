@@ -9,6 +9,7 @@ import ChevronUpIcon from "@/app/shared/Icons/chevron-up.svg";
 import MenuIcon from "@/app/shared/Icons/menu.svg";
 import CloseIcon from "@/app/shared/Icons/close.svg";
 import Button from "@/app/shared/ui/Button/Button";
+import LinkButton from "@/app/shared/ui/LinkButton/LinkButton";
 import Dropdown from "@/app/shared/ui/Dropdown/Dropdown";
 import { LanguageSwitcher } from "@/app/shared/ui/LanguageSwitcher/LanguageSwitcher";
 import { getServiceOptions } from "../../shared/data/serviceOptions";
@@ -83,7 +84,7 @@ const Header: React.FC = () => {
         {/* Десктопные контролы */}
         <div className={styles.controls}>
           <div className={styles.requestQuoteButton}>
-            <Button variant="primary">{t("requestQuoteButton")}</Button>
+            <LinkButton href="/contacts">{t("requestQuoteButton")}</LinkButton>
           </div>
           <LanguageSwitcher />
           {!isMenuOpen && (

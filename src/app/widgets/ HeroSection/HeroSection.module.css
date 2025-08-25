@@ -36,6 +36,7 @@
   font-weight: bold;
   letter-spacing: var(--letter-spacing-xsmall);
   line-height: var(--line-height-regular);
+  text-transform: uppercase;
 }
 @media (min-width: 768px) {
   .heroSection .overlay .overlayContent .title {
@@ -50,6 +51,7 @@
   letter-spacing: var(--letter-spacing-xsmall);
   line-height: var(--line-height-regular);
   color: var(--color-grey-10);
+  text-transform: uppercase;
 }
 @media (min-width: 768px) {
   .heroSection .overlay .overlayContent .subtitle {
@@ -60,6 +62,7 @@
 .heroSection .overlay .overlayContent .actions {
   display: flex;
   justify-content: center;
+  text-transform: uppercase;
   gap: var(--gap-regular);
 }
 @media (max-width: 576px) {

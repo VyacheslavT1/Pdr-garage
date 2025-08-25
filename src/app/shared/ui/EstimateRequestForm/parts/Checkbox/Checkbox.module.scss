@@ -3,8 +3,9 @@
 
 .label {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: var(--margin-small);
+  gap: var(--gap-xsmall);
 
   input[type="checkbox"] {
     appearance: none;
@@ -20,12 +21,24 @@
     color: var(--color-main);
     cursor: pointer;
   }
+
   .text {
-    text-indent: 0.5rem;
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: var(--font-size-small);
-  }
-  a {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    line-height: var(--line-height-medium);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+
+    a {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      @include hover {
+        color: var(--color-main);
+      }
+    }
   }
 }
