@@ -1,0 +1,41 @@
+@charset "UTF-8";
+/* Локальные стили только для страницы /admin/blocks/new */
+.pageRoot {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.titleReset {
+  margin: 0;
+}
+
+.formGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.serviceRow {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+}
+
+.uploadRow {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.buttonsRow {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}/*# sourceMappingURL=AdminBlockNew.module.css.map */

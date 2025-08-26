@@ -20,6 +20,7 @@ const ALLOWED_ATTACHMENT_TYPES = ["application/pdf"]; // plus any image/*
 const MAX_NAME_LENGTH = 60;
 const MAX_MESSAGE_LENGTH = 2000;
 
+// ВАЖНО: не трогаю имена/сигнатуры — оставляю как есть
 function isValidName(firstName: string, lastName: string) {
   return /^[A-Za-zА-Яа-я]+$/.test(firstName || lastName);
 }
@@ -47,6 +48,7 @@ export async function submitEstimateRequest(
   formData: FormData
 ): Promise<SubmitEstimateResult> {
   try {
+    // Чтение полей из FormData
     const gender = String(formData.get("gender") ?? "").trim();
     const firstName = String(formData.get("firstName") ?? "").trim();
     const lastName = String(formData.get("lastName") ?? "").trim();
@@ -54,16 +56,20 @@ export async function submitEstimateRequest(
     const email = String(formData.get("email") ?? "").trim();
     const message = String(formData.get("message") ?? "").trim();
 
+    // Honeypot из формы (если ты добавил <input name="company" ... />)
+    const company = String(formData.get("company") ?? "").trim();
+
     //  согласие (чекбокс). Если не отмечен — ключа в FormData просто нет.
     const consentAccepted = formData.has("consentToContact");
 
+    // Файл
     const attachmentEntry = formData.get("attachment");
     const attachmentFile =
       attachmentEntry instanceof File ? (attachmentEntry as File) : null;
-
     const hasRealAttachment =
       !!attachmentFile && !!attachmentFile.name && attachmentFile.size > 0;
 
+    // Валидация (оставляю твою логику; без переименований)
     const fieldErrors: SubmitEstimateResult["fieldErrors"] = {};
 
     // gender
@@ -77,6 +83,7 @@ export async function submitEstimateRequest(
     } else if (firstName.length > MAX_NAME_LENGTH) {
       fieldErrors.firstName = "validationFirstNameMax";
     } else if (!isValidName) {
+      // оставляю как в твоём коде (не меняю поведение)
       fieldErrors.firstName = "validationFirstNameSymbols";
     }
 
@@ -85,6 +92,7 @@ export async function submitEstimateRequest(
     } else if (lastName.length > MAX_NAME_LENGTH) {
       fieldErrors.lastName = "validationLastNameMax";
     } else if (!isValidName) {
+      // оставляю как в твоём коде (не меняю поведение)
       fieldErrors.lastName = "validationLastNameSymbols";
     }
 
@@ -130,11 +138,46 @@ export async function submitEstimateRequest(
       fieldErrors.consent = "validationConsentRequired";
     }
 
+    // Если есть ошибки — возвращаем их
     if (Object.keys(fieldErrors).length > 0) {
       return { ok: false, fieldErrors };
     }
 
-    // Success — side effects (email/DB/storage) can be added later
+    // ⬇️ ДОБАВЛЕНО: создаём заявку в системе через публичный API /api/requests
+    try {
+      const clientFullName = `${firstName} ${lastName}`.trim();
+
+      const requestPayload = {
+        clientName: clientFullName,
+        phone: phone, // уже нормализован
+        comment: message || undefined,
+        company, // honeypot: если бот заполнил — API вернёт 204 и не создаст запись
+      };
+
+      const createRequestResponse = await fetch("/api/requests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(requestPayload),
+      });
+
+      // Любой 2xx (включая 204 при сработавшем honeypot) — считаем успехом.
+      if (
+        !(
+          createRequestResponse.status >= 200 &&
+          createRequestResponse.status < 300
+        )
+      ) {
+        return { ok: false, formError: "formSubmitFailed" };
+      }
+    } catch {
+      return { ok: false, formError: "formSubmitFailed" };
+    }
+    // ⬆️ КОНЕЦ ДОБАВЛЕННОГО БЛОКА
+
+    // Успех — дополнительные side effects (email/БД/storage) можно добавить позже
     return { ok: true };
   } catch {
     return {

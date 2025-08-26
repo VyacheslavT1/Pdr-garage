@@ -203,6 +203,17 @@ export default function EstimateRequestForm() {
             displayErrors.consent ? t(displayErrors.consent) : undefined
           }
         />
+        <div className={styles.honeypot} aria-hidden="true">
+          <label htmlFor="company">Company</label>
+          <input
+            id="company"
+            name="company"
+            type="text"
+            autoComplete="off"
+            tabIndex={-1}
+            defaultValue=""
+          />
+        </div>
 
         <div className={styles.actions}>
           <Button
@@ -218,7 +229,7 @@ export default function EstimateRequestForm() {
 
         {submitState.formError && (
           <div className={styles.formError} role="alert">
-            {t(submitState.formError)}
+            {t("formSubmitFailed")}
           </div>
         )}
 

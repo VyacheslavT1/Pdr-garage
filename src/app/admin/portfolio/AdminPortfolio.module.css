@@ -1,0 +1,30 @@
+@charset "UTF-8";
+/* Локальные стили только для страницы /admin/portfolio */
+.pageRoot {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.titleReset {
+  margin: 0; /* убираем внешний отступ у заголовка */
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* расстояние между кнопками действий */
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}/*# sourceMappingURL=AdminPortfolio.module.css.map */

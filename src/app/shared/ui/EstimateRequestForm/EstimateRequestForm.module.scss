@@ -18,6 +18,19 @@
       gap: var(--gap-regular);
       border: none;
     }
+    /* Honeypot-поле: визуально скрыто, но остаётся в DOM для ботов */
+    .honeypot {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
     .actions {
       button {
         width: 100%;

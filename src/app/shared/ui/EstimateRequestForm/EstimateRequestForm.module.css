@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .formContainer .form {
   padding: var(--padding-small);
   border: 1px solid var(--color-grey-70);
@@ -5,6 +6,7 @@
   box-shadow: var(--color-grey-dark) 0px 0px 18px 10px;
   min-width: 343px;
   max-width: 27rem;
+  /* Honeypot-поле: визуально скрыто, но остаётся в DOM для ботов */
 }
 .formContainer .form .formTitle {
   padding-bottom: var(--padding-small);
@@ -14,6 +16,17 @@
   display: flex;
   gap: var(--gap-regular);
   border: none;
+}
+.formContainer .form .honeypot {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 .formContainer .form .actions button {
   width: 100%;

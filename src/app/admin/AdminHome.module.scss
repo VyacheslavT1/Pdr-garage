@@ -1,0 +1,39 @@
+/* Локальные стили только для /admin (домашняя страница админки) */
+
+.layoutRoot {
+  /* Было: style={{ minHeight: '100dvh' }} */
+  min-height: 100dvh;
+}
+
+.headerBar {
+  /* Было: display, align, justify, paddingInline */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 1rem;
+  /* Фон оставляем дефолтный от AntD <Header>, он тёмный */
+}
+
+.headerTitle {
+  /* Было: style={{ color: 'white', margin: 0 }} на <Title level={4}> */
+  margin: 0;
+  color: white;
+}
+
+.contentRoot {
+  /* Было: style={{ padding: '1.5rem' }} на <Content> */
+  padding: 1.5rem;
+}
+
+.contentContainer {
+  /* Было: maxWidth, marginInline, grid, gap на внутреннем <div> */
+  max-width: 960px;
+  margin-inline: auto;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.footerBar {
+  /* Было: style={{ textAlign: 'center' }} на <Footer> */
+  text-align: center;
+}
