@@ -36,6 +36,13 @@
         width: 100%;
       }
     }
+
+    .formError {
+      color: var(--color-error);
+      padding-top: var(--padding-small);
+      font-size: var(--font-size-base);
+    }
+
     .disclaimer {
       padding-top: var(--padding-small);
       font-size: var(--font-size-small);

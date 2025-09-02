@@ -10,9 +10,10 @@ import {
   Space,
   Card,
   Table,
-  message,
   Tag,
+  message,
   Popconfirm,
+  Image,
 } from "antd";
 import AdminNav from "../shared/AdminNav/AdminNav";
 import styles from "./AdminRequests.module.scss";
@@ -26,8 +27,17 @@ type RequestRow = {
   createdAt: string; // Дата создания (ISO)
   clientName: string; // Имя клиента (обязательное поле формы)
   phone: string; // Телефон (обязательное поле формы)
+  email: string;
   comment?: string | null; // Комментарий (опционально)
   status: "Не обработано" | "Обработано"; // Статус обработки админом
+  attachments?: Array<{
+    id: string;
+    name: string;
+    type: string;
+    size: number;
+    dataUrl?: string | null;
+  }>;
+  gender?: "male" | "female";
 };
 
 export default function AdminRequestsPage() {
@@ -51,6 +61,10 @@ export default function AdminRequestsPage() {
   Показываем спиннер на конкретной кнопке "Удалить"
   и блокируем повторные клики, пока идёт запрос.
 */
+  // ⬇️ спиннер для обратного действия (возврат в "Не обработано")
+  const [revertingRequestId, setRevertingRequestId] = useState<string | null>(
+    null
+  );
 
   // 3) Колонки таблицы — без изменений логики и названий
   const tableColumns = [
@@ -64,18 +78,34 @@ export default function AdminRequestsPage() {
       ),
       sorter: true, // обработчик добавим позже, когда появится серверная сортировка
     },
+
     {
-      title: "Имя",
+      title: "Клиент",
       dataIndex: "clientName",
       key: "clientName",
-      ellipsis: true,
+      // ⬇️ показываем бейдж гендера слева от имени, если он передан с API
+      render: (_: unknown, record: RequestRow) => (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {record.gender && (
+            <span>{record.gender === "male" ? "Г-н" : "Г-жа"}</span>
+          )}
+          <span>{record.clientName}</span>
+        </div>
+      ),
     },
+
     {
       title: "Телефон",
       dataIndex: "phone",
       key: "phone",
       width: 180,
       render: (value: string) => <a href={`tel:${value}`}>{value}</a>,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      render: (value: string) => <a href={`email:${value}`}>{value}</a>,
     },
     {
       title: "Комментарий",
@@ -85,6 +115,52 @@ export default function AdminRequestsPage() {
       render: (value: string | null | undefined) =>
         value ? <Text>{value}</Text> : <Text type="secondary">—</Text>,
     },
+    {
+      title: "Фотографии",
+      dataIndex: "attachments",
+      key: "attachments",
+      width: 200,
+      render: (cellValue: RequestRow["attachments"], record: RequestRow) => {
+        const attachments = Array.isArray(record.attachments)
+          ? record.attachments
+          : [];
+        const imagePreviews = attachments.filter(
+          (a) => !!a?.dataUrl && typeof a.dataUrl === "string"
+        );
+
+        if (imagePreviews.length === 0) {
+          return <span style={{ opacity: 0.6 }}>нет</span>;
+        }
+
+        // Покажем до 3 миниатюр, остальное — счётчиком
+        const previewSlice = imagePreviews.slice(0, 3);
+        const hiddenCount = imagePreviews.length - previewSlice.length;
+
+        return (
+          <Image.PreviewGroup>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              {previewSlice.map((item) => (
+                <Image
+                  key={item.id}
+                  src={item.dataUrl!}
+                  alt={item.name}
+                  width={48}
+                  height={48}
+                  style={{ objectFit: "cover", borderRadius: 6 }}
+                  placeholder
+                />
+              ))}
+              {hiddenCount > 0 && (
+                <span style={{ fontSize: 12, opacity: 0.8 }}>
+                  +{hiddenCount}
+                </span>
+              )}
+            </div>
+          </Image.PreviewGroup>
+        );
+      },
+    },
+
     {
       title: "Статус",
       dataIndex: "status",
@@ -106,18 +182,17 @@ export default function AdminRequestsPage() {
         <Space wrap>
           <Button onClick={handleExportRequestsCsvClick}>Экспорт CSV</Button>
 
-          {/* Отметить обработанной — оставляем как есть */}
+          {/* ОДНА кнопка: меняет лейбл и действие по текущему статусу */}
           <Button
             size="small"
             type="primary"
-            onClick={() => handleMarkProcessed(record.id)}
-            loading={processingRequestId === record.id} // спиннер на конкретной строке
-            disabled={
-              record.status === "Обработано" ||
-              processingRequestId === record.id
-            } // нельзя кликать повторно
+            onClick={() => handleToggleProcessed(record)}
+            loading={processingRequestId === record.id}
+            disabled={processingRequestId === record.id}
           >
-            Отметить обработанной
+            {record.status === "Обработано"
+              ? "Вернуть в «Не обработано»"
+              : "Отметить обработанной"}
           </Button>
 
           {/* ⬇️ Подтверждение удаления + спиннер и блокировка на время запроса */}
@@ -142,7 +217,39 @@ export default function AdminRequestsPage() {
       ),
     },
   ];
-
+  // ⬇️ Явный рефетч по клику "Обновить" (без рефакторинга существующего кода)
+  async function refetchRequestsNow() {
+    const requestAbortController = new AbortController();
+    try {
+      setIsTableLoading(true);
+      setErrorMessage("");
+      const response = await fetch("/api/requests", {
+        method: "GET",
+        credentials: "include",
+        signal: requestAbortController.signal,
+        headers: { Accept: "application/json" },
+      });
+      if (response.status === 401) {
+        message.error("Сессия недействительна. Войдите заново.");
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(`Ошибка загрузки: ${response.status}`);
+      }
+      const payload = (await response.json()) as { items: RequestRow[] };
+      setRequestsData(Array.isArray(payload.items) ? payload.items : []);
+      message.success("Список обновлён");
+    } catch (caughtError) {
+      const readableMessage =
+        caughtError instanceof Error
+          ? caughtError.message
+          : "Неизвестная ошибка";
+      setErrorMessage(readableMessage);
+      message.error("Не удалось загрузить список заявок");
+    } finally {
+      setIsTableLoading(false);
+    }
+  }
   // 4) Загрузка данных из защищённого API /api/requests при монтировании страницы
   useEffect(() => {
     const requestAbortController = new AbortController(); // позволит отменить запрос при уходе со страницы
@@ -191,22 +298,149 @@ export default function AdminRequestsPage() {
   // 5) Табличные данные: сохраняем имя переменной tableData (без переименований)
   const tableData: RequestRow[] = requestsData;
 
-  // 6) Обработчики верхних элементов управления (оставляем заглушками)
-  function handleExportCsvClick() {
-    message.info("Экспорт заявок (заглушка)");
-  }
-
   function handleSearchByNameOrPhone(value: string) {
-    message.info(`Поиск по имени/телефону: ${value || "—"}`);
+    // Пустой запрос — показываем все заявки (без параметра ?search)
+    const hasQuery = typeof value === "string" && value.trim().length > 0;
+    const baseUrl = "/api/requests";
+    const requestUrl = hasQuery
+      ? `${baseUrl}?search=${encodeURIComponent(value.trim())}`
+      : baseUrl;
+
+    setIsTableLoading(true);
+    setErrorMessage("");
+
+    fetch(requestUrl, {
+      method: "GET",
+      credentials: "include", // cookie access_token для админ-доступа
+      headers: { Accept: "application/json" },
+    })
+      .then(async (response) => {
+        if (response.status === 401) {
+          message.error("Сессия недействительна. Войдите заново.");
+          return { items: [] };
+        }
+        if (!response.ok) {
+          throw new Error(`Ошибка загрузки: ${response.status}`);
+        }
+        return (await response.json()) as { items: RequestRow[] };
+      })
+      .then((payload) => {
+        setRequestsData(Array.isArray(payload.items) ? payload.items : []);
+        message.success(
+          hasQuery
+            ? `Найдено записей: ${payload.items?.length ?? 0}`
+            : "Показаны все заявки"
+        );
+      })
+      .catch((caught) => {
+        const readable =
+          caught instanceof Error ? caught.message : "Неизвестная ошибка";
+        setErrorMessage(readable);
+        message.error("Не удалось выполнить поиск");
+      })
+      .finally(() => {
+        setIsTableLoading(false);
+      });
   }
 
   function handleFilterByStatus(statusValue: string) {
-    message.info(`Фильтр по статусу: ${statusValue || "все"}`);
+    // Пояснение:
+    // - пустая строка ("Все") -> запрашиваем без фильтра: /api/requests
+    // - конкретный статус -> /api/requests?status=<значение>, обязательно кодируем кириллицу
+
+    const isAllStatusesSelected = !statusValue; // "Все" в вашем Select = пустая строка
+    const baseUrl = "/api/requests";
+    const requestUrl = isAllStatusesSelected
+      ? baseUrl
+      : `${baseUrl}?status=${encodeURIComponent(statusValue)}`;
+
+    setIsTableLoading(true);
+    setErrorMessage("");
+
+    fetch(requestUrl, {
+      method: "GET",
+      credentials: "include", // нужны cookie access_token
+      headers: { Accept: "application/json" },
+    })
+      .then(async (response) => {
+        if (response.status === 401) {
+          message.error("Сессия недействительна. Войдите заново.");
+          return { items: [] };
+        }
+        if (!response.ok) {
+          throw new Error(`Ошибка загрузки: ${response.status}`);
+        }
+        return (await response.json()) as { items: RequestRow[] };
+      })
+      .then((payload) => {
+        setRequestsData(Array.isArray(payload.items) ? payload.items : []);
+      })
+      .catch((caught) => {
+        const readable =
+          caught instanceof Error ? caught.message : "Неизвестная ошибка";
+        setErrorMessage(readable);
+        message.error("Не удалось применить фильтр статуса");
+      })
+      .finally(() => {
+        setIsTableLoading(false);
+      });
   }
 
   function handleFilterByDateRange(_: unknown, dateStrings: [string, string]) {
-    const [fromDate, toDate] = dateStrings || [];
-    message.info(`Диапазон дат: ${fromDate || "—"} → ${toDate || "—"}`);
+    // dateStrings приходит как ["YYYY-MM-DD", "YYYY-MM-DD"] или ["", ""], если очистили
+    const [fromDate, toDate] = Array.isArray(dateStrings)
+      ? dateStrings
+      : ["", ""];
+
+    // Собираем URL: /api/requests[?from=YYYY-MM-DD][&to=YYYY-MM-DD]
+    const baseUrl = "/api/requests";
+    const params: string[] = [];
+
+    if (fromDate) params.push(`from=${encodeURIComponent(fromDate)}`);
+    if (toDate) params.push(`to=${encodeURIComponent(toDate)}`);
+
+    const requestUrl = params.length
+      ? `${baseUrl}?${params.join("&")}`
+      : baseUrl;
+
+    setIsTableLoading(true);
+    setErrorMessage("");
+
+    fetch(requestUrl, {
+      method: "GET",
+      credentials: "include", // нужны cookie access_token
+      headers: { Accept: "application/json" },
+    })
+      .then(async (response) => {
+        if (response.status === 401) {
+          message.error("Сессия недействительна. Войдите заново.");
+          return { items: [] };
+        }
+        if (!response.ok) {
+          throw new Error(`Ошибка загрузки: ${response.status}`);
+        }
+        return (await response.json()) as { items: RequestRow[] };
+      })
+      .then((payload) => {
+        setRequestsData(Array.isArray(payload.items) ? payload.items : []);
+        // Небольшая подсказка пользователю
+        if (fromDate || toDate) {
+          message.success(
+            `Диапазон дат применён: ${fromDate || "—"} → ${toDate || "—"}`
+          );
+        } else {
+          message.success("Показаны заявки за все даты");
+        }
+      })
+      .catch((caught) => {
+        const readable =
+          caught instanceof Error ? caught.message : "Неизвестная ошибка";
+        setErrorMessage(readable);
+        message.error("Не удалось применить фильтр по датам");
+      })
+      .finally(() => {
+        setIsTableLoading(false);
+      });
   }
 
   // 7) Обработчики действий по строке (как были)
@@ -255,6 +489,56 @@ export default function AdminRequestsPage() {
       message.error("Не удалось обновить статус заявки");
     } finally {
       setProcessingRequestId(null); // снимаем спиннер
+    }
+  }
+
+  // ⬇️ Новый универсальный обработчик: тумблер статуса
+  async function handleToggleProcessed(targetRow: RequestRow) {
+    const nextStatus: RequestRow["status"] =
+      targetRow.status === "Обработано" ? "Не обработано" : "Обработано";
+    try {
+      setProcessingRequestId(targetRow.id);
+      const response = await fetch(
+        `/api/requests?id=${encodeURIComponent(targetRow.id)}`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ status: nextStatus }),
+        }
+      );
+      if (response.status === 401) {
+        message.error("Сессия недействительна. Войдите заново.");
+        return;
+      }
+      if (response.status === 404) {
+        message.error("Заявка не найдена (возможно, была удалена).");
+        setRequestsData((previous) =>
+          previous.filter((existing) => existing.id !== targetRow.id)
+        );
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      // Локально обновляем статус
+      setRequestsData((previous) =>
+        previous.map((item) =>
+          item.id === targetRow.id ? { ...item, status: nextStatus } : item
+        )
+      );
+      message.success(
+        nextStatus === "Обработано"
+          ? `Заявка ${targetRow.id} отмечена обработанной`
+          : `Статус заявки ${targetRow.id} возвращён в «Не обработано»`
+      );
+    } catch {
+      message.error("Не удалось изменить статус заявки");
+    } finally {
+      setProcessingRequestId(null);
     }
   }
 
@@ -315,6 +599,7 @@ export default function AdminRequestsPage() {
     const headerColumns = [
       "id",
       "createdAt",
+      "clientGender",
       "clientName",
       "phone",
       "comment",
@@ -330,6 +615,7 @@ export default function AdminRequestsPage() {
       return [
         escapeCsvCell(requestItem.id),
         escapeCsvCell(createdAtIso),
+        escapeCsvCell(requestItem.gender),
         escapeCsvCell(requestItem.clientName),
         escapeCsvCell(requestItem.phone),
         escapeCsvCell(requestItem.comment ?? ""),
@@ -392,7 +678,10 @@ export default function AdminRequestsPage() {
         </Title>
 
         <div className={styles.actions}>
-          <Button onClick={handleExportCsvClick}>Экспорт</Button>
+          <Button onClick={handleExportRequestsCsvClick}>Экспорт</Button>
+          <Button onClick={refetchRequestsNow} loading={isTableLoading}>
+            Обновить
+          </Button>
         </div>
       </div>
 

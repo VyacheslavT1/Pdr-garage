@@ -5,7 +5,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
-import { routing } from "./src/i18n/routing";
+import { routing } from "@/i18n/routing";
 
 // 0) Готовим middleware из next-intl — это твоя текущая логика локализации.
 //    Мы её НЕ меняем, просто вызываем позже, если путь не относится к /admin/**

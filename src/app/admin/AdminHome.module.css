@@ -1,39 +1,118 @@
 @charset "UTF-8";
-/* Локальные стили только для /admin (домашняя страница админки) */
-.layoutRoot {
-  /* Было: style={{ minHeight: '100dvh' }} */
-  min-height: 100dvh;
+/* 1) Корневой контейнер — базовые отступы для ≥768px */
+.pageRoot {
+  padding: 1rem;
+}
+@media (min-width: 768px) {
+  .pageRoot {
+    padding: 1.5rem 1.25rem;
+  }
+}
+@media (min-width: 1200px) {
+  .pageRoot {
+    padding: 2rem 1.5rem;
+  }
 }
 
-.headerBar {
-  /* Было: display, align, justify, paddingInline */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-inline: 1rem;
-  /* Фон оставляем дефолтный от AntD <Header>, он тёмный */
+/* 2) Шапка: заголовок + действия */
+.titleReset {
+  margin: 0; /* убираем лишние отступы у Title AntD */
 }
 
-.headerTitle {
-  /* Было: style={{ color: 'white', margin: 0 }} на <Title level={4}> */
-  margin: 0;
-  color: white;
-}
-
-.contentRoot {
-  /* Было: style={{ padding: '1.5rem' }} на <Content> */
-  padding: 1.5rem;
-}
-
-.contentContainer {
-  /* Было: maxWidth, marginInline, grid, gap на внутреннем <div> */
-  max-width: 960px;
-  margin-inline: auto;
+.headerRow {
   display: grid;
-  gap: 0.75rem;
+  grid-template-columns: 1fr;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  /* с 992px — в линию: заголовок слева, кнопки справа */
+}
+@media (min-width: 992px) {
+  .headerRow {
+    grid-template-columns: 1fr auto;
+  }
 }
 
-.footerBar {
-  /* Было: style={{ textAlign: 'center' }} на <Footer> */
-  text-align: center;
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  /* AntD кнопки — не на всю ширину */
+}
+@media (min-width: 992px) {
+  .actions {
+    justify-content: flex-end;
+  }
+}
+.actions :global(.ant-btn) {
+  white-space: nowrap;
+}
+
+/* 3) Панель фильтров:
+      - 768–1199px: 2 колонки
+      - 1200–1439px: 3 колонки
+      - ≥1440px: 4 колонки
+   Все контролы тянутся на 100% ширины своей ячейки.
+*/
+.filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-block: 1rem 1.25rem;
+  /* делаем элементы AntD резиновыми внутри CSS-модуля */
+}
+.filters :global(.ant-input-search),
+.filters :global(.ant-select),
+.filters :global(.ant-picker),
+.filters :global(.ant-picker-range) {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1440px) {
+  .filters {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* 4) Таблица: на узких ноутбуках — горизонтальный скролл,
+      на широких — шапка липкая для удобства чтения.
+*/
+.tableContainer {
+  /* скролл размещаем на теле карточки */
+  /* не даём колонкам чрезмерно ужиматься */
+  /* липкая шапка начиная с десктопа */
+}
+.tableContainer :global(.ant-card-body) {
+  overflow-x: auto;
+}
+.tableContainer :global(.ant-table) {
+  min-width: 1100px;
+}
+@media (min-width: 1440px) {
+  .tableContainer :global(.ant-table) {
+    min-width: 1300px;
+  }
+}
+@media (min-width: 1200px) {
+  .tableContainer :global(.ant-table-thead > tr > th) {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff; /* можно заменить на var(--color-surface) если есть */
+  }
+}
+
+/* 5) Небольшой визуальный штрих для превью изображений (без изменений логики) */
+:global(.ant-image-img) {
+  border-radius: 6px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }/*# sourceMappingURL=AdminHome.module.css.map */

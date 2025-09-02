@@ -1,9 +1,10 @@
 // Назначение: обработчик GET /api/requests
-// - Возвращает массив заявок (заглушка для разработки)
+// - Возвращает массив заявок
 // - Защищён: без cookie access_token вернёт 401 (как и раздел /admin/**)
 // - Возвращает JSON с безопасными заголовками
 
 import { NextResponse } from "next/server";
+import { supabaseServer } from "../../../../lib/supabaseServer";
 
 // 1) Единые заголовки безопасности для всех ответов
 const securityHeaders = {
@@ -17,50 +18,134 @@ type RequestItem = {
   id: string; // уникальный идентификатор
   createdAt: string; // дата создания (ISO)
   clientName: string; // имя клиента (из формы)
+  gender?: "male" | "female";
   phone: string; // телефон (из формы)
+  email: string;
   comment?: string | null; // комментарий (опционально)
   status: "Не обработано" | "Обработано"; // статус обработки в админке
+  attachments?: Array<{
+    id: string;
+    name: string;
+    type: string;
+    size: number;
+    dataUrl?: string | null; // для изображений — превью (data:image/*;base64,...)
+  }>;
 };
 
-// 3) Демо-данные (заглушка). Позже заменим на подключение к БД/бэкенду.
-const demoRequests: RequestItem[] = [
-  {
-    id: "rq_001",
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 часа назад
-    clientName: "Сергей Кузнецов",
-    phone: "+33 6 12 34 56 78",
-    comment: "Нужна оценка вмятины на двери",
-    status: "Не обработано",
-  },
-  {
-    id: "rq_002",
-    createdAt: new Date(Date.now() - 2 * 86400000).toISOString(), // 2 дня назад
-    clientName: "Anna Dupont",
-    phone: "+33 7 98 76 54 32",
-    comment: null,
-    status: "Обработано",
-  },
-];
-
-// 4) Обработчик GET /api/requests
+// 4) Обработчик GET /api/requests (с сортировкой, пагинацией, статусом, поиском и диапазоном дат)
 export async function GET(incomingRequest: Request) {
-  // 4.1) Простейшая проверка наличия access_token в cookies запроса
+  // 1) Авторизация по cookie (как у тебя было)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
   const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
-
   if (!hasAccessToken) {
-    // 4.2) Без токена — 401 Unauthorized (поведение согласовано с админ-разделом)
     return NextResponse.json(
       { error: "Unauthorized" },
       { status: 401, headers: securityHeaders }
     );
   }
 
-  // 4.3) Возвращаем заглушечные данные
-  return NextResponse.json(
-    { items: demoRequests },
-    { status: 200, headers: securityHeaders }
-  );
+  try {
+    // 2) Разбор query-параметров (без переименований твоих переменных)
+    const url = new URL(incomingRequest.url);
+    const rawPage = Number(url.searchParams.get("page") || 1);
+    const rawPageSize = Number(url.searchParams.get("pageSize") || 10);
+    const rawOrder = (url.searchParams.get("order") || "desc").toLowerCase();
+    const rawStatus = url.searchParams.get("status"); // "Не обработано" | "Обработано" | null
+    const rawSearch = url.searchParams.get("search"); // строка или null
+    const rawFrom = url.searchParams.get("from"); // YYYY-MM-DD или null
+    const rawTo = url.searchParams.get("to"); // YYYY-MM-DD или null
+
+    const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
+    const pageSize =
+      Number.isFinite(rawPageSize) && rawPageSize > 0 && rawPageSize <= 100
+        ? rawPageSize
+        : 10;
+    const order: "asc" | "desc" = rawOrder === "asc" ? "asc" : "desc";
+
+    const allowedStatuses: RequestItem["status"][] = [
+      "Не обработано",
+      "Обработано",
+    ];
+    const normalizedStatus =
+      typeof rawStatus === "string" &&
+      allowedStatuses.includes(rawStatus as any)
+        ? (rawStatus as RequestItem["status"])
+        : null;
+
+    const hasSearch =
+      typeof rawSearch === "string" && rawSearch.trim().length > 0;
+    const searchValue = hasSearch ? rawSearch!.trim() : "";
+
+    const ymdRegex = /^\d{4}-\d{2}-\d{2}$/;
+    const hasFrom = typeof rawFrom === "string" && ymdRegex.test(rawFrom);
+    const hasTo = typeof rawTo === "string" && ymdRegex.test(rawTo);
+
+    const fromIso = hasFrom ? `${rawFrom}T00:00:00.000Z` : null;
+    const toIso = hasTo ? `${rawTo}T23:59:59.999Z` : null;
+
+    // 3) Базовый запрос к Supabase (public.requests), сортировка по created_at
+    //    В БД: created_at, client_name, ... (snake_case)
+    //    В ответе: createdAt, clientName, ... (camelCase) — маппим после выборки
+    let query = supabaseServer
+      .from("requests")
+      .select("*")
+      .order("created_at", { ascending: order === "asc" });
+
+    // 4) Фильтр по статусу (если передан)
+    if (normalizedStatus) {
+      query = query.eq("status", normalizedStatus);
+    }
+
+    // 5) Фильтры по дате (если переданы границы)
+    if (fromIso) query = query.gte("created_at", fromIso);
+    if (toIso) query = query.lte("created_at", toIso);
+
+    // 6) Поиск по имени/телефону (OR). Используем ilike с шаблоном %...%
+    if (hasSearch) {
+      // client_name ILIKE %term% OR phone ILIKE %term%
+      query = query.or(
+        `client_name.ilike.%${searchValue}%,phone.ilike.%${searchValue}%`
+      );
+    }
+
+    // 7) Пагинация (range — включительно по end)
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
+    query = query.range(start, end);
+
+    // 8) Выполняем запрос
+    const { data, error } = await query;
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    // 9) Маппинг snake_case → camelCase под твой контракт (RequestItem)
+    const items: RequestItem[] = (data || []).map((row: any) => ({
+      id: row.id,
+      createdAt: row.created_at,
+      clientName: row.client_name,
+      gender: row.gender ?? undefined,
+      phone: row.phone,
+      email: row.email,
+      comment: row.comment ?? null,
+      status: row.status,
+      attachments: Array.isArray(row.attachments)
+        ? row.attachments
+        : row.attachments ?? [],
+    }));
+
+    return NextResponse.json(
+      { items },
+      { status: 200, headers: securityHeaders }
+    );
+  } catch (caughtError) {
+    const readable =
+      caughtError instanceof Error ? caughtError.message : "Unknown error";
+    return NextResponse.json(
+      { error: "ServerError", details: readable },
+      { status: 500, headers: securityHeaders }
+    );
+  }
 }
 
 // ---------- POST /api/requests (публичное создание заявки) ----------
@@ -152,6 +237,7 @@ export async function POST(incomingRequest: Request) {
       typeof parsedBody?.comment === "string"
         ? parsedBody.comment.trim()
         : null,
+    email: (parsedBody?.email ?? "").toString().trim(),
   };
 
   // 4) Валидация (минимально достаточная под текущую таблицу)
@@ -187,28 +273,186 @@ export async function POST(incomingRequest: Request) {
     );
   }
 
-  // 5) Создаём запись в демо-хранилище (в памяти процесса) со статусом "Не обработано"
-  //    Типы RequestItem и массив demoRequests уже объявлены выше в файле — имена НЕ меняем.
-  const newRequestItem: RequestItem = {
-    id: `rq_${crypto.randomUUID()}`,
+  // ⬇️ ПОДДЕРЖКА ГЕНДЕРА: принимаем из тела запроса 'male' | 'female' (опционально)
+  const rawGenderValue =
+    typeof parsedBody?.gender === "string"
+      ? parsedBody.gender.trim().toLowerCase()
+      : undefined;
+
+  // Если поле передано, но значение не из допустимых — вернём ошибку валидации
+  let normalizedGenderValue: "male" | "female" | undefined = undefined;
+  if (rawGenderValue !== undefined) {
+    if (rawGenderValue === "male" || rawGenderValue === "female") {
+      normalizedGenderValue = rawGenderValue;
+    } else {
+      validationErrors.gender = "Недопустимое значение гендера";
+    }
+  }
+
+  if (Object.keys(validationErrors).length > 0) {
+    return NextResponse.json(
+      { error: "ValidationError", details: validationErrors },
+      { status: 400, headers: localSecurityHeaders }
+    );
+  }
+
+  // ⬇️ ПРИЁМ вложений из тела запроса: ожидаем attachments как массив объектов
+  const incomingAttachmentsRaw = Array.isArray(parsedBody?.attachments)
+    ? parsedBody.attachments
+    : [];
+
+  // Нормализуем и фильтруем вложения (в демо сохраняем только изображения с dataUrl)
+  const normalizedAttachments: RequestItem["attachments"] =
+    incomingAttachmentsRaw
+      .slice(0, 10) // ограничим до 10 на всякий случай
+      .map((it: any) => ({
+        id: typeof it?.id === "string" ? it.id : `att_${crypto.randomUUID()}`,
+        name: typeof it?.name === "string" ? it.name : "file",
+        type:
+          typeof it?.type === "string" ? it.type : "application/octet-stream",
+        size: Number.isFinite(it?.size) ? Number(it.size) : 0,
+        dataUrl:
+          typeof it?.dataUrl === "string" &&
+          it.dataUrl.startsWith("data:image/")
+            ? it.dataUrl
+            : null,
+      }))
+      // оставим только изображения ИЛИ метаданные с null-превью (на будущее)
+      .filter(
+        (att: { dataUrl?: string | null }) =>
+          att.dataUrl === null ||
+          (typeof att.dataUrl === "string" &&
+            att.dataUrl.startsWith("data:image/"))
+      );
+
+  // ---------- ⬇️ НОВЫЙ БЛОК: сохраняем вложения в Supabase Storage (bucket: requests)
+  // Генерируем id заявки (как и раньше)
+  const generatedRequestId = `rq_${crypto.randomUUID()}`;
+
+  // Если нужно уметь "выключать" загрузки — оставляем флаг как есть
+  const isStorageUploadsDisabled =
+    process.env.DISABLE_STORAGE_UPLOADS === "true";
+
+  let uploadedAttachments: RequestItem["attachments"];
+
+  if (isStorageUploadsDisabled) {
+    // Ничего не грузим, сохраняем как есть (base64 или null)
+    uploadedAttachments = normalizedAttachments || [];
+  } else {
+    const storageBucketName = "requests";
+
+    // ⚠️ функция с тем же именем, что у тебя раньше — чтобы не менять вызовы
+    async function saveImageDataUrlToStorage(args: {
+      requestId: string;
+      attachmentId: string;
+      name: string;
+      type: string;
+      dataUrl: string; // "data:image/png;base64,..."
+    }): Promise<{ publicUrl: string; bytes: number }> {
+      // отделяем метаданные от base64
+      const commaIndex = args.dataUrl.indexOf(",");
+      if (commaIndex < 0) {
+        throw new Error("Invalid dataUrl format");
+      }
+      const base64Part = args.dataUrl.slice(commaIndex + 1);
+      const buffer = Buffer.from(base64Part, "base64");
+
+      // безопасное имя файла
+      const safeName = args.name.replace(/[^a-zA-Z0-9._-]+/g, "_");
+      // путь хранения: сгруппировано по заявке
+      const objectPath = `requests/${args.requestId}/${args.attachmentId}_${safeName}`;
+
+      // загружаем в Supabase Storage
+      const { error: uploadError } = await supabaseServer.storage
+        .from(storageBucketName)
+        .upload(objectPath, buffer, {
+          contentType: args.type || "application/octet-stream",
+          upsert: true, // разрешим перезапись, чтобы не падать при повторе
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // получаем публичный URL
+      const { data: publicData } = supabaseServer.storage
+        .from(storageBucketName)
+        .getPublicUrl(objectPath);
+
+      return { publicUrl: publicData.publicUrl, bytes: buffer.byteLength };
+    }
+
+    uploadedAttachments = await Promise.all(
+      (normalizedAttachments || []).map(async (att) => {
+        if (att.dataUrl && typeof att.dataUrl === "string") {
+          try {
+            const { publicUrl, bytes } = await saveImageDataUrlToStorage({
+              requestId: generatedRequestId,
+              attachmentId: att.id,
+              name: att.name,
+              type: att.type,
+              dataUrl: att.dataUrl,
+            });
+            return {
+              ...att,
+              size: Number.isFinite(att.size) ? att.size : bytes,
+              dataUrl: publicUrl, // теперь тут публичная ссылка с Supabase
+            };
+          } catch {
+            // не роняем весь запрос из-за одного файла
+            return { ...att, dataUrl: null };
+          }
+        }
+        return att;
+      })
+    );
+  }
+
+  // ---------- ⬇️ НОВЫЙ БЛОК: собираем объект заявки и пишем в Supabase (PostgreSQL)
+  const newRequestItemForFirestore: RequestItem = {
+    id: generatedRequestId,
     createdAt: new Date().toISOString(),
     clientName: incomingPayload.clientName,
     phone: incomingPayload.phone,
+    email: incomingPayload.email,
     comment: incomingPayload.comment,
     status: "Не обработано",
+    attachments: uploadedAttachments,
+    gender: normalizedGenderValue,
   };
-  demoRequests.unshift(newRequestItem); // добавим в начало, чтобы в списке было видно сразу
 
-  // 6) Отдаём 201 Created с созданной записью
+  // ✅ Сохраняем заявку в Supabase (маппим camelCase → snake_case колонок таблицы)
+  const { error: insertError } = await supabaseServer.from("requests").insert([
+    {
+      id: newRequestItemForFirestore.id,
+      created_at: newRequestItemForFirestore.createdAt,
+      client_name: newRequestItemForFirestore.clientName,
+      gender: newRequestItemForFirestore.gender ?? null,
+      phone: newRequestItemForFirestore.phone,
+      email: newRequestItemForFirestore.email,
+      comment: newRequestItemForFirestore.comment,
+      status: newRequestItemForFirestore.status,
+      attachments: newRequestItemForFirestore.attachments ?? [],
+    },
+  ]);
+
+  if (insertError) {
+    return NextResponse.json(
+      { error: "ServerError", details: insertError.message },
+      { status: 500, headers: localSecurityHeaders }
+    );
+  }
+
+  // ⬇️ Отдаём тот же контракт, что и раньше — ничего не меняем
   return NextResponse.json(
-    { item: newRequestItem },
+    { item: newRequestItemForFirestore },
     { status: 201, headers: localSecurityHeaders }
   );
 }
 
 // ---------- PATCH /api/requests?id=<id> (смена статуса заявки) ----------
 export async function PATCH(incomingRequest: Request) {
-  // 1) Простая авторизация по cookie (как в GET)
+  // 1) Авторизация по cookie (как в GET)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
   const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
   if (!hasAccessToken) {
@@ -246,11 +490,10 @@ export async function PATCH(incomingRequest: Request) {
   //    По умолчанию переводим в 'Обработано'
   let parsedBody: any = null;
   try {
-    // тело может быть пустым; не падаем на пустоте
-    const raw = await incomingRequest.text();
+    const raw = await incomingRequest.text(); // тело может быть пустым
     parsedBody = raw ? JSON.parse(raw) : null;
   } catch {
-    // игнорируем некорректный JSON и пойдём по значению по умолчанию
+    // игнорируем некорректный JSON — используем значение по умолчанию
   }
 
   const requestedStatus =
@@ -259,15 +502,66 @@ export async function PATCH(incomingRequest: Request) {
       ? (parsedBody.status as RequestItem["status"])
       : ("Обработано" as RequestItem["status"]); // статус по умолчанию
 
-  // 4) Ищем заявку и обновляем статус
-  const foundIndex = demoRequests.findIndex(
-    (existing) => existing.id === idParam
-  );
-  if (foundIndex < 0) {
+  try {
+    // Обновляем только поле статуса по id и сразу читаем обновлённую строку
+    const { data, error } = await supabaseServer
+      .from("requests")
+      .update({ status: requestedStatus })
+      .eq("id", idParam)
+      .select("*")
+      .single(); // ожидаем ровно одну запись
+
+    // Если записи с таким id нет — отдаём 404 (поведение сохраняем)
+    if (error && /no rows|Row not found/i.test(error.message)) {
+      return NextResponse.json(
+        { error: "NotFound" },
+        {
+          status: 404,
+          headers: {
+            "Cache-Control": "no-store",
+            Pragma: "no-cache",
+            "X-Content-Type-Options": "nosniff",
+          },
+        }
+      );
+    }
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    // Маппим snake_case → твой контракт RequestItem (camelCase)
+    const updatedItem: RequestItem = {
+      id: data.id,
+      createdAt: data.created_at,
+      clientName: data.client_name,
+      gender: data.gender ?? undefined,
+      phone: data.phone,
+      email: data.email,
+      comment: data.comment ?? null,
+      status: data.status,
+      attachments: Array.isArray(data.attachments)
+        ? data.attachments
+        : data.attachments ?? [],
+    };
+
     return NextResponse.json(
-      { error: "NotFound" },
+      { item: updatedItem },
       {
-        status: 404,
+        status: 200,
+        headers: {
+          "Cache-Control": "no-store",
+          Pragma: "no-cache",
+          "X-Content-Type-Options": "nosniff",
+        },
+      }
+    );
+  } catch (caughtError) {
+    const readable =
+      caughtError instanceof Error ? caughtError.message : "Unknown error";
+    return NextResponse.json(
+      { error: "ServerError", details: readable },
+      {
+        status: 500,
         headers: {
           "Cache-Control": "no-store",
           Pragma: "no-cache",
@@ -276,27 +570,9 @@ export async function PATCH(incomingRequest: Request) {
       }
     );
   }
-
-  // Перезаписываем только поле статуса
-  const currentItem = demoRequests[foundIndex];
-  const updatedItem: RequestItem = { ...currentItem, status: requestedStatus };
-  demoRequests[foundIndex] = updatedItem;
-
-  // 5) Отдаём обновлённую запись
-  return NextResponse.json(
-    { item: updatedItem },
-    {
-      status: 200,
-      headers: {
-        "Cache-Control": "no-store",
-        Pragma: "no-cache",
-        "X-Content-Type-Options": "nosniff",
-      },
-    }
-  );
 }
 
-// ---------- DELETE /api/requests?id=<id> (удаление заявки) ----------
+// ---------- DELETE /api/requests?id=<id> (удаление заявки + файлов Storage) ----------
 export async function DELETE(incomingRequest: Request) {
   // 1) Авторизация по cookie (как в GET/PATCH)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
@@ -332,15 +608,49 @@ export async function DELETE(incomingRequest: Request) {
     );
   }
 
-  // 3) Ищем заявку
-  const foundIndex = demoRequests.findIndex(
-    (existing) => existing.id === idParam
-  );
-  if (foundIndex < 0) {
+  try {
+    // Удаляем запись по id и просим вернуть удалённую строку, чтобы понять — была ли она
+    const { data, error } = await supabaseServer
+      .from("requests")
+      .delete()
+      .eq("id", idParam)
+      .select("id") // вернуть хотя бы id удалённой записи
+      .single(); // ожидаем ровно одну запись
+
+    if (error && /no rows|Row not found/i.test(error.message)) {
+      // Аналог твоего 404, если записи не было
+      return NextResponse.json(
+        { error: "NotFound" },
+        {
+          status: 404,
+          headers: {
+            "Cache-Control": "no-store",
+            Pragma: "no-cache",
+            "X-Content-Type-Options": "nosniff",
+          },
+        }
+      );
+    }
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    // Успех: как и раньше — 204 No Content
+    return new NextResponse(null, {
+      status: 204,
+      headers: {
+        "Cache-Control": "no-store",
+        Pragma: "no-cache",
+        "X-Content-Type-Options": "nosniff",
+      },
+    });
+  } catch (caughtError) {
+    const readable =
+      caughtError instanceof Error ? caughtError.message : "Unknown error";
     return NextResponse.json(
-      { error: "NotFound" },
+      { error: "ServerError", details: readable },
       {
-        status: 404,
+        status: 500,
         headers: {
           "Cache-Control": "no-store",
           Pragma: "no-cache",
@@ -349,19 +659,6 @@ export async function DELETE(incomingRequest: Request) {
       }
     );
   }
-
-  // 4) Удаляем из демо-хранилища (память процесса)
-  demoRequests.splice(foundIndex, 1);
-
-  // 5) 204 No Content (тела нет намеренно)
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      "Cache-Control": "no-store",
-      Pragma: "no-cache",
-      "X-Content-Type-Options": "nosniff",
-    },
-  });
 }
 
 // 5) Флаг динамики — чтобы Next не кэшировал ответ в dev/SSG

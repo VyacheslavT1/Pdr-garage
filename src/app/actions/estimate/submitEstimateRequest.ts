@@ -1,5 +1,7 @@
 "use server";
 
+import { headers } from "next/headers";
+
 export type SubmitEstimateResult = {
   ok: boolean;
   fieldErrors?: {
@@ -68,6 +70,41 @@ export async function submitEstimateRequest(
       attachmentEntry instanceof File ? (attachmentEntry as File) : null;
     const hasRealAttachment =
       !!attachmentFile && !!attachmentFile.name && attachmentFile.size > 0;
+
+    // ⬇️ СОБЕРЁМ превью для изображений из FormData (image/*), чтобы показать их в админке
+    const attachmentsFromForm = formData.getAll("attachment"); // т.к. multiple
+    const imageFiles = attachmentsFromForm.filter(
+      (entry) => entry instanceof File
+    ) as File[];
+
+    // Ограничения для демо-превью: не тащим огромные файлы в dataUrl
+    const maxPreviewImages = 6; // максимум миниатюр
+    const maxPreviewBytesPerImage = 1_500_000; // ~400 KB на превью
+
+    const attachmentsPayload = [];
+    for (
+      let index = 0;
+      index < imageFiles.length && attachmentsPayload.length < maxPreviewImages;
+      index += 1
+    ) {
+      const currentFile = imageFiles[index];
+      if (!currentFile.type.startsWith("image/")) continue; // только изображения
+
+      const fileBuffer = Buffer.from(await currentFile.arrayBuffer());
+      // если файл слишком большой — пропустим превью, но оставим метаданные
+      const dataUrl =
+        fileBuffer.byteLength <= maxPreviewBytesPerImage
+          ? `data:${currentFile.type};base64,${fileBuffer.toString("base64")}`
+          : null;
+
+      attachmentsPayload.push({
+        id: `att_${crypto.randomUUID()}`,
+        name: currentFile.name,
+        type: currentFile.type,
+        size: currentFile.size,
+        dataUrl, // может быть null, если слишком большой
+      });
+    }
 
     // Валидация (оставляю твою логику; без переименований)
     const fieldErrors: SubmitEstimateResult["fieldErrors"] = {};
@@ -147,14 +184,28 @@ export async function submitEstimateRequest(
     try {
       const clientFullName = `${firstName} ${lastName}`.trim();
 
+      // Гендер пришёл из формы как строка; приведём к допустимому юниону или отбросим
+      const normalizedGender: "male" | "female" | undefined =
+        gender === "male" || gender === "female"
+          ? (gender as "male" | "female")
+          : undefined;
+
       const requestPayload = {
         clientName: clientFullName,
         phone: phone, // уже нормализован
+        email: email,
         comment: message || undefined,
         company, // honeypot: если бот заполнил — API вернёт 204 и не создаст запись
+        attachments: attachmentsPayload,
+        gender: normalizedGender,
       };
 
-      const createRequestResponse = await fetch("/api/requests", {
+      const headerBag = await headers();
+      const protocol = headerBag.get("x-forwarded-proto") ?? "http";
+      const host = headerBag.get("host")!;
+      const baseUrl = `${protocol}://${host}`;
+
+      const createRequestResponse = await fetch(`${baseUrl}/api/requests`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

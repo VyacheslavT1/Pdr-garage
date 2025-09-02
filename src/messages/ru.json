@@ -252,12 +252,15 @@
     "firstNameLabel": "Имя *",
     "lastNameLabel": "Фамилия *",
     "phoneLabel": "Номер телефона *",
-    "messageLabel": "Опишите повреждения",
+    "messageLabel": "Опишите повреждения *",
     "consentPrivacyText": "Я согласен(на) с",
     "consentPrivacyLink": "политикой конфиденциальности",
     "submitPending": "Отправка",
     "submitLabel": "Отправить",
     "submitSuccess": "Запрос успешно отправлен",
+
+    "formSubmitFailed": "Не удалось отправить форму. Попробуйте ещё раз.",
+    "rateLimited": "Слишком много попыток. Попробуйте позже.",
 
     "placeholderText": "Файл не выбран",
     "uploadButtonLabel": "Загрузить фото",

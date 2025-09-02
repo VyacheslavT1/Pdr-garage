@@ -23,6 +23,8 @@ const initialSubmitState: SubmitEstimateResult = { ok: false };
 export default function EstimateRequestForm() {
   const t = useTranslations("EstimateRequestForm");
   const [gender, setGender] = useState("");
+  const [formResetKey, setFormResetKey] = useState(0);
+  const [showSuccess, setShowSuccess] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const [inlineErrors, setInlineErrors] = useState<ValidationErrors>({});
@@ -55,6 +57,26 @@ export default function EstimateRequestForm() {
     return detach;
   }, [isPending]);
 
+  useEffect(() => {
+    const isSuccess =
+      submitState.ok && !submitState.fieldErrors && !submitState.formError;
+    if (!isSuccess) return;
+
+    // Сбрасываем DOM-поля (включая файл/чекбоксы/радио)
+    formRef.current?.reset();
+    // Сбрасываем локальные состояния для радиокнопок и инлайн-ошибок
+    setGender("");
+    setInlineErrors({});
+    setFormValues({});
+    // Ремонтируем форму, чтобы «uncontrolled»-поля точно обнулились
+    setFormResetKey((n) => n + 1);
+
+    // Показываем success и скрываем через 3 секунды
+    setShowSuccess(true);
+    const timer = setTimeout(() => setShowSuccess(false), 3000);
+    return () => clearTimeout(timer);
+  }, [submitState]);
+
   const handleGenderChange = (
     event: React.ChangeEvent<HTMLFieldSetElement>
   ) => {
@@ -73,6 +95,7 @@ export default function EstimateRequestForm() {
   return (
     <div className={styles.formContainer}>
       <form
+        key={formResetKey}
         ref={formRef}
         className={styles.form}
         encType="multipart/form-data"
@@ -235,7 +258,8 @@ export default function EstimateRequestForm() {
 
         {submitState.ok &&
           !submitState.fieldErrors &&
-          !submitState.formError && (
+          !submitState.formError &&
+          showSuccess && (
             <div className={styles.formSuccess} role="status">
               {t("submitSuccess")}
             </div>
