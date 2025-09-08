@@ -282,6 +282,39 @@
   "ContactSection": {
     "mainTitle": "Contact Us",
     "contactSectionTitle": "Paintless restoration of the body for dents, scratches, and scrapes. Local painting, polishing. Repair of windscreen: scrapes, cracks.",
-    "getDirection": "Get directions"
+    "getDirection": "Get directions",
+    "publishedOn": "published on",
+    "adminReply": {
+      "badge": "Reply",
+      "by": "by {author}",
+      "byUnknown": "Administration"
+    }
+  },
+  "ReviewCreateForm": {
+    "title": "Leave a review",
+    "fields": {
+      "clientName": "Your name",
+      "rating": "Rating (1–5, optional)",
+      "comment": "Your review"
+    },
+    "placeholders": {
+      "clientName": "Enter your name",
+      "noRating": "No rating",
+      "comment": "Write your review…"
+    },
+    "buttons": {
+      "submit": "Submit review",
+      "submitting": "Submitting…"
+    },
+    "errors": {
+      "clientNameRequired": "Name is required",
+      "clientNameTooLong": "Name is too long",
+      "ratingInvalid": "Rating must be between 1 and 5",
+      "commentTooLong": "Review text is too long"
+    },
+    "messages": {
+      "success": "Thank you for your review!",
+      "unknownError": "Unknown error"
+    }
   }
 }

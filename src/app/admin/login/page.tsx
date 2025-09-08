@@ -37,14 +37,14 @@ export default function AdminLoginPage() {
 
       if (!response.ok) {
         // Сообщение общее — не раскрываем, что именно неверно
-        message.error("Неверные учётные данные");
+        message.error("Identifiants incorrects");
         return;
       }
 
-      message.success("Вход выполнен");
+      message.success("Connexion réussie");
       routerInstance.push("/admin"); // Переходим в защищённый раздел
     } catch {
-      message.error("Ошибка сети. Попробуйте ещё раз");
+      message.error("Erreur réseau. Réessayez");
     } finally {
       setIsSubmitting(false);
     }
@@ -56,10 +56,10 @@ export default function AdminLoginPage() {
       <Card className={styles.loginCard}>
         <div className={styles.loginHeader}>
           <Title level={3} className={styles.loginTitle}>
-            Админ-панель
+            Panneau d’administration
           </Title>
           <Text className={styles.loginSubtitle}>
-            Войдите, чтобы продолжить
+            Connectez-vous pour continuer
           </Text>
         </div>
 
@@ -73,23 +73,23 @@ export default function AdminLoginPage() {
             label="Email"
             name="email"
             rules={[
-              { required: true, message: "Укажите email" },
-              { type: "email", message: "Некорректный формат email" },
+              { required: true, message: "Indiquez votre email" },
+              { type: "email", message: "Format d’email incorrect" },
             ]}
           >
-            <Input placeholder="you@example.com" autoComplete="email" />
+            <Input placeholder="vous@example.com" autoComplete="email" />
           </Form.Item>
 
           <Form.Item
-            label="Пароль"
+            label="Mot de passe"
             name="password"
             rules={[
-              { required: true, message: "Введите пароль" },
-              { min: 8, message: "Минимум 8 символов" },
+              { required: true, message: "Saisissez votre mot de passe" },
+              { min: 8, message: "8 caractères minimum" },
             ]}
           >
             <Input.Password
-              placeholder="Пароль"
+              placeholder="Mot de passe"
               autoComplete="current-password"
             />
           </Form.Item>
@@ -101,7 +101,7 @@ export default function AdminLoginPage() {
           >
             {/* Этот единственный style оставляем: он не конфликтует и минимален.
                Если хочешь — тоже вынесем в SCSS на следующем шаге. */}
-            <Checkbox>Оставаться в системе</Checkbox>
+            <Checkbox>Rester connecté</Checkbox>
           </Form.Item>
 
           <Form.Item className={styles.submitRow}>
@@ -111,7 +111,7 @@ export default function AdminLoginPage() {
               block // Кнопка растянутой ширины
               loading={isSubmitting}
             >
-              Войти
+              Se connecter
             </Button>
           </Form.Item>
         </Form>

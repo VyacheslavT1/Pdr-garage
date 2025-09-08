@@ -84,6 +84,7 @@
 .cardWrapper {
   margin-bottom: var(--margin-large);
   border-bottom: 1px solid var(--color-grey-70);
+  box-shadow: var(--color-grey-dark) 0px 0px 18px 10px;
 }
 .cardWrapper .cardImage {
   position: relative;

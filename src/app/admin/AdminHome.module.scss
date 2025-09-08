@@ -1,3 +1,5 @@
+// src/app/admin/AdminHome.module.scss
+
 /* 1) Корневой контейнер — базовые отступы для ≥768px */
 .pageRoot {
   padding: 1rem;
@@ -12,8 +14,8 @@
 }
 
 /* 2) Шапка: заголовок + действия */
-.titleReset {
-  margin: 0; /* убираем лишние отступы у Title AntD */
+.title {
+  text-align: center;
 }
 
 .headerRow {
@@ -41,6 +43,11 @@
   :global(.ant-btn) {
     white-space: nowrap;
   }
+}
+
+.loadingPlaceholder {
+  width: 100%;
+  min-height: 4rem; // высота зоны спиннера
 }
 
 /* 3) Панель фильтров:

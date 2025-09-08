@@ -1,28 +1,40 @@
 /* Локальные стили только для компонента AdminNav (верхняя навигация админки) */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* меню в центре, actions вправо */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+.actions {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+}
 
 .navRoot {
-  /* Светлая полоска под шапкой, отделяет навигацию от контента */
+  flex: 1; /* чтобы заняло всё доступное место */
+  display: flex;
+  justify-content: center; /* ссылки по центру */
   background: #ffffff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  margin-bottom: 1rem; /* расстояние до основного контента */
+  margin-bottom: 1rem;
 }
 
 .innerContainer {
   /* Центровка по ширине контента админки */
-  max-width: 960px;
-  margin-inline: auto;
+  // max-width: 960px;
+  // margin-inline: auto;
   padding-block: 0.5rem;
-  padding-inline: 0.75rem;
 }
 
 .navList {
   /* Горизонтальный список ссылок с переносом при узкой ширине */
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
-  margin: 0; /* убираем дефолтные отступы ul */
-  padding: 0; /* убираем дефолтные отступы ul */
   list-style: none;
+  text-transform: uppercase;
 }
 
 .navLink {

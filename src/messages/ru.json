@@ -286,6 +286,39 @@
   "ContactSection": {
     "mainTitle": "Контакты",
     "contactSectionTitle": "беспокрасочное восстановление кузова: вмятины, царапины, сколы. Локальная покраска, полировка. Ремонт автостёкол: сколы, трещины.",
-    "getDirection": " Проложить маршрут"
+    "getDirection": " Проложить маршрут",
+    "publishedOn": "опубликовано",
+    "adminReply": {
+      "badge": "Ответ",
+      "by": "от {author}",
+      "byUnknown": "Администрация"
+    }
+  },
+  "ReviewCreateForm": {
+    "title": "Оставить отзыв",
+    "fields": {
+      "clientName": "Ваше имя",
+      "rating": "Оценка (1–5, необязательно)",
+      "comment": "Ваш отзыв"
+    },
+    "placeholders": {
+      "clientName": "Введите ваше имя",
+      "noRating": "Без оценки",
+      "comment": "Напишите свой отзыв…"
+    },
+    "buttons": {
+      "submit": "Отправить отзыв",
+      "submitting": "Отправка…"
+    },
+    "errors": {
+      "clientNameRequired": "Имя обязательно",
+      "clientNameTooLong": "Имя слишком длинное",
+      "ratingInvalid": "Оценка должна быть от 1 до 5",
+      "commentTooLong": "Текст отзыва слишком длинный"
+    },
+    "messages": {
+      "success": "Спасибо за ваш отзыв!",
+      "unknownError": "Неизвестная ошибка"
+    }
   }
 }

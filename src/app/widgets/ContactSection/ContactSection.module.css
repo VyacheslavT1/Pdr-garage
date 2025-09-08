@@ -59,6 +59,98 @@
   border-radius: var(--border-radius);
 }
 
+.feedbackList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium, 16px);
+  padding: 0;
+  margin-block: 2rem;
+  list-style: none;
+}
+
+.reviewItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--padding-small, 12px) var(--padding-small, 12px);
+  border: 1px solid var(--color-grey-80, #2f2f2f);
+  border-radius: var(--border-radius, 8px);
+  background: var(--color-dark, #111);
+}
+
+.reviewStars {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  line-height: 1;
+  color: var(--color-accent, #ffbf00);
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: var(--color-grey-80, #2f2f2f);
+  color: var(--color-grey-10, #f2f2f2);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  flex: 0 0 36px;
+}
+
+.clientName {
+  font-size: 0.95rem;
+}
+
+.reviewMeta {
+  color: var(--color-grey-cool-light, #9aa0a6);
+  font-size: 0.85rem;
+}
+
+.reviewText {
+  margin-top: 2px;
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.adminReply {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--color-grey-80, #2f2f2f);
+}
+
+.adminReplyHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--color-grey-cool-light, #9aa0a6);
+}
+
+.adminBadge {
+  padding: 2px 8px;
+  border: 1px solid var(--color-grey-80, #2f2f2f);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+.adminMeta {
+  line-height: 1;
+}
+
+.adminReplyText {
+  margin-top: 4px;
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
 /* ≥576px: твоя текущая паддинговая настройка */
 @media (min-width: 576px) {
   .wrapper {

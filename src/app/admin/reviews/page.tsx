@@ -16,7 +16,6 @@ import {
   Popconfirm,
 } from "antd";
 import AdminNav from "../shared/AdminNav/AdminNav";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import styles from "./AdminReviews.module.scss";
@@ -29,8 +28,9 @@ const { RangePicker } = DatePicker;
 type ReviewRow = {
   id: string; // Уникальный идентификатор записи
   clientName: string; // Имя клиента (обязательное поле)
+  comment?: string | null;
   rating?: number | null; // Рейтинг 1–5 (опционально)
-  status: "Черновик" | "Опубликовано" | "Скрыто"; // Публикационный статус
+  status: "Brouillon" | "Publié" | "Masqué"; // Публикационный статус
   date?: string | null; // Дата отзыва (ISO), может быть пустой
   updatedAt: string; // Дата последнего изменения (ISO)
 };
@@ -43,27 +43,42 @@ export default function AdminReviewsPage() {
   const [errorMessage, setErrorMessage] = useState<string>(""); // текст ошибки (для подсказки под таблицей)
   const routerInstance = useRouter(); // программная навигация внутри админки
   const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
+  const [approvingReviewId, setApprovingReviewId] = useState<string | null>(
+    null
+  );
+  const [replyingReviewId, setReplyingReviewId] = useState<string | null>(null);
+  const [replyDraftValue, setReplyDraftValue] = useState<string>("");
+  const [publishingReplyReviewId, setPublishingReplyReviewId] = useState<
+    string | null
+  >(null);
+  const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
   // 3) Колонки таблицы (как и были — без переименований)
   const tableColumns = [
     {
-      title: "Имя",
+      title: "Client",
       dataIndex: "clientName",
       key: "clientName",
       ellipsis: true,
       render: (cellValue: string, currentRecord: ReviewRow) => (
         // Ссылка на форму редактирования конкретного отзыва
-        <Link
-          href={`/admin/reviews/${currentRecord.id}`}
-          aria-label={`Открыть редактирование отзыва ${cellValue}`}
-        >
-          {cellValue}
-        </Link>
+        <Text>{cellValue}</Text>
       ),
     },
-
     {
-      title: "Рейтинг",
+      title: "Avis",
+      dataIndex: "comment",
+      key: "comment",
+
+      render: (value: string | null | undefined) =>
+        value && value.trim().length > 0 ? (
+          <Text>{value}</Text>
+        ) : (
+          <Tag color="default">Vide</Tag>
+        ),
+    },
+    {
+      title: "Note",
       dataIndex: "rating",
       key: "rating",
       width: 160,
@@ -71,38 +86,27 @@ export default function AdminReviewsPage() {
         typeof value === "number" ? (
           <Rate disabled value={value} />
         ) : (
-          <Text type="secondary">нет</Text>
+          <Text type="secondary">non</Text>
         ),
     },
     {
-      title: "Статус",
+      title: "Status",
       dataIndex: "status",
       key: "status",
       width: 160,
       render: (value: ReviewRow["status"]) => {
         const color =
-          value === "Опубликовано"
+          value === "Publié"
             ? "green"
-            : value === "Черновик"
+            : value === "Brouillon"
             ? "default"
             : "orange";
         return <Tag color={color}>{value}</Tag>;
       },
     },
+
     {
-      title: "Дата",
-      dataIndex: "date",
-      key: "date",
-      width: 200,
-      render: (value: string | null | undefined) =>
-        value ? (
-          <Text>{new Date(value).toLocaleDateString()}</Text>
-        ) : (
-          <Tag color="default">не указана</Tag>
-        ),
-    },
-    {
-      title: "Обновлено",
+      title: "Date",
       dataIndex: "updatedAt",
       key: "updatedAt",
       width: 220,
@@ -111,47 +115,187 @@ export default function AdminReviewsPage() {
       ),
     },
     {
-      title: "Действия",
+      title: "Actons",
       key: "actions",
       width: 260,
-      render: (_: unknown, record: ReviewRow) => (
-        <Space wrap>
-          {/* Заглушки действий — оставляем как есть */}
-          <Button
-            size="small"
-            onClick={() => message.info(`Открыть отзыв: ${record.clientName}`)}
-          >
-            Редактировать
-          </Button>
-          <Button
-            size="small"
-            onClick={() =>
-              message.info(`Дублировать отзыв: ${record.clientName}`)
-            }
-          >
-            Дублировать
-          </Button>
-          <Popconfirm
-            title="Удалить отзыв?"
-            description={`Действие необратимо. ID: ${record.id}`}
-            okText="Удалить"
-            cancelText="Отмена"
-            okButtonProps={{ danger: true }}
-            onConfirm={() => handleDeleteReview(record.id)}
-          >
+      render: (_: unknown, record: ReviewRow) => {
+        const isReplyingThisRow = replyingReviewId === record.id; // ← используется состояние из предыдущего шага
+        return (
+          <Space wrap>
+            {/* Публикация */}
+            <Popconfirm
+              title="Publier l'avis?"
+              description={`Action irréversible. ID: ${record.id}`}
+              okText="Publier"
+              cancelText="Annuler"
+              okButtonProps={{ danger: true }}
+              onConfirm={() => handleApproveReview(record.id)}
+            >
+              <Button
+                size="small"
+                type="primary"
+                loading={approvingReviewId === record.id}
+                disabled={approvingReviewId === record.id}
+              >
+                Accorder
+              </Button>
+            </Popconfirm>
+
+            {/* Répondre */}
             <Button
               size="small"
-              danger
-              loading={deletingReviewId === record.id} // спиннер именно на этой строке
-              disabled={deletingReviewId === record.id} // блокируем повторные клики
+              onClick={() => handleStartReply(record.id)}
+              disabled={publishingReplyReviewId === record.id}
             >
-              Удалить
+              Répondre
             </Button>
-          </Popconfirm>
-        </Space>
-      ),
+
+            {/* Удаление */}
+            <Popconfirm
+              title="Supprimer l'avis?"
+              description={`Action irréversible. ID: ${record.id}`}
+              okText="Supprimer"
+              cancelText="Annuler"
+              okButtonProps={{ danger: true }}
+              onConfirm={() => handleDeleteReview(record.id)}
+            >
+              <Button
+                size="small"
+                danger
+                loading={deletingReviewId === record.id} // спиннер именно на этой строке
+                disabled={deletingReviewId === record.id} // блокируем повторные клики
+              >
+                Supprimer
+              </Button>
+            </Popconfirm>
+
+            {/* Поле ответа + кнопка публикации (показываем только для выбранной строки) */}
+          </Space>
+        );
+      },
     },
   ];
+
+  const expandedRowRender = (record: ReviewRow) => {
+    const isThis = replyingReviewId === record.id;
+    return (
+      <div className={styles.expandedReplyRow}>
+        <Input.TextArea
+          className={styles.replyTextarea}
+          placeholder="Votre réponse…"
+          value={isThis ? replyDraftValue : ""}
+          onChange={(e) => setReplyDraftValue(e.target.value)}
+          maxLength={4000}
+          autoSize={{ minRows: 3, maxRows: 8 }}
+          autoFocus={isThis} // ← фокус при раскрытии
+          onKeyDown={(keyboardEvent) => {
+            // ← Cmd/Ctrl + Enter = публиковать
+            const isSubmitCombo =
+              (keyboardEvent.metaKey || keyboardEvent.ctrlKey) &&
+              keyboardEvent.key === "Enter";
+            if (isSubmitCombo && replyDraftValue.trim()) {
+              keyboardEvent.preventDefault();
+              handlePublishReply(record.id);
+            }
+          }}
+        />
+
+        <div className={styles.replyRowActions}>
+          <Button
+            type="primary"
+            onClick={() => handlePublishReply(record.id)}
+            loading={publishingReplyReviewId === record.id}
+            disabled={
+              publishingReplyReviewId === record.id ||
+              replyDraftValue.trim().length === 0
+            }
+          >
+            Publier
+          </Button>
+          <Button
+            onClick={() => {
+              setReplyingReviewId(null);
+              setReplyDraftValue("");
+              setExpandedRowKeys([]);
+            }}
+          >
+            Annuler
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  async function handleApproveReview(targetReviewId: string) {
+    try {
+      setApprovingReviewId(targetReviewId);
+
+      const response = await fetch(
+        `/api/reviews?id=${encodeURIComponent(targetReviewId)}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: "Publié" }),
+        }
+      );
+
+      if (response.status === 401) {
+        message.error("Session invalide. Veuillez vous reconnecter.");
+        return;
+      }
+      if (response.status === 404) {
+        message.error("Avis introuvable (peut-être déjà supprimé).");
+        // синхронизуем локально, если записи уже нет
+        setReviewsData((previous) =>
+          previous.filter((existing) => existing.id !== targetReviewId)
+        );
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      // если сервер вернул обновлённый item — используем его updatedAt
+      const payload = await response.json().catch(() => null as any);
+      if (payload?.item) {
+        const updated = payload.item as ReviewRow;
+        setReviewsData((previous) =>
+          previous.map((existing) =>
+            existing.id === targetReviewId
+              ? {
+                  ...existing,
+                  status: updated.status,
+                  updatedAt: updated.updatedAt,
+                }
+              : existing
+          )
+        );
+      } else {
+        // fallback: обновим статус локально
+        setReviewsData((previous) =>
+          previous.map((existing) =>
+            existing.id === targetReviewId
+              ? {
+                  ...existing,
+                  status: "Publié",
+                  updatedAt: new Date().toISOString(),
+                }
+              : existing
+          )
+        );
+      }
+
+      message.success("Avis accordé (publié).");
+    } catch {
+      message.error("Échec de l’accord de l’avis");
+    } finally {
+      setApprovingReviewId(null);
+    }
+  }
 
   // 4) Загрузка данных из защищённого API /api/reviews при монтировании страницы
   useEffect(() => {
@@ -171,12 +315,14 @@ export default function AdminReviewsPage() {
 
         if (response.status === 401) {
           // Теоретически middleware не пустит сюда без токена; сообщение — на всякий случай
-          message.error("Сессия недействительна. Войдите заново.");
+          message.error("Session invalide. Veuillez vous reconnecter.");
           return;
         }
 
         if (!response.ok) {
-          throw new Error(`Ошибка загрузки: ${response.status}`);
+          throw new Error(
+            `Une erreur est survenue lors du chargement: ${response.status}`
+          );
         }
 
         // Ожидаем структуру { items: ReviewRow[] } из API-заглушки
@@ -186,9 +332,9 @@ export default function AdminReviewsPage() {
         const readableMessage =
           caughtError instanceof Error
             ? caughtError.message
-            : "Неизвестная ошибка";
+            : "Erreur inconnue";
         setErrorMessage(readableMessage);
-        message.error("Не удалось загрузить список отзывов");
+        message.error("Échec du chargement de la liste des avis");
       } finally {
         setIsTableLoading(false);
       }
@@ -201,27 +347,21 @@ export default function AdminReviewsPage() {
   // 5) Сохраняем прежнее имя переменной tableData (ничего не переименовываем):
   const tableData: ReviewRow[] = reviewsData;
 
-  // 6) Обработчики верхних элементов управления (оставляем без изменений)
-  function handleCreateReviewClick() {
-    // Переход на форму создания нового отзыва
-    routerInstance.push("/admin/reviews/new");
-  }
-
   function handleSearchByName(value: string) {
-    message.info(`Поиск по имени: ${value || "—"}`);
+    message.info(`Recherche par nom: ${value || "—"}`);
   }
 
   function handleFilterByStatus(statusValue: string) {
-    message.info(`Фильтр по статусу: ${statusValue || "все"}`);
+    message.info(`Filtrer par statut: ${statusValue || "tous"}`);
   }
 
   function handleFilterByRating(ratingValue: number) {
-    message.info(`Фильтр по рейтингу: ${ratingValue || "все"}`);
+    message.info(`Filtrer par note: ${ratingValue || "tous"}`);
   }
 
   function handleFilterByDateRange(_: unknown, dateStrings: [string, string]) {
     const [fromDate, toDate] = dateStrings || [];
-    message.info(`Диапазон даты: ${fromDate || "—"} → ${toDate || "—"}`);
+    message.info(`Plage de dates: ${fromDate || "—"} → ${toDate || "—"}`);
   }
 
   async function handleDeleteReview(targetReviewId: string) {
@@ -238,11 +378,11 @@ export default function AdminReviewsPage() {
       );
 
       if (response.status === 401) {
-        message.error("Сессия недействительна. Войдите заново.");
+        message.error("Session invalide. Veuillez vous reconnecter.");
         return;
       }
       if (response.status === 404) {
-        message.error("Отзыв не найден (возможно, уже удалён).");
+        message.error("Avis introuvable (peut-être déjà supprimé).");
         // синхронизируем локально на всякий случай
         setReviewsData((previous) =>
           previous.filter((existing) => existing.id !== targetReviewId)
@@ -257,11 +397,81 @@ export default function AdminReviewsPage() {
       setReviewsData((previous) =>
         previous.filter((existing) => existing.id !== targetReviewId)
       );
-      message.success("Отзыв удалён");
+      message.success("Avis supprimé");
     } catch {
-      message.error("Не удалось удалить отзыв");
+      message.error("Échec de la suppression de l’avis");
     } finally {
       setDeletingReviewId(null); // снимаем спиннер
+    }
+  }
+
+  function handleStartReply(targetReviewId: string) {
+    setReplyDraftValue("");
+    setReplyingReviewId((prev) =>
+      prev === targetReviewId ? null : targetReviewId
+    );
+    setExpandedRowKeys((prev) =>
+      prev[0] === targetReviewId ? [] : [targetReviewId]
+    );
+  }
+
+  async function handlePublishReply(targetReviewId: string) {
+    const trimmedMessage = replyDraftValue.trim();
+    if (!trimmedMessage) {
+      message.warning("Le message est vide.");
+      return;
+    }
+
+    try {
+      setPublishingReplyReviewId(targetReviewId);
+
+      const response = await fetch(
+        `/api/reviews?id=${encodeURIComponent(targetReviewId)}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ adminReply: trimmedMessage }),
+        }
+      );
+
+      if (response.status === 401) {
+        message.error("Session invalide. Veuillez vous reconnecter.");
+        return;
+      }
+      if (response.status === 404) {
+        message.error("Avis introuvable (peut-être déjà supprimé).");
+        setReviewsData((previous) =>
+          previous.filter((existing) => existing.id !== targetReviewId)
+        );
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const payload = await response.json().catch(() => null as any);
+      if (payload?.item?.updatedAt) {
+        const updated = payload.item as ReviewRow;
+        setReviewsData((previous) =>
+          previous.map((existing) =>
+            existing.id === targetReviewId
+              ? { ...existing, updatedAt: updated.updatedAt }
+              : existing
+          )
+        );
+      }
+
+      message.success("Réponse publiée.");
+      setReplyingReviewId(null);
+      setReplyDraftValue("");
+    } catch {
+      message.error("Échec de la publication de la réponse.");
+    } finally {
+      setPublishingReplyReviewId(null);
     }
   }
 
@@ -272,38 +482,32 @@ export default function AdminReviewsPage() {
       <AdminNav />
       <div className={styles.headerRow}>
         <Title level={3} className={styles.titleReset}>
-          Отзывы
+          Avis
         </Title>
-
-        <div className={styles.actions}>
-          <Button type="primary" onClick={handleCreateReviewClick}>
-            Создать отзыв
-          </Button>
-        </div>
       </div>
 
       <div className={styles.filters}>
         <Input.Search
-          placeholder="Поиск по имени"
+          placeholder="Recherche par nom"
           allowClear
           onSearch={handleSearchByName}
-          enterButton="Найти"
+          enterButton="Chercher"
         />
 
         <Select
-          placeholder="Статус"
+          placeholder="Status"
           style={{ width: 180 }}
           onChange={handleFilterByStatus}
           options={[
-            { value: "", label: "Все" },
-            { value: "Опубликовано", label: "Опубликовано" },
-            { value: "Черновик", label: "Черновик" },
-            { value: "Скрыто", label: "Скрыто" },
+            { value: "", label: "Tous" },
+            { value: "Publié", label: "Publié" },
+            { value: "Brouillon", label: "Brouillon" },
+            { value: "Masqué", label: "Masqué" },
           ]}
         />
 
         <Select
-          placeholder="Рейтинг"
+          placeholder="Note"
           style={{ width: 160 }}
           onChange={handleFilterByRating}
           options={[
@@ -325,13 +529,28 @@ export default function AdminReviewsPage() {
           rowKey="id"
           pagination={{ pageSize: 10, showSizeChanger: true }}
           scroll={{ x: 960 }}
-          loading={isTableLoading} // ⬅️ показываем спиннер во время загрузки
+          loading={isTableLoading}
+          expandable={{
+            expandedRowRender,
+            expandedRowKeys,
+            onExpand: (expanded, record) => {
+              if (expanded) {
+                setReplyingReviewId(record.id);
+                setReplyDraftValue("");
+                setExpandedRowKeys([record.id]);
+              } else {
+                setReplyingReviewId(null);
+                setReplyDraftValue("");
+                setExpandedRowKeys([]);
+              }
+            },
+          }}
         />
       </Card>
 
       {/* Опционально: выводим техническую ошибку под таблицей */}
       {errorMessage && (
-        <Text type="danger">Техническая информация: {errorMessage}</Text>
+        <Text type="danger">Informations techniques: {errorMessage}</Text>
       )}
     </div>
   );

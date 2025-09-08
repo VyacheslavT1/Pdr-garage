@@ -283,6 +283,39 @@
   "ContactSection": {
     "mainTitle": "Contactez-nous",
     "contactSectionTitle": "restauration sans peinture de la carrosserie pour bosses, rayures et éraflures. Peinture locale, polissage. Réparation de pare-brise : éraflures, fissures.",
-    "getDirection": "Itinéraire"
+    "getDirection": "Itinéraire",
+    "publishedOn": "publiée le",
+    "adminReply": {
+      "badge": "Réponse",
+      "by": "par {author}",
+      "byUnknown": "Administration"
+    }
+  },
+  "ReviewCreateForm": {
+    "title": "Laisser un avis",
+    "fields": {
+      "clientName": "Votre nom",
+      "rating": "Note (1–5, optionnel)",
+      "comment": "Votre avis"
+    },
+    "placeholders": {
+      "clientName": "Entrez votre nom",
+      "noRating": "Sans note",
+      "comment": "Écrivez votre avis…"
+    },
+    "buttons": {
+      "submit": "Envoyer l’avis",
+      "submitting": "Envoi…"
+    },
+    "errors": {
+      "clientNameRequired": "Le nom est obligatoire",
+      "clientNameTooLong": "Le nom est trop long",
+      "ratingInvalid": "La note doit être entre 1 et 5",
+      "commentTooLong": "Le texte est trop long"
+    },
+    "messages": {
+      "success": "Merci pour votre avis !",
+      "unknownError": "Erreur inconnue"
+    }
   }
 }

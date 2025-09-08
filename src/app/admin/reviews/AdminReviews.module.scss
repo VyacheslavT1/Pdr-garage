@@ -28,3 +28,18 @@
   flex-wrap: wrap;
   gap: 0.75rem;
 }
+.expandedReplyRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.replyTextarea {
+  width: 100%;
+}
+
+.replyRowActions {
+  display: flex;
+  gap: 8px;
+}

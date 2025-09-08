@@ -15,8 +15,8 @@
 }
 
 /* 2) Шапка: заголовок + действия */
-.titleReset {
-  margin: 0; /* убираем лишние отступы у Title AntD */
+.title {
+  text-align: center;
 }
 
 .headerRow {
@@ -45,6 +45,11 @@
 }
 .actions :global(.ant-btn) {
   white-space: nowrap;
+}
+
+.loadingPlaceholder {
+  width: 100%;
+  min-height: 4rem;
 }
 
 /* 3) Панель фильтров:

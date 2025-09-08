@@ -1,80 +1,105 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Layout, Typography, Button, Space, message } from "antd";
+import AdminNav from "./shared/AdminNav/AdminNav";
 import styles from "./AdminHome.module.scss";
-import AdminNav from "./shared/AdminNav/AdminNav"; // ⬅️ добавили импорт
+import { Empty, Spin, Alert } from "antd";
+import { useEffect, useState } from "react";
 
-const { Header, Content, Footer } = Layout;
-const { Title, Text } = Typography;
+// Подставь свои эндпоинты:
+const REQUESTS_COUNT_ENDPOINT = "/api/requests/count?status=Non%20trait%C3%A9";
+const REVIEWS_COUNT_ENDPOINT =
+  "/api/reviews/count?status=%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%B2%D0%B8%D0%BA"; // новые отзывы
 
 export default function AdminHomePage() {
-  const routerInstance = useRouter();
-  const [isLogoutInProgress, setIsLogoutInProgress] = useState<boolean>(false);
+  // Ранее используемые имена сохраняю
+  const [newRequestsCount, setNewRequestsCount] = useState<number>(0);
+  const [newReviewsCount, setNewReviewsCount] = useState<number>(0);
+  const [isLoadingCounts, setIsLoadingCounts] = useState<boolean>(true);
+  const [loadingErrorMessage, setLoadingErrorMessage] = useState<string | null>(
+    null
+  );
 
-  async function handleLogoutClick() {
-    try {
-      setIsLogoutInProgress(true);
-      const logoutResponse = await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      if (!logoutResponse.ok) {
-        message.error("Не удалось выйти. Повторите попытку.");
-        return;
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadCounts() {
+      setIsLoadingCounts(true);
+      setLoadingErrorMessage(null);
+
+      try {
+        const [requestsResponse, reviewsResponse] = await Promise.all([
+          fetch(REQUESTS_COUNT_ENDPOINT, { cache: "no-store" }),
+          fetch(REVIEWS_COUNT_ENDPOINT, { cache: "no-store" }),
+        ]);
+
+        if (!requestsResponse.ok) {
+          throw new Error(`Requests count HTTP ${requestsResponse.status}`);
+        }
+        if (!reviewsResponse.ok) {
+          throw new Error(`Reviews count HTTP ${reviewsResponse.status}`);
+        }
+
+        const requestsJson: { count: number } = await requestsResponse.json();
+        const reviewsJson: { count: number } = await reviewsResponse.json();
+
+        if (isCancelled) return;
+
+        setNewRequestsCount(Number(requestsJson?.count ?? 0));
+        setNewReviewsCount(Number(reviewsJson?.count ?? 0));
+      } catch (caughtError: unknown) {
+        const errorMessage =
+          caughtError instanceof Error ? caughtError.message : "Unknown error";
+        if (!isCancelled) {
+          setLoadingErrorMessage(errorMessage);
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoadingCounts(false);
+        }
       }
-      message.success("Вы вышли из системы");
-      routerInstance.push("/admin/login");
-    } catch {
-      message.error("Ошибка сети при выходе");
-    } finally {
-      setIsLogoutInProgress(false);
     }
+
+    loadCounts();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  let descriptionText = "Pas de nouvelle";
+  if (newRequestsCount > 0 && newReviewsCount > 0) {
+    descriptionText = `Vous avez ${newReviewsCount} nouveaux avis et ${newRequestsCount} nouvelles demandes`;
+  } else if (newReviewsCount > 0) {
+    descriptionText = `Vous avez ${newReviewsCount} nouveaux avis`;
+  } else if (newRequestsCount > 0) {
+    descriptionText = `Vous avez ${newRequestsCount} nouvelles demandes`;
   }
 
   return (
-    <Layout className={styles.layoutRoot}>
-      <Header
-        className={styles.headerBar}
-        aria-label="Панель навигации админки"
-      >
-        <Title level={4} className={styles.headerTitle}>
-          Админ-панель
-        </Title>
-        <Space>
-          <Button
-            danger
-            type="primary"
-            onClick={handleLogoutClick}
-            loading={isLogoutInProgress}
-            aria-label="Выйти из админ-панели"
-          >
-            Выйти
-          </Button>
-        </Space>
-      </Header>
+    <div className={styles.pageRoot}>
+      <AdminNav />
+      <div className={styles.headerRow}>
+        <h1 className={styles.title}>Panneau d’administration</h1>
+      </div>
 
-      <Content className={styles.contentRoot}>
-        <AdminNav /> {/* ⬅️ добавили верхнюю навигацию админки */}
-        <div className={styles.contentContainer}>
-          <Title level={3} style={{ margin: 0 }}>
-            Добро пожаловать в админ-панель
-          </Title>
-          <Text type="secondary">
-            Здесь появятся разделы: «Блоки сайта», «Портфолио», «Отзывы»,
-            «Заявки», «Настройки».
-          </Text>
-          <Text>
-            На следующем шаге добавим каркас навигации к остальным страницам по
-            одному и начнём CRUD.
-          </Text>
-        </div>
-      </Content>
-
-      <Footer className={styles.footerBar}>
-        PDR Garage — Admin © {new Date().getFullYear()}
-      </Footer>
-    </Layout>
+      <div className={styles.notifications}>
+        {isLoadingCounts ? (
+          <div className={styles.loadingRow} aria-busy="true">
+            <Spin tip="Chargement...">
+              <div className={styles.loadingPlaceholder} />
+            </Spin>
+          </div>
+        ) : loadingErrorMessage ? (
+          <Alert
+            type="error"
+            message="Impossible de charger les données"
+            description={loadingErrorMessage}
+            showIcon
+          />
+        ) : (
+          <Empty description={descriptionText} />
+        )}
+      </div>
+    </div>
   );
 }

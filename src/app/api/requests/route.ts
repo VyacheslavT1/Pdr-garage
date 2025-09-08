@@ -22,7 +22,7 @@ type RequestItem = {
   phone: string; // телефон (из формы)
   email: string;
   comment?: string | null; // комментарий (опционально)
-  status: "Не обработано" | "Обработано"; // статус обработки в админке
+  status: "Non traité" | "Traité"; // статус обработки в админке
   attachments?: Array<{
     id: string;
     name: string;
@@ -62,10 +62,7 @@ export async function GET(incomingRequest: Request) {
         : 10;
     const order: "asc" | "desc" = rawOrder === "asc" ? "asc" : "desc";
 
-    const allowedStatuses: RequestItem["status"][] = [
-      "Не обработано",
-      "Обработано",
-    ];
+    const allowedStatuses: RequestItem["status"][] = ["Non traité", "Traité"];
     const normalizedStatus =
       typeof rawStatus === "string" &&
       allowedStatuses.includes(rawStatus as any)
@@ -244,26 +241,26 @@ export async function POST(incomingRequest: Request) {
   const validationErrors: Record<string, string> = {};
 
   if (!incomingPayload.clientName) {
-    validationErrors.clientName = "Имя обязательно";
+    validationErrors.clientName = "Le nom est obligatoire";
   } else if (incomingPayload.clientName.length > 120) {
-    validationErrors.clientName = "Имя слишком длинное";
+    validationErrors.clientName = "Le nom est trop long";
   }
 
   // Телефон: разрешим + цифры, пробелы, дефисы, скобки; приведём к компактному виду для сохранения
   if (!incomingPayload.phone) {
-    validationErrors.phone = "Телефон обязателен";
+    validationErrors.phone = "Le numéro de téléphone est obligatoire";
   } else {
     const rawPhone = incomingPayload.phone;
     const normalizedPhone = rawPhone.replace(/[^\d+]/g, ""); // оставим + и цифры
     if (!/^\+?\d{6,20}$/.test(normalizedPhone)) {
-      validationErrors.phone = "Неверный формат телефона";
+      validationErrors.phone = "Format du numéro de téléphone invalide";
     } else {
       incomingPayload.phone = normalizedPhone;
     }
   }
 
   if (incomingPayload.comment && incomingPayload.comment.length > 1000) {
-    validationErrors.comment = "Комментарий слишком длинный";
+    validationErrors.comment = "Le commentaire est trop long";
   }
 
   if (Object.keys(validationErrors).length > 0) {
@@ -285,7 +282,7 @@ export async function POST(incomingRequest: Request) {
     if (rawGenderValue === "male" || rawGenderValue === "female") {
       normalizedGenderValue = rawGenderValue;
     } else {
-      validationErrors.gender = "Недопустимое значение гендера";
+      validationErrors.gender = "Valeur de genre non autorisée";
     }
   }
 
@@ -416,7 +413,7 @@ export async function POST(incomingRequest: Request) {
     phone: incomingPayload.phone,
     email: incomingPayload.email,
     comment: incomingPayload.comment,
-    status: "Не обработано",
+    status: "Non traité",
     attachments: uploadedAttachments,
     gender: normalizedGenderValue,
   };
@@ -474,7 +471,10 @@ export async function PATCH(incomingRequest: Request) {
   const idParam = currentUrl.searchParams.get("id");
   if (!idParam) {
     return NextResponse.json(
-      { error: "ValidationError", details: { id: "id обязателен" } },
+      {
+        error: "ValidationError",
+        details: { id: "L’identifiant est obligatoire" },
+      },
       {
         status: 400,
         headers: {
@@ -497,10 +497,9 @@ export async function PATCH(incomingRequest: Request) {
   }
 
   const requestedStatus =
-    parsedBody?.status === "Не обработано" ||
-    parsedBody?.status === "Обработано"
+    parsedBody?.status === "Non traité" || parsedBody?.status === "Traité"
       ? (parsedBody.status as RequestItem["status"])
-      : ("Обработано" as RequestItem["status"]); // статус по умолчанию
+      : ("Traité" as RequestItem["status"]); // статус по умолчанию
 
   try {
     // Обновляем только поле статуса по id и сразу читаем обновлённую строку
@@ -596,7 +595,10 @@ export async function DELETE(incomingRequest: Request) {
   const idParam = currentUrl.searchParams.get("id");
   if (!idParam) {
     return NextResponse.json(
-      { error: "ValidationError", details: { id: "id обязателен" } },
+      {
+        error: "ValidationError",
+        details: { id: "L’identifiant est obligatoire" },
+      },
       {
         status: 400,
         headers: {

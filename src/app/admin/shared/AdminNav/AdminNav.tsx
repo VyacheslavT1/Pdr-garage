@@ -1,27 +1,30 @@
 "use client"; // Компонент интерактивный: используем usePathname для подсветки активного пункта
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Space, Button, message } from "antd";
 import { usePathname } from "next/navigation";
 import styles from "./AdminNav.module.scss";
 
 // Тип одного пункта меню
 type AdminNavItem = {
   href: string; // абсолютный путь внутри админки
-  label: string; // подпись ссылки на русском
+  label: string; // подпись ссылки
 };
 
 export default function AdminNav() {
   // Текущий путь: нужен, чтобы подсвечивать активный пункт
   const currentPathname = usePathname();
+  const routerInstance = useRouter();
+  const [isLogoutInProgress, setIsLogoutInProgress] = useState<boolean>(false);
 
   // Набор ссылок админ-панели (минимум из ТЗ)
   const navigationItems: AdminNavItem[] = [
-    { href: "/admin", label: "Главная" },
-    { href: "/admin/blocks", label: "Блоки сайта" },
-    { href: "/admin/portfolio", label: "Портфолио" },
-    { href: "/admin/reviews", label: "Отзывы" },
-    { href: "/admin/requests", label: "Заявки" },
+    { href: "/admin", label: "Accueil" },
+
+    { href: "/admin/requests", label: "Demandes" },
+    { href: "/admin/reviews", label: "Avis" },
   ];
 
   // Вспомогательная функция: активен ли пункт (учитываем подстраницы, например /admin/blocks/123)
@@ -34,28 +37,63 @@ export default function AdminNav() {
     return pathname === itemHref || pathname.startsWith(itemHref + "/");
   }
 
+  async function handleLogoutClick() {
+    try {
+      setIsLogoutInProgress(true);
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        message.error("Échec de la déconnexion.");
+        return;
+      }
+      message.success("Déconnexion réussie");
+      routerInstance.push("/admin/login");
+    } catch {
+      message.error("Erreur réseau lors de la déconnexion");
+    } finally {
+      setIsLogoutInProgress(false);
+    }
+  }
+
   return (
-    <nav className={styles.navRoot} aria-label="Навигация админ-панели">
-      <div className={styles.innerContainer}>
-        <ul className={styles.navList}>
-          {navigationItems.map((navigationItem) => {
-            const active = isItemActive(navigationItem.href, currentPathname);
-            return (
-              <li className={styles.navItem} key={navigationItem.href}>
-                <Link
-                  href={navigationItem.href}
-                  className={`${styles.navLink} ${
-                    active ? styles.navLinkActive : ""
-                  }`}
-                  aria-current={active ? "page" : undefined}
-                >
-                  {navigationItem.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+    <header className={styles.header}>
+      <nav className={styles.navRoot} aria-label="Навигация админ-панели">
+        <div className={styles.innerContainer}>
+          <ul className={styles.navList}>
+            {navigationItems.map((navigationItem) => {
+              const active = isItemActive(navigationItem.href, currentPathname);
+              return (
+                <li className={styles.navItem} key={navigationItem.href}>
+                  <Link
+                    href={navigationItem.href}
+                    className={`${styles.navLink} ${
+                      active ? styles.navLinkActive : ""
+                    }`}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {navigationItem.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </nav>
+      <div className={styles.actions}>
+        <Space>
+          <Button
+            danger
+            type="primary"
+            onClick={handleLogoutClick}
+            loading={isLogoutInProgress}
+            aria-label="Se déconnecter"
+          >
+            Se déconnecter
+          </Button>
+        </Space>
       </div>
-    </nav>
+    </header>
   );
 }

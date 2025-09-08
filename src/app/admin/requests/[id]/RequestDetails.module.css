@@ -1,0 +1,54 @@
+@charset "UTF-8";
+.pageRoot {
+  /* общий корневой контейнер страницы (запасной хук для будущих правок) */
+  /* Ант-таблица свойств заявки */
+  /* Панель действий под таблицей свойств */
+  /* Блок фото */
+}
+.pageRoot .headerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pageRoot .titleReset {
+  margin: 0;
+}
+.pageRoot .actionsRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.pageRoot .cardTopMargin {
+  margin-top: 16px;
+}
+.pageRoot .loadingWrap {
+  display: flex;
+  justify-content: center;
+  padding-block: 40px;
+}
+.pageRoot .descriptionsRoot :global(.ant-descriptions-item-label) {
+  width: 220px;
+}
+.pageRoot .actionsBarBelow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+.pageRoot .photosSection {
+  margin-top: 24px;
+}
+.pageRoot .photosTitle {
+  margin-bottom: 12px;
+}
+.pageRoot .photosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+.pageRoot .photoItem {
+  width: 100%;
+  height: 140px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
+}/*# sourceMappingURL=RequestDetails.module.css.map */

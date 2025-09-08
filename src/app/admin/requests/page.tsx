@@ -1,22 +1,19 @@
-"use client"; // Клиентская страница: кнопки, фильтры, уведомления
+"use client";
 
-import React, { useEffect, useState } from "react"; // ⬅️ добавили useEffect/useState для загрузки данных
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Button,
   Input,
   Select,
   DatePicker,
-  Space,
   Card,
   Table,
   Tag,
   message,
-  Popconfirm,
-  Image,
 } from "antd";
 import AdminNav from "../shared/AdminNav/AdminNav";
-import styles from "./AdminRequests.module.scss";
+import styles from "./AdminRequests.module.css";
 
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -29,7 +26,7 @@ type RequestRow = {
   phone: string; // Телефон (обязательное поле формы)
   email: string;
   comment?: string | null; // Комментарий (опционально)
-  status: "Не обработано" | "Обработано"; // Статус обработки админом
+  status: "Non traité" | "Traité"; // Статус обработки админом
   attachments?: Array<{
     id: string;
     name: string;
@@ -61,162 +58,55 @@ export default function AdminRequestsPage() {
   Показываем спиннер на конкретной кнопке "Удалить"
   и блокируем повторные клики, пока идёт запрос.
 */
-  // ⬇️ спиннер для обратного действия (возврат в "Не обработано")
-  const [revertingRequestId, setRevertingRequestId] = useState<string | null>(
-    null
-  );
+
+  // ⬇️ новый обработчик: переход на страницу детали заявки
+  function handleRowClick(targetRequestId: string) {
+    window.location.href = `/admin/requests/${encodeURIComponent(
+      targetRequestId
+    )}`;
+  }
 
   // 3) Колонки таблицы — без изменений логики и названий
   const tableColumns = [
     {
-      title: "Дата",
+      title: "Date",
       dataIndex: "createdAt",
       key: "createdAt",
       width: 200,
       render: (value: string) => (
         <Text>{new Date(value).toLocaleString()}</Text>
       ),
-      sorter: true, // обработчик добавим позже, когда появится серверная сортировка
+      sorter: true,
     },
-
     {
-      title: "Клиент",
+      title: "Client",
       dataIndex: "clientName",
       key: "clientName",
-      // ⬇️ показываем бейдж гендера слева от имени, если он передан с API
       render: (_: unknown, record: RequestRow) => (
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {record.gender && (
-            <span>{record.gender === "male" ? "Г-н" : "Г-жа"}</span>
+            <span>{record.gender === "male" ? "M." : "Mme"}</span>
           )}
           <span>{record.clientName}</span>
         </div>
       ),
     },
-
     {
-      title: "Телефон",
-      dataIndex: "phone",
-      key: "phone",
-      width: 180,
-      render: (value: string) => <a href={`tel:${value}`}>{value}</a>,
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      render: (value: string) => <a href={`email:${value}`}>{value}</a>,
-    },
-    {
-      title: "Комментарий",
-      dataIndex: "comment",
-      key: "comment",
-      ellipsis: true,
-      render: (value: string | null | undefined) =>
-        value ? <Text>{value}</Text> : <Text type="secondary">—</Text>,
-    },
-    {
-      title: "Фотографии",
-      dataIndex: "attachments",
-      key: "attachments",
-      width: 200,
-      render: (cellValue: RequestRow["attachments"], record: RequestRow) => {
-        const attachments = Array.isArray(record.attachments)
-          ? record.attachments
-          : [];
-        const imagePreviews = attachments.filter(
-          (a) => !!a?.dataUrl && typeof a.dataUrl === "string"
-        );
-
-        if (imagePreviews.length === 0) {
-          return <span style={{ opacity: 0.6 }}>нет</span>;
-        }
-
-        // Покажем до 3 миниатюр, остальное — счётчиком
-        const previewSlice = imagePreviews.slice(0, 3);
-        const hiddenCount = imagePreviews.length - previewSlice.length;
-
-        return (
-          <Image.PreviewGroup>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              {previewSlice.map((item) => (
-                <Image
-                  key={item.id}
-                  src={item.dataUrl!}
-                  alt={item.name}
-                  width={48}
-                  height={48}
-                  style={{ objectFit: "cover", borderRadius: 6 }}
-                  placeholder
-                />
-              ))}
-              {hiddenCount > 0 && (
-                <span style={{ fontSize: 12, opacity: 0.8 }}>
-                  +{hiddenCount}
-                </span>
-              )}
-            </div>
-          </Image.PreviewGroup>
-        );
-      },
-    },
-
-    {
-      title: "Статус",
+      title: "Statut",
       dataIndex: "status",
       key: "status",
       width: 160,
       render: (value: RequestRow["status"]) => (
-        <Tag color={value === "Обработано" ? "green" : "default"}>{value}</Tag>
+        <Tag color={value === "Traité" ? "green" : "default"}>{value}</Tag>
       ),
       filters: [
-        { text: "Не обработано", value: "Не обработано" },
-        { text: "Обработано", value: "Обработано" },
+        { text: "Tous", value: "" },
+        { text: "Non traité", value: "Non traité" },
+        { text: "Traité", value: "Traité" },
       ],
     },
-    {
-      title: "Действия",
-      key: "actions",
-      width: 260,
-      render: (_: unknown, record: RequestRow) => (
-        <Space wrap>
-          <Button onClick={handleExportRequestsCsvClick}>Экспорт CSV</Button>
-
-          {/* ОДНА кнопка: меняет лейбл и действие по текущему статусу */}
-          <Button
-            size="small"
-            type="primary"
-            onClick={() => handleToggleProcessed(record)}
-            loading={processingRequestId === record.id}
-            disabled={processingRequestId === record.id}
-          >
-            {record.status === "Обработано"
-              ? "Вернуть в «Не обработано»"
-              : "Отметить обработанной"}
-          </Button>
-
-          {/* ⬇️ Подтверждение удаления + спиннер и блокировка на время запроса */}
-          <Popconfirm
-            title="Удалить заявку?"
-            description={`Действие необратимо. ID: ${record.id}`}
-            okText="Удалить"
-            cancelText="Отмена"
-            okButtonProps={{ danger: true }}
-            onConfirm={() => handleDeleteRequest(record.id)} // фактическое удаление
-          >
-            <Button
-              size="small"
-              danger
-              loading={deletingRequestId === record.id} // спиннер именно на этой кнопке строки
-              disabled={deletingRequestId === record.id} // не даём нажимать повторно
-            >
-              Удалить
-            </Button>
-          </Popconfirm>
-        </Space>
-      ),
-    },
   ];
+
   // ⬇️ Явный рефетч по клику "Обновить" (без рефакторинга существующего кода)
   async function refetchRequestsNow() {
     const requestAbortController = new AbortController();
@@ -230,22 +120,20 @@ export default function AdminRequestsPage() {
         headers: { Accept: "application/json" },
       });
       if (response.status === 401) {
-        message.error("Сессия недействительна. Войдите заново.");
+        message.error("Session invalide. Veuillez vous reconnecter.");
         return;
       }
       if (!response.ok) {
-        throw new Error(`Ошибка загрузки: ${response.status}`);
+        throw new Error(`Erreur de chargement: ${response.status}`);
       }
       const payload = (await response.json()) as { items: RequestRow[] };
       setRequestsData(Array.isArray(payload.items) ? payload.items : []);
-      message.success("Список обновлён");
+      message.success("Liste mise à jour");
     } catch (caughtError) {
       const readableMessage =
-        caughtError instanceof Error
-          ? caughtError.message
-          : "Неизвестная ошибка";
+        caughtError instanceof Error ? caughtError.message : "Erreur inconnue";
       setErrorMessage(readableMessage);
-      message.error("Не удалось загрузить список заявок");
+      message.error("Impossible de charger la liste des demandes");
     } finally {
       setIsTableLoading(false);
     }
@@ -268,12 +156,12 @@ export default function AdminRequestsPage() {
 
         if (response.status === 401) {
           // Теоретически middleware не пустит сюда без токена; сообщение — на всякий случай
-          message.error("Сессия недействительна. Войдите заново.");
+          message.error("Session invalide. Veuillez vous reconnecter.");
           return;
         }
 
         if (!response.ok) {
-          throw new Error(`Ошибка загрузки: ${response.status}`);
+          throw new Error(`Erreur de chargement: ${response.status}`);
         }
 
         // Ожидаем структуру { items: RequestRow[] } из API-заглушки
@@ -283,9 +171,9 @@ export default function AdminRequestsPage() {
         const readableMessage =
           caughtError instanceof Error
             ? caughtError.message
-            : "Неизвестная ошибка";
+            : "Erreur inconnue";
         setErrorMessage(readableMessage);
-        message.error("Не удалось загрузить список заявок");
+        message.error("Impossible de charger la liste des demandes");
       } finally {
         setIsTableLoading(false);
       }
@@ -316,11 +204,11 @@ export default function AdminRequestsPage() {
     })
       .then(async (response) => {
         if (response.status === 401) {
-          message.error("Сессия недействительна. Войдите заново.");
+          message.error("Session invalide. Veuillez vous reconnecter.");
           return { items: [] };
         }
         if (!response.ok) {
-          throw new Error(`Ошибка загрузки: ${response.status}`);
+          throw new Error(`Erreur de chargement: ${response.status}`);
         }
         return (await response.json()) as { items: RequestRow[] };
       })
@@ -328,15 +216,15 @@ export default function AdminRequestsPage() {
         setRequestsData(Array.isArray(payload.items) ? payload.items : []);
         message.success(
           hasQuery
-            ? `Найдено записей: ${payload.items?.length ?? 0}`
-            : "Показаны все заявки"
+            ? `Résultats trouvés: ${payload.items?.length ?? 0}`
+            : "Toutes les demandes sont affichées"
         );
       })
       .catch((caught) => {
         const readable =
-          caught instanceof Error ? caught.message : "Неизвестная ошибка";
+          caught instanceof Error ? caught.message : "Erreur inconnue";
         setErrorMessage(readable);
-        message.error("Не удалось выполнить поиск");
+        message.error("Échec de la recherche");
       })
       .finally(() => {
         setIsTableLoading(false);
@@ -364,11 +252,11 @@ export default function AdminRequestsPage() {
     })
       .then(async (response) => {
         if (response.status === 401) {
-          message.error("Сессия недействительна. Войдите заново.");
+          message.error("Session invalide. Veuillez vous reconnecter.");
           return { items: [] };
         }
         if (!response.ok) {
-          throw new Error(`Ошибка загрузки: ${response.status}`);
+          throw new Error(`Erreur de chargement: ${response.status}`);
         }
         return (await response.json()) as { items: RequestRow[] };
       })
@@ -377,9 +265,9 @@ export default function AdminRequestsPage() {
       })
       .catch((caught) => {
         const readable =
-          caught instanceof Error ? caught.message : "Неизвестная ошибка";
+          caught instanceof Error ? caught.message : "Erreur inconnue";
         setErrorMessage(readable);
-        message.error("Не удалось применить фильтр статуса");
+        message.error("Échec de l’application du filtre de statut");
       })
       .finally(() => {
         setIsTableLoading(false);
@@ -413,11 +301,11 @@ export default function AdminRequestsPage() {
     })
       .then(async (response) => {
         if (response.status === 401) {
-          message.error("Сессия недействительна. Войдите заново.");
+          message.error("Session invalide. Veuillez vous reconnecter.");
           return { items: [] };
         }
         if (!response.ok) {
-          throw new Error(`Ошибка загрузки: ${response.status}`);
+          throw new Error(`Erreur de chargement: ${response.status}`);
         }
         return (await response.json()) as { items: RequestRow[] };
       })
@@ -426,17 +314,17 @@ export default function AdminRequestsPage() {
         // Небольшая подсказка пользователю
         if (fromDate || toDate) {
           message.success(
-            `Диапазон дат применён: ${fromDate || "—"} → ${toDate || "—"}`
+            `Plage de dates appliquée: ${fromDate || "—"} → ${toDate || "—"}`
           );
         } else {
-          message.success("Показаны заявки за все даты");
+          message.success("Demandes pour toutes les dates affichées");
         }
       })
       .catch((caught) => {
         const readable =
-          caught instanceof Error ? caught.message : "Неизвестная ошибка";
+          caught instanceof Error ? caught.message : "Erreur inconnue";
         setErrorMessage(readable);
-        message.error("Не удалось применить фильтр по датам");
+        message.error("Échec de l’application du filtre des dates");
       })
       .finally(() => {
         setIsTableLoading(false);
@@ -462,11 +350,11 @@ export default function AdminRequestsPage() {
       );
 
       if (response.status === 401) {
-        message.error("Сессия недействительна. Войдите заново.");
+        message.error("Session invalide. Veuillez vous reconnecter.");
         return;
       }
       if (response.status === 404) {
-        message.error("Заявка не найдена (возможно, была удалена).");
+        message.error("Demande introuvable (peut-être supprimée).");
         // синхронизируем локальное состояние — уберём её из списка
         setRequestsData((previous) =>
           previous.filter((existing) => existing.id !== requestId)
@@ -474,19 +362,19 @@ export default function AdminRequestsPage() {
         return;
       }
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        throw new Error(`Erreur serveur: ${response.status}`);
       }
 
       // Локально обновляем статус строки без полного refetch
       setRequestsData((previous) =>
         previous.map((item) =>
-          item.id === requestId ? { ...item, status: "Обработано" } : item
+          item.id === requestId ? { ...item, status: "Traité" } : item
         )
       );
 
-      message.success(`Заявка ${requestId} отмечена обработанной`);
+      message.success(`Demande ${requestId} marquée comme traitée`);
     } catch {
-      message.error("Не удалось обновить статус заявки");
+      message.error("Échec de la mise à jour du statut de la demande");
     } finally {
       setProcessingRequestId(null); // снимаем спиннер
     }
@@ -495,7 +383,7 @@ export default function AdminRequestsPage() {
   // ⬇️ Новый универсальный обработчик: тумблер статуса
   async function handleToggleProcessed(targetRow: RequestRow) {
     const nextStatus: RequestRow["status"] =
-      targetRow.status === "Обработано" ? "Не обработано" : "Обработано";
+      targetRow.status === "Traité" ? "Non traité" : "Traité";
     try {
       setProcessingRequestId(targetRow.id);
       const response = await fetch(
@@ -511,18 +399,18 @@ export default function AdminRequestsPage() {
         }
       );
       if (response.status === 401) {
-        message.error("Сессия недействительна. Войдите заново.");
+        message.error("Session invalide. Veuillez vous reconnecter.");
         return;
       }
       if (response.status === 404) {
-        message.error("Заявка не найдена (возможно, была удалена).");
+        message.error("Demande introuvable (peut-être supprimée).");
         setRequestsData((previous) =>
           previous.filter((existing) => existing.id !== targetRow.id)
         );
         return;
       }
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        throw new Error(`Erreur serveur: ${response.status}`);
       }
       // Локально обновляем статус
       setRequestsData((previous) =>
@@ -531,12 +419,12 @@ export default function AdminRequestsPage() {
         )
       );
       message.success(
-        nextStatus === "Обработано"
-          ? `Заявка ${targetRow.id} отмечена обработанной`
-          : `Статус заявки ${targetRow.id} возвращён в «Не обработано»`
+        nextStatus === "Traité"
+          ? `Demande ${targetRow.id} marquée comme traitée`
+          : `Statut de la demande ${targetRow.id} remis à « Traité »`
       );
     } catch {
-      message.error("Не удалось изменить статус заявки");
+      message.error("Échec de la modification du statut de la demande");
     } finally {
       setProcessingRequestId(null);
     }
@@ -556,11 +444,11 @@ export default function AdminRequestsPage() {
       );
 
       if (response.status === 401) {
-        message.error("Сессия недействительна. Войдите заново.");
+        message.error("Session invalide. Veuillez vous reconnecter.");
         return;
       }
       if (response.status === 404) {
-        message.error("Заявка не найдена (возможно, уже удалена).");
+        message.error("Demande introuvable (peut-être déjà supprimée).");
         // синхронизируем локально: уберём строку, если её уже нет на бэкенде
         setRequestsData((previous) =>
           previous.filter((existing) => existing.id !== targetRequestId)
@@ -568,16 +456,16 @@ export default function AdminRequestsPage() {
         return;
       }
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        throw new Error(`Erreur serveur: ${response.status}`);
       }
 
       // Успех: удаляем строку без дополнительного refetch
       setRequestsData((previous) =>
         previous.filter((existing) => existing.id !== targetRequestId)
       );
-      message.success("Заявка удалена");
+      message.success("Demande supprimée");
     } catch {
-      message.error("Не удалось удалить заявку");
+      message.error("Échec de la suppression de la demande");
     } finally {
       setDeletingRequestId(null);
     }
@@ -662,7 +550,7 @@ export default function AdminRequestsPage() {
       document.body.removeChild(tempLinkElement);
       URL.revokeObjectURL(blobUrl);
     } catch {
-      message.error("Не удалось сформировать CSV");
+      message.error("Échec de la génération du CSV");
     }
   }
 
@@ -674,13 +562,13 @@ export default function AdminRequestsPage() {
       {/* Шапка: заголовок «Заявки» и действия справа */}
       <div className={styles.headerRow}>
         <Title level={3} className={styles.titleReset}>
-          Заявки
+          Demandes
         </Title>
 
         <div className={styles.actions}>
-          <Button onClick={handleExportRequestsCsvClick}>Экспорт</Button>
+          <Button onClick={handleExportRequestsCsvClick}>Exporter</Button>
           <Button onClick={refetchRequestsNow} loading={isTableLoading}>
-            Обновить
+            Actualiser
           </Button>
         </div>
       </div>
@@ -688,20 +576,20 @@ export default function AdminRequestsPage() {
       {/* Панель фильтров/поиска — сейчас только вызывает заглушки-обработчики */}
       <div className={styles.filters}>
         <Input.Search
-          placeholder="Поиск по имени или телефону"
+          placeholder="Recherche par nom ou téléphone"
           allowClear
           onSearch={handleSearchByNameOrPhone}
-          enterButton="Найти"
+          enterButton="Rechercher"
         />
 
         <Select
-          placeholder="Статус"
+          placeholder="Statut"
           style={{ width: 200 }}
           onChange={handleFilterByStatus}
           options={[
-            { value: "", label: "Все" },
-            { value: "Не обработано", label: "Не обработано" },
-            { value: "Обработано", label: "Обработано" },
+            { value: "", label: "Tous" },
+            { value: "Non traité", label: "Non traité" },
+            { value: "Traité", label: "Traité" },
           ]}
         />
 
@@ -717,12 +605,24 @@ export default function AdminRequestsPage() {
           pagination={{ pageSize: 10, showSizeChanger: true }}
           scroll={{ x: 1000 }}
           loading={isTableLoading} // ⬅️ индикатор загрузки во время запроса
+          onRow={(record) => ({
+            onClick: (mouseEvent) => {
+              // игнорируем клики по интерактивным элементам внутри строки
+              const targetElement = mouseEvent.target as HTMLElement;
+              const interactiveSelector =
+                'a, button, [role="button"], input, textarea, select, .ant-btn, .ant-popover, .ant-image';
+              if (targetElement.closest(interactiveSelector)) return;
+
+              handleRowClick(record.id);
+            },
+            style: { cursor: "pointer" },
+          })}
         />
       </Card>
 
       {/* Опционально: техническая подсказка об ошибке под таблицей */}
       {errorMessage && (
-        <Text type="danger">Техническая информация: {errorMessage}</Text>
+        <Text type="danger">Informations techniques: {errorMessage}</Text>
       )}
     </div>
   );
