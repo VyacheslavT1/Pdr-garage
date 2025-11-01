@@ -1,0 +1,79 @@
+@use "../../app/shared/styles/variables" as *;
+
+.heroSection {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-image: url("/images/main-picture.avif");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+
+  .overlay {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+    background-color: var(--color-overlay-dark);
+
+    .overlayContent {
+      max-width: 1200px;
+      width: 100%;
+      padding-inline: var(--padding-medium);
+
+      @media (min-width: 1200px) {
+        padding-inline: var(--padding-xlarge);
+      }
+      @media (min-width: 1440px) {
+        padding-inline: 0;
+        margin-inline: auto;
+      }
+
+      .title {
+        font-size: var(--font-size-medium);
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: var(--letter-spacing-xsmall);
+        line-height: var(--line-height-regular);
+        text-transform: uppercase;
+        @media (min-width: 768px) {
+          font-size: var(--font-size-large);
+        }
+      }
+
+      .subtitle {
+        font-size: var(--font-size-normal);
+        font-weight: var(--font-thin);
+        text-align: center;
+        padding-block: var(--padding-block-large);
+        letter-spacing: var(--letter-spacing-xsmall);
+        line-height: var(--line-height-regular);
+        color: var(--color-grey-10);
+        text-transform: uppercase;
+        @media (min-width: 768px) {
+          font-size: var(--font-size-regular);
+          font-weight: var(--font-normal);
+        }
+      }
+
+      .actions {
+        display: flex;
+        justify-content: center;
+        text-transform: uppercase;
+        gap: var(--gap-regular);
+        @media (max-width: 576px) {
+          flex-direction: column;
+          align-items: center;
+        }
+        a {
+          width: 15rem;
+        }
+      }
+    }
+  }
+}

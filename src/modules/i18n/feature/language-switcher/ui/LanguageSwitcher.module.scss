@@ -1,0 +1,64 @@
+@use "../../../../../app/shared/styles/mixins" as *;
+
+.languageSwitcher {
+  display: inline-flex;
+  position: relative;
+  align-self: stretch;
+
+  .languageSwitcherButton {
+    display: flex;
+
+    button {
+      svg {
+        @include size(1rem, 1rem);
+        @media (min-width: 768px) {
+          @include size(1.5rem, 1.5rem);
+        }
+        color: var(--color-light);
+        @include hover {
+          color: var(--color-main);
+        }
+      }
+    }
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 50;
+    transition: all 500ms ease-in-out;
+    transform: scaleY(0.75);
+    transform-origin: top;
+    opacity: 0;
+    visibility: hidden;
+
+    .dropdownOption {
+      display: flex;
+      justify-content: center;
+
+      &.active {
+        font-weight: var(--font-semi-bold);
+        text-decoration: underline;
+        text-underline-offset: var(--text-underline-offset-xsmall);
+      }
+    }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    @include hover {
+      .dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: scaleY(1);
+      }
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    &:focus-within .dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: scaleY(1);
+    }
+  }
+}

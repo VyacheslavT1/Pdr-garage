@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Breadcrumb from "@/app/shared/ui/Breadcrumb/Breadcrumb";
+import Breadcrumb from "@/shared/ui/breadcrumb/Breadcrumb";
 
 type ContactsLayoutProps = { children: ReactNode };
 

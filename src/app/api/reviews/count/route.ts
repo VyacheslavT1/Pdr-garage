@@ -1,20 +1,18 @@
 // src/app/api/reviews/count/route.ts
 import { NextResponse } from "next/server";
-import { supabaseServer } from "../../../../../lib/supabaseServer";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import { securityHeaders } from "@/shared/api/next/securityHeaders";
+import type { ReviewStatus } from "@/modules/reviews/model/types";
+import { hasAccessTokenCookie } from "@/modules/auth/lib/cookies";
 
-// Те же безопасные заголовки, что и в остальных роутов
-const securityHeaders = {
-  "Cache-Control": "no-store",
-  Pragma: "no-cache",
-  "X-Content-Type-Options": "nosniff",
-};
+// Те же безопасные заголовки, что и в остальных роутов (shared)
 
-type ReviewStatus = "Черновик" | "Опубликовано" | "Скрыто";
+// Тип статуса — из модуля reviews
 
 export async function GET(incomingRequest: Request) {
   // Авторизация — как у тебя в /api/reviews
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },
@@ -25,16 +23,12 @@ export async function GET(incomingRequest: Request) {
   try {
     const currentUrl = new URL(incomingRequest.url);
     const rawStatus = currentUrl.searchParams.get("status");
-    const allowedStatuses: ReviewStatus[] = [
-      "Черновик",
-      "Опубликовано",
-      "Скрыто",
-    ];
+    const allowedStatuses: ReviewStatus[] = ["Brouillon", "Publié", "Masqué"];
     const targetStatus: ReviewStatus = allowedStatuses.includes(
       rawStatus as ReviewStatus
     )
       ? (rawStatus as ReviewStatus)
-      : "Черновик";
+      : "Brouillon";
 
     // Точный счёт без выборки строк
     const { count, error } = await supabaseServer

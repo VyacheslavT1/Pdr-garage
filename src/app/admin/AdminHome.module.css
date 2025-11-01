@@ -1,123 +1,143 @@
-@charset "UTF-8";
-/* 1) Корневой контейнер — базовые отступы для ≥768px */
+:root {
+  --color-main: #00c950;
+  --color-accent-dark: #006529;
+  --gradient-color: linear-gradient(to right, #104e10, #00cc00, #104e10);
+  --gradient-color-light: linear-gradient(
+    to right,
+    #8a8a8a,
+    #f2f2f2,
+    #ffffff,
+    #8a8a8a
+  );
+  --gradient-color-dark: linear-gradient(to right, #1b941b, #0a300a);
+  --color-light: #fafafa;
+  --color-light-semi-transparent: #fafafae6;
+  --color-dark: #222;
+  --color-overlay-dark: #000000bf;
+  --color-error: #e7000b;
+  --color-accent: oklch(80% 0.18 53.371);
+  --color-grey-10: #d1d5db;
+  --color-grey-60: #4a4f63;
+  --color-grey-70: #505050;
+  --color-grey-80: #707070;
+  --color-grey-100: #5c5f6e;
+  --color-grey-slate: #3f3f46;
+  --color-grey-charcoal: #27272a;
+  --color-cool-silver: #d4d4d8;
+  --color-grey-cool: #6b7280;
+  --color-grey-cool-light: #9ca3af;
+  --color-grey-dark: #18181b;
+  --color-nav-blue: #0050c0;
+  --color-nav-blue-hover: #1677ff14;
+  --color-nav-blue-active: #1677ff26;
+  --facebook-color: #3382ea;
+  --facebook-shadow-color: #1166d4;
+  --instagram-color: #fc3b64;
+  --instagram-shadow-color: #d93155;
+  --telegram-color: #1fa2e2;
+  --telegram-shadow-color: #1084be;
+  --border-radius: 0.5rem;
+  --border-radius-small: 0.25rem;
+  --padding-xxl: 7.5rem;
+  --padding-xlarge: 5rem;
+  --padding-large: 2rem;
+  --padding-medium: 1.5rem;
+  --padding-small: 1rem;
+  --padding-xsmall: 0.5rem;
+  --padding-mini: 0.25rem;
+  --padding-all-medium: 2rem 1rem;
+  --padding-button: 0.7rem 1rem;
+  --padding-block-large: 2rem 4rem;
+  --padding-custom-medium: 1.5rem 1.25rem;
+  --padding-custom-large: 2rem 1.5rem;
+  --margin-mini: 0.25rem;
+  --margin-xsmall: 0.5rem;
+  --margin-small: 1rem;
+  --margin-medium: 1.5rem;
+  --margin-large: 2rem;
+  --margin-xlarge: 5rem;
+  --margin-xxl: 7.5rem;
+  --margin-all-medium: 2rem 1rem;
+  --text-indent-small: 1rem;
+  --gap-large: 2.5rem;
+  --gap-regular: 2rem;
+  --gap-medium: 1.5rem;
+  --gap-small: 1rem;
+  --gap-xsmall: 0.5rem;
+  --font-size-large: 2.5rem;
+  --font-size-medium: 1.5rem;
+  --font-size-regular: 1.25rem;
+  --font-size-normal: 1rem;
+  --font-size-base: 0.85rem;
+  --font-size-small: 0.75rem;
+  --font-size-xsmall: 0.6rem;
+  --font-thin: 100;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semi-bold: 600;
+  --font-bold: 700;
+  --line-height-medium: 1.2rem;
+  --line-height-regular: 1.5;
+  --line-height-xlarge: 1.7rem;
+  --text-underline-offset-large: 1.5rem;
+  --text-underline-offset-small: 0.5rem;
+  --text-underline-offset-xsmall: 0.25rem;
+  --letter-spacing-small: 0.1em;
+  --letter-spacing-xsmall: 0.05em;
+  --transition: 500ms ease-in-out;
+}
+
+body {
+  background-color: #fff;
+}
+
 .pageRoot {
-  padding: 1rem;
+  padding: var(--padding-small);
 }
 @media (min-width: 768px) {
   .pageRoot {
-    padding: 1.5rem 1.25rem;
+    padding: var(--padding-custom-medium);
   }
 }
 @media (min-width: 1200px) {
   .pageRoot {
-    padding: 2rem 1.5rem;
+    padding: var(--padding-custom-large);
   }
 }
-
-/* 2) Шапка: заголовок + действия */
-.title {
+.pageRoot .title {
   text-align: center;
+  padding: var(--padding-small);
 }
-
-.headerRow {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem 1rem;
-  align-items: center;
-  /* с 992px — в линию: заголовок слева, кнопки справа */
-}
-@media (min-width: 992px) {
-  .headerRow {
-    grid-template-columns: 1fr auto;
-  }
-}
-
-.actions {
+.pageRoot .noticeList {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  /* AntD кнопки — не на всю ширину */
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--margin-small);
 }
-@media (min-width: 992px) {
-  .actions {
-    justify-content: flex-end;
-  }
-}
-.actions :global(.ant-btn) {
-  white-space: nowrap;
-}
-
-.loadingPlaceholder {
+.pageRoot .noticeList .loadingPlaceholder {
   width: 100%;
-  min-height: 4rem;
+  min-height: 5rem;
 }
-
-/* 3) Панель фильтров:
-      - 768–1199px: 2 колонки
-      - 1200–1439px: 3 колонки
-      - ≥1440px: 4 колонки
-   Все контролы тянутся на 100% ширины своей ячейки.
-*/
-.filters {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-  margin-block: 1rem 1.25rem;
-  /* делаем элементы AntD резиновыми внутри CSS-модуля */
+.pageRoot .noticeList .noticeLink {
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--margin-medium);
+  gap: var(--gap-xsmall);
+  color: var(--color-dark);
+  text-decoration: none;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-bold);
 }
-.filters :global(.ant-input-search),
-.filters :global(.ant-select),
-.filters :global(.ant-picker),
-.filters :global(.ant-picker-range) {
-  width: 100%;
-}
-@media (min-width: 768px) {
-  .filters {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (hover: hover) {
+  .pageRoot .noticeList .noticeLink:hover, .pageRoot .noticeList .noticeLink.is-active {
+    color: var(--color-main);
   }
 }
-@media (min-width: 1200px) {
-  .filters {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+@media (hover: none) {
+  .pageRoot .noticeList .noticeLink:active, .pageRoot .noticeList .noticeLink.is-active {
+    color: var(--color-main);
   }
 }
-@media (min-width: 1440px) {
-  .filters {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* 4) Таблица: на узких ноутбуках — горизонтальный скролл,
-      на широких — шапка липкая для удобства чтения.
-*/
-.tableContainer {
-  /* скролл размещаем на теле карточки */
-  /* не даём колонкам чрезмерно ужиматься */
-  /* липкая шапка начиная с десктопа */
-}
-.tableContainer :global(.ant-card-body) {
-  overflow-x: auto;
-}
-.tableContainer :global(.ant-table) {
-  min-width: 1100px;
-}
-@media (min-width: 1440px) {
-  .tableContainer :global(.ant-table) {
-    min-width: 1300px;
-  }
-}
-@media (min-width: 1200px) {
-  .tableContainer :global(.ant-table-thead > tr > th) {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background: #fff; /* можно заменить на var(--color-surface) если есть */
-  }
-}
-
-/* 5) Небольшой визуальный штрих для превью изображений (без изменений логики) */
-:global(.ant-image-img) {
-  border-radius: 6px;
-  -o-object-fit: cover;
-     object-fit: cover;
+.pageRoot .noticeList .noticeStar {
+  color: var(--color-error);
 }/*# sourceMappingURL=AdminHome.module.css.map */

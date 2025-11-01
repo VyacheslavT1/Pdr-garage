@@ -6,6 +6,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
+import { AUTH_COOKIE } from "@/modules/auth/model/types";
 
 // 0) Готовим middleware из next-intl — это твоя текущая логика локализации.
 //    Мы её НЕ меняем, просто вызываем позже, если путь не относится к /admin/**
@@ -21,7 +22,7 @@ export default function combinedMiddleware(incomingRequest: NextRequest) {
   const isAdminLoginPath = currentUrl.pathname === "/admin/login";
 
   // 3) Достаём access_token из cookie (httpOnly cookie выставляет бэкенд при успешном логине)
-  const accessTokenCookie = incomingRequest.cookies.get("access_token");
+  const accessTokenCookie = incomingRequest.cookies.get(AUTH_COOKIE.access);
   const hasAccessToken = Boolean(accessTokenCookie?.value);
 
   // 4) Если пользователь идёт в админку (кроме /admin/login) без токена — отправляем на логин

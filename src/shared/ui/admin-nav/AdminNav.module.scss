@@ -1,0 +1,55 @@
+@use "../../../app/shared/styles/mixins" as *;
+@use "../../../app/shared/styles/variables" as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-cool-silver);
+  position: relative;
+
+  .navRoot {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--margin-small);
+
+    .innerContainer {
+      padding-block: var(--padding-xsmall);
+
+      .navList {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: var(--gap-small);
+        list-style: none;
+        text-transform: uppercase;
+
+        .navLink {
+          text-decoration: none;
+          padding: var(--padding-button);
+          border-radius: var(--border-radius);
+          color: var(--color-nav-blue);
+
+          @include hover {
+            background-color: var(--color-nav-blue-hover);
+          }
+        }
+        .navLinkActive {
+          background-color: var(--color-nav-blue-active);
+          font-weight: var(--font-semi-bold);
+        }
+      }
+    }
+  }
+}
+.actions {
+  position: absolute;
+  right: 1rem;
+  top: 3px;
+}
+
+.errorMessage {
+  color: var(--color-error);
+  margin-left: var(--margin-xsmall);
+}

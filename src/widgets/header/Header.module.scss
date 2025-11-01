@@ -1,0 +1,333 @@
+@use "../../app/shared/styles/variables" as *;
+@use "../../app/shared/styles/mixins" as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  padding-inline: var(--padding-small);
+  background-color: var(--color-dark);
+  box-shadow: var(--color-grey-dark) 0px 4px 6px -1px,
+    var(--color-overlay-dark) 0px 2px 4px -1px;
+
+  .nav {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin-inline: auto;
+
+    .logoLink {
+      display: flex;
+    }
+    @media (max-width: 439px) {
+      .logoLink {
+        padding-block: var(--padding-xsmall);
+      }
+    }
+    .logoLink {
+      .logoIcon {
+        width: 6rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .logoLink {
+        .logoIcon {
+          width: 7rem;
+        }
+      }
+    }
+    @media (min-width: 1024px) {
+      .logoLink {
+        .logoIcon {
+          width: 8rem;
+        }
+      }
+    }
+
+    .menuList {
+      display: none;
+      position: relative;
+      .servicesLink,
+      .menuLink {
+        position: relative;
+      }
+      .servicesLink::before,
+      .menuLink::before {
+        content: "";
+        position: absolute;
+        bottom: -0.5rem;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-main);
+        transition: width var(--transition), left var(--transition);
+      }
+      @media (hover: hover) {
+        .servicesLink:hover,
+        .servicesLink.is-active,
+        .menuLink:hover,
+        .menuLink.is-active {
+          color: var(--color-main);
+        }
+        .servicesLink:hover::before,
+        .servicesLink.is-active::before,
+        .menuLink:hover::before,
+        .menuLink.is-active::before {
+          width: 100%;
+          left: 0;
+        }
+      }
+      @media (hover: none) {
+        .servicesLink:active,
+        .servicesLink.is-active,
+        .menuLink:active,
+        .menuLink.is-active {
+          color: var(--color-main);
+        }
+        .servicesLink:active::before,
+        .servicesLink.is-active::before,
+        .menuLink:active::before,
+        .menuLink.is-active::before {
+          width: 100%;
+          left: 0;
+        }
+      }
+    }
+    @media (min-width: 1024px) {
+      .menuList {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-small);
+        color: var(--color-light);
+      }
+    }
+    @media (min-width: 1200px) {
+      .menuList {
+        gap: var(--gap-medium);
+      }
+    }
+
+    .menuList {
+      .menuItem {
+        padding-block: var(--padding-medium);
+        .servicesLink {
+          display: flex;
+          align-items: center;
+          gap: var(--gap-xsmall);
+
+          .chevronDownIcon {
+            display: block;
+          }
+          .chevronUpIcon {
+            display: none;
+          }
+          @media (hover: hover) {
+            &:hover .chevronDownIcon,
+            &.is-active .chevronDownIcon {
+              display: none;
+            }
+            &:hover .chevronUpIcon,
+            &.is-active .chevronUpIcon {
+              display: block;
+            }
+          }
+          @media (hover: none) {
+            &:active .chevronDownIcon,
+            &.is-active .chevronDownIcon {
+              display: none;
+            }
+            &:active .chevronUpIcon,
+            &.is-active .chevronUpIcon {
+              display: block;
+            }
+          }
+        }
+        .serviceOptions {
+          position: absolute;
+          top: 100%;
+          box-shadow: var(--color-grey-dark) 0px 4px 6px -1px,
+            var(--color-overlay-dark) 0px 2px 4px -1px;
+          z-index: 50;
+          transition: all var(--transition);
+          opacity: 0;
+          transform: scaleY(0.75);
+          transform-origin: top;
+          visibility: hidden;
+          text-indent: var(--text-indent-small);
+        }
+        @media (hover: hover) and (pointer: fine) {
+          &:hover .serviceOptions,
+          &.is-active .serviceOptions {
+            opacity: 1;
+            visibility: visible;
+            transform: scaleY(1);
+          }
+        }
+        @media (hover: hover) and (pointer: fine) and (hover: none) {
+          &:active .serviceOptions,
+          &.is-active .serviceOptions {
+            opacity: 1;
+            visibility: visible;
+            transform: scaleY(1);
+          }
+        }
+        @media (hover: none) and (pointer: coarse) {
+          &:focus-within .serviceOptions {
+            opacity: 1;
+            visibility: visible;
+            transform: scaleY(1);
+          }
+        }
+      }
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      gap: var(--gap-small);
+      position: relative;
+      .languageSwitcher {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 1rem;
+        display: flex;
+      }
+      .requestQuoteButton {
+        display: none;
+      }
+      @media (min-width: 440px) {
+        .requestQuoteButton {
+          display: block;
+          padding-block: var(--padding-xsmall);
+          padding-right: var(--padding-large);
+        }
+      }
+      @media (min-width: 768px) {
+        .languageSwitcher {
+          right: 2rem;
+        }
+        .menuButton {
+          padding-left: var(--padding-medium);
+        }
+      }
+      @media (min-width: 1024px) {
+        .requestQuoteButton {
+          display: block;
+          padding-right: 0;
+        }
+        .languageSwitcher {
+          right: 13rem;
+        }
+      }
+      .menuButton {
+        display: flex;
+        button {
+          padding: 0;
+          svg {
+            color: var(--color-light);
+          }
+        }
+      }
+      @media (min-width: 768px) {
+        .menuButton {
+          button {
+            svg {
+              @include size(1.5rem, 1.5rem);
+            }
+          }
+        }
+      }
+      @media (min-width: 1024px) {
+        .menuButton {
+          display: none;
+        }
+      }
+    }
+
+    .mobileMenuOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      overflow: hidden;
+      background-color: var(--color-dark);
+      color: var(--color-light);
+      transition: height var(--transition), background-color var(--transition);
+      &--open {
+        height: 100vh;
+      }
+      &--closed {
+        height: 0;
+      }
+      .closeButtonWrapper {
+        display: flex;
+        justify-content: center;
+        padding-top: var(--padding-large);
+        svg {
+          color: var(--color-error);
+        }
+      }
+      .mobileMenuList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--gap-regular);
+        margin-top: var(--margin-xxl);
+        @media (hover: hover) {
+          a:hover,
+          a.is-active {
+            color: var(--color-main);
+          }
+        }
+        @media (hover: none) {
+          a:active,
+          a.is-active {
+            color: var(--color-main);
+          }
+        }
+        .mobileServiceItem {
+          position: relative;
+          width: 100%;
+          text-align: center;
+        }
+        .serviceOptionsIcon {
+          position: absolute;
+          margin-left: var(--margin-small);
+        }
+        .serviceOptionsWrapper {
+          overflow: hidden;
+          transition: max-height var(--transition);
+          &--open {
+            max-height: 500px;
+          }
+          &--closed {
+            max-height: 0;
+          }
+        }
+        .callToAction {
+          padding-top: var(--padding-xxl);
+        }
+      }
+    }
+  }
+
+  @media (min-width: 576px) {
+    padding-inline: var(--padding-medium);
+  }
+  @media (min-width: 1024px) {
+    padding-inline: var(--padding-small);
+  }
+  @media (min-width: 1050px) {
+    padding-inline: var(--padding-medium);
+  }
+  @media (min-width: 1200px) {
+    padding-inline: var(--padding-xlarge);
+  }
+  @media (min-width: 1440px) {
+    padding-inline: 0;
+  }
+}

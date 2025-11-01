@@ -1,0 +1,129 @@
+@use "../../app/shared/styles/variables" as *;
+
+.servicesSectionWrapper {
+  width: 100%;
+  padding-inline: var(--padding-small);
+  margin-block: var(--padding-small);
+
+  .servicesSection {
+    position: relative;
+    margin-block: var(--margin-medium);
+    max-width: 1200px;
+    margin-inline: auto;
+
+    .servicesHeader {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-medium);
+      padding-bottom: var(--padding-medium);
+
+      h3 {
+        font-size: var(--font-size-regular);
+        font-weight: var(--font-normal);
+        color: var(--color-grey-cool);
+      }
+
+      h2 {
+        padding-bottom: var(--padding-small);
+        font-size: var(--font-size-medium);
+        font-weight: var(--font-medium);
+        letter-spacing: var(--letter-spacing-small);
+        text-transform: uppercase;
+        color: var(--color-grey-cool-light);
+        text-decoration: underline;
+        text-decoration-color: var(--color-main);
+        text-underline-offset: var(--text-underline-offset-large);
+      }
+    }
+
+    .carouselWrapper {
+      position: relative;
+      width: 100%;
+      margin-top: var(--margin-medium);
+
+      .swiper {
+        width: 100%;
+      }
+
+      :global(.swiper-wrapper) {
+        align-items: stretch;
+      }
+
+      /* Слайды */
+      .slide {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Кнопки навигации */
+      .navButton {
+        position: absolute;
+        z-index: 50;
+        transition: all var(--transition);
+
+        &.prev {
+          top: -6.25rem;
+          right: 4rem;
+        }
+
+        &.next {
+          top: -6.25rem;
+          right: 0;
+        }
+        button {
+          border: 1px solid var(--color-light);
+        }
+        @media (hover: hover) {
+          button:hover,
+          button.is-active {
+            color: var(--color-main);
+            border-color: var(--color-main);
+          }
+        }
+        @media (hover: none) {
+          button:active,
+          button.is-active {
+            color: var(--color-main);
+            border-color: var(--color-main);
+          }
+        }
+      }
+
+      .pagination {
+        margin-top: var(--margin-large);
+        display: flex;
+        justify-content: center;
+
+        :global(.swiper-pagination-bullet) {
+          width: 1.5rem;
+          height: 5px;
+          background-color: var(--color-grey-70);
+          border-radius: 2px;
+          opacity: 1;
+          margin: 0 4px;
+          transition: background var(--transition);
+        }
+
+        /* активная bullet */
+        :global(.swiper-pagination-bullet-active) {
+          background: var(--color-main);
+        }
+      }
+    }
+  }
+}
+@media (min-width: 576px) {
+  .servicesSectionWrapper {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1200px) {
+  .servicesSectionWrapper {
+    padding-inline: var(--padding-xlarge);
+  }
+}
+@media (min-width: 1440px) {
+  .servicesSectionWrapper {
+    padding-inline: 0;
+  }
+}

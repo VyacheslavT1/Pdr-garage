@@ -2,17 +2,15 @@
 // Сохраняет запись в БД (Supabase/PostgreSQL) со статусом "Черновик" для последующей модерации в админке.
 
 import { NextResponse } from "next/server";
-import { supabaseServer } from "../../../../../lib/supabaseServer";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import { securityHeaders } from "@/shared/api/next/securityHeaders";
+import { normalizeAndValidatePublicCreate } from "@/modules/reviews/model/validation";
+import { mapRowToReviewItem } from "@/modules/reviews/lib/mappers";
+import type { ReviewItem, ReviewStatus } from "@/modules/reviews/model/types";
 
-// Единые безопасные заголовки (аналогично другим роутам)
-const securityHeaders = {
-  "Cache-Control": "no-store",
-  Pragma: "no-cache",
-  "X-Content-Type-Options": "nosniff",
-};
+// Единые безопасные заголовки (из shared)
 
-// Допустимые статусы для совместимости с админкой
-type ReviewStatus = "Brouillon" | "Publié" | "Masqué";
+// Типы — из модуля reviews
 
 // Антиспам-корзина (как у заявок), переживает HMR в dev
 type RateLimitBucket = { count: number; windowStart: number };
@@ -38,7 +36,7 @@ export async function GET(incomingRequest: Request) {
     const { data, error } = await supabaseServer
       .from("reviews")
       .select(
-        "id, client_name, rating, comment, date, admin_reply, admin_reply_author, admin_reply_date"
+        "id, client_name, rating, comment, date, admin_reply, admin_reply_author, admin_reply_date, status, updated_at"
       )
       .eq("status", "Publié")
       .order("date", { ascending: false })
@@ -48,15 +46,17 @@ export async function GET(incomingRequest: Request) {
       throw new Error(error.message);
     }
 
-    const items = (data || []).map((row: any) => ({
-      id: row.id,
-      clientName: row.client_name,
-      rating: row.rating ?? null,
-      comment: row.comment ?? null,
-      date: row.date ?? null,
-      adminReply: row.admin_reply ?? null,
-      adminReplyAuthor: row.admin_reply_author ?? null,
-      adminReplyDate: row.admin_reply_date ?? null,
+    const fullItems: ReviewItem[] = (data || []).map(mapRowToReviewItem);
+    // публичному списку отдадим тот же контракт, но фактически это подмножество
+    const items = fullItems.map((it) => ({
+      id: it.id,
+      clientName: it.clientName,
+      rating: it.rating ?? null,
+      comment: it.comment ?? null,
+      date: it.date ?? null,
+      adminReply: it.adminReply ?? null,
+      adminReplyAuthor: it.adminReplyAuthor ?? null,
+      adminReplyDate: it.adminReplyDate ?? null,
     }));
 
     return NextResponse.json(
@@ -76,7 +76,7 @@ export async function GET(incomingRequest: Request) {
 export async function POST(incomingRequest: Request) {
   try {
     // 1) Honeypot: скрытое поле "company" должно быть пустым
-    let parsedBody: any;
+    let parsedBody: unknown;
     try {
       parsedBody = await incomingRequest.json();
     } catch {
@@ -85,10 +85,8 @@ export async function POST(incomingRequest: Request) {
         { status: 400, headers: securityHeaders }
       );
     }
-    if (
-      typeof parsedBody?.company === "string" &&
-      parsedBody.company.trim().length > 0
-    ) {
+    const pb = (parsedBody ?? {}) as Record<string, unknown>;
+    if (typeof pb.company === "string" && pb.company.trim().length > 0) {
       // Тихо "проглатываем" бота
       return new NextResponse(null, { status: 204, headers: securityHeaders });
     }
@@ -117,42 +115,9 @@ export async function POST(incomingRequest: Request) {
       existingBucket.count += 1;
     }
 
-    // 3) Нормализация входных полей
-    const payload = {
-      clientName: (parsedBody?.clientName ?? "").toString().trim(),
-      rating:
-        parsedBody?.rating === null || parsedBody?.rating === ""
-          ? null
-          : Number(parsedBody?.rating),
-      comment:
-        typeof parsedBody?.comment === "string" &&
-        parsedBody.comment.trim().length > 0
-          ? parsedBody.comment.trim()
-          : null,
-    };
-
-    // 4) Валидация
-    const validationErrors: Record<string, string> = {};
-    if (!payload.clientName) {
-      validationErrors.clientName = "Имя обязательно";
-    } else if (payload.clientName.length > 120) {
-      validationErrors.clientName = "Имя слишком длинное";
-    }
-
-    if (payload.rating !== null) {
-      if (
-        !Number.isFinite(payload.rating) ||
-        payload.rating < 1 ||
-        payload.rating > 5
-      ) {
-        validationErrors.rating = "Оценка должна быть числом 1–5 или null";
-      }
-    }
-
-    if (payload.comment !== null && payload.comment.length > 2000) {
-      validationErrors.comment = "Текст отзыва слишком длинный";
-    }
-
+    // 3) Нормализация + валидация (модуль reviews)
+    const { payload, errors: validationErrors } =
+      normalizeAndValidatePublicCreate(parsedBody);
     if (Object.keys(validationErrors).length > 0) {
       return NextResponse.json(
         { error: "ValidationError", details: validationErrors },
@@ -160,7 +125,7 @@ export async function POST(incomingRequest: Request) {
       );
     }
 
-    // 5) Сборка записи для БД
+    // 4) Сборка записи для БД
     const generatedReviewId = `rv_${crypto.randomUUID()}`;
     const nowIso = new Date().toISOString();
     const status: ReviewStatus = "Brouillon";
@@ -186,7 +151,7 @@ export async function POST(incomingRequest: Request) {
       );
     }
 
-    // 6) Возвращаем минимально нужные данные
+    // 5) Возвращаем минимально нужные данные
     return NextResponse.json(
       {
         item: {

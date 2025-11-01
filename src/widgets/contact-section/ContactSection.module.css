@@ -1,0 +1,262 @@
+:root {
+  --color-main: #00c950;
+  --color-accent-dark: #006529;
+  --gradient-color: linear-gradient(to right, #104e10, #00cc00, #104e10);
+  --gradient-color-light: linear-gradient(
+    to right,
+    #8a8a8a,
+    #f2f2f2,
+    #ffffff,
+    #8a8a8a
+  );
+  --gradient-color-dark: linear-gradient(to right, #1b941b, #0a300a);
+  --color-light: #fafafa;
+  --color-light-semi-transparent: #fafafae6;
+  --color-dark: #222;
+  --color-overlay-dark: #000000bf;
+  --color-error: #e7000b;
+  --color-accent: oklch(80% 0.18 53.371);
+  --color-grey-10: #d1d5db;
+  --color-grey-60: #4a4f63;
+  --color-grey-70: #505050;
+  --color-grey-80: #707070;
+  --color-grey-100: #5c5f6e;
+  --color-grey-slate: #3f3f46;
+  --color-grey-charcoal: #27272a;
+  --color-cool-silver: #d4d4d8;
+  --color-grey-cool: #6b7280;
+  --color-grey-cool-light: #9ca3af;
+  --color-grey-dark: #18181b;
+  --color-nav-blue: #0050c0;
+  --color-nav-blue-hover: #1677ff14;
+  --color-nav-blue-active: #1677ff26;
+  --facebook-color: #3382ea;
+  --facebook-shadow-color: #1166d4;
+  --instagram-color: #fc3b64;
+  --instagram-shadow-color: #d93155;
+  --telegram-color: #1fa2e2;
+  --telegram-shadow-color: #1084be;
+  --border-radius: 0.5rem;
+  --border-radius-small: 0.25rem;
+  --padding-xxl: 7.5rem;
+  --padding-xlarge: 5rem;
+  --padding-large: 2rem;
+  --padding-medium: 1.5rem;
+  --padding-small: 1rem;
+  --padding-xsmall: 0.5rem;
+  --padding-mini: 0.25rem;
+  --padding-all-medium: 2rem 1rem;
+  --padding-button: 0.7rem 1rem;
+  --padding-block-large: 2rem 4rem;
+  --padding-custom-medium: 1.5rem 1.25rem;
+  --padding-custom-large: 2rem 1.5rem;
+  --margin-mini: 0.25rem;
+  --margin-xsmall: 0.5rem;
+  --margin-small: 1rem;
+  --margin-medium: 1.5rem;
+  --margin-large: 2rem;
+  --margin-xlarge: 5rem;
+  --margin-xxl: 7.5rem;
+  --margin-all-medium: 2rem 1rem;
+  --text-indent-small: 1rem;
+  --gap-large: 2.5rem;
+  --gap-regular: 2rem;
+  --gap-medium: 1.5rem;
+  --gap-small: 1rem;
+  --gap-xsmall: 0.5rem;
+  --font-size-large: 2.5rem;
+  --font-size-medium: 1.5rem;
+  --font-size-regular: 1.25rem;
+  --font-size-normal: 1rem;
+  --font-size-base: 0.85rem;
+  --font-size-small: 0.75rem;
+  --font-size-xsmall: 0.6rem;
+  --font-thin: 100;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semi-bold: 600;
+  --font-bold: 700;
+  --line-height-medium: 1.2rem;
+  --line-height-regular: 1.5;
+  --line-height-xlarge: 1.7rem;
+  --text-underline-offset-large: 1.5rem;
+  --text-underline-offset-small: 0.5rem;
+  --text-underline-offset-xsmall: 0.25rem;
+  --letter-spacing-small: 0.1em;
+  --letter-spacing-xsmall: 0.05em;
+  --transition: 500ms ease-in-out;
+}
+
+.wrapper {
+  width: 100%;
+  padding-inline: var(--padding-small);
+}
+.wrapper .mainTitle {
+  margin-bottom: var(--margin-large);
+  text-align: center;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-normal);
+  line-height: var(--line-height-regular);
+  letter-spacing: var(--letter-spacing-small);
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .wrapper .mainTitle {
+    font-size: var(--font-size-medium);
+  }
+}
+.wrapper .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-block: var(--padding-medium);
+}
+.wrapper .container .info .contactSectionTitle {
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-normal);
+  letter-spacing: var(--letter-spacing-xsmall);
+  line-height: var(--line-height-regular);
+}
+.wrapper .container .info .contactSectionTitle span {
+  color: var(--color-main);
+  font-weight: var(--font-bold);
+}
+.wrapper .container .info .geolocation {
+  width: 100%;
+  padding-block: var(--padding-small);
+}
+.wrapper .container .info .geolocation iframe {
+  border-radius: var(--border-radius);
+}
+.wrapper .container .info .geolocation .getDirection {
+  margin-block: var(--margin-medium);
+  color: var(--color-main);
+}
+.wrapper .container .info .team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-small);
+}
+.wrapper .container .info .team img {
+  border-radius: var(--border-radius);
+}
+
+.feedbackList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
+  padding: 0;
+  margin-block: var(--margin-large);
+  list-style: none;
+}
+
+.reviewItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xsmall);
+  padding: var(--padding-small) var(--padding-small);
+  border: 1px solid var(--color-grey-80);
+  border-radius: var(--border-radius);
+  background-color: var(--color-dark);
+}
+
+.reviewStars {
+  letter-spacing: var(--letter-spacing-small);
+  color: var(--color-accent);
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xsmall);
+}
+
+.avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-grey-80);
+  color: var(--color-grey-10);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  flex: 0 0 2.25rem;
+}
+
+.clientName {
+  font-size: var(--font-size-base);
+}
+
+.reviewMeta {
+  color: var(--color-grey-cool-light);
+  font-size: var(--font-size-small);
+}
+
+.reviewText {
+  white-space: pre-wrap;
+  line-height: var(--line-height-regular);
+}
+
+.adminReply {
+  margin-top: var(--margin-xsmall);
+  padding-top: var(--padding-xsmall);
+  border-top: 1px dashed var(--color-grey-80);
+}
+
+.adminReplyHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xsmall);
+  font-size: var(--font-size-base);
+  color: var(--color-grey-cool-light);
+}
+
+.adminBadge {
+  padding-block: var(--padding-xsmall);
+  border: 1px solid var(--color-grey-80);
+  border-radius: 50%;
+  font-size: var(--font-size-small);
+}
+
+.adminReplyText {
+  margin-top: var(--margin-mini);
+  white-space: pre-wrap;
+  line-height: var(--line-height-regular);
+}
+
+@media (min-width: 576px) {
+  .wrapper {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 768px) {
+  .wrapper .container .info .team {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+@media (min-width: 1024px) {
+  .wrapper .container {
+    flex-direction: row;
+    gap: var(--gap-small);
+    align-items: start;
+  }
+}
+@media (min-width: 1200px) {
+  .wrapper {
+    padding-inline: var(--padding-xlarge);
+  }
+  .wrapper .container {
+    gap: var(--gap-large);
+  }
+}
+@media (min-width: 1440px) {
+  .wrapper {
+    padding-inline: 0;
+  }
+}/*# sourceMappingURL=ContactSection.module.css.map */

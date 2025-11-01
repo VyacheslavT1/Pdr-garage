@@ -1,19 +1,20 @@
 import { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { CommonPageTemplate } from "@/app/shared/ui/CommonPageTemplate/CommonPageTemplate";
+import { CommonPageTemplate } from "@/shared/ui/common-page-template/CommonPageTemplate";
 import GlassCrackRepair from "./GlassCrackRepairContent";
 import RestorativePolish from "./RestorativePolishContent";
-import { serviceCards } from "@/app/shared/data/serviceCards";
+import { serviceCards } from "@/shared/config/data/serviceCards";
 import { getTranslations } from "next-intl/server";
 
 export default async function Page({
   params,
 }: {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<ReactNode> {
+  const { locale, slug } = await params;
   // текущая статья по slug (у тебя slug = titleKey)
   const contentData = serviceCards.find(
-    (item) => item.titleKey === params.slug
+    (item) => item.titleKey === slug
   );
   if (!contentData) {
     notFound();
@@ -22,12 +23,12 @@ export default async function Page({
   // боковое меню = все услуги
   const t = await getTranslations("CommonTemplateData");
   const sideMenuItems = serviceCards.map((item) => ({
-    href: `/${params.locale}/services/${item.titleKey}`,
+    href: `/${locale}/services/${item.titleKey}`,
     label: t(item.titleKey),
   }));
 
-  const isGlassCrackRepair = params.slug === "glassCrackRepair";
-  const isRestorativePolish = params.slug === "restorativePolish";
+  const isGlassCrackRepair = slug === "glassCrackRepair";
+  const isRestorativePolish = slug === "restorativePolish";
 
   let customContent: React.ReactNode | undefined;
   if (isGlassCrackRepair) {

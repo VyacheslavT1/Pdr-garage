@@ -7,6 +7,9 @@
 // ВНИМАНИЕ: это заглушка для разработки. В проде её заменит настоящий бэкенд/JWT.
 
 import { NextResponse } from "next/server";
+import { securityHeaders } from "@/shared/api/next/securityHeaders";
+import { setAuthCookies } from "@/modules/auth/lib/cookies";
+import type { LoginResponse } from "@/modules/auth/model/types";
 
 // 1) Утилита: безопасно читаем JSON-тело и валидируем минимально
 async function readAndValidateRequestBody(incomingRequest: Request) {
@@ -66,12 +69,7 @@ async function readAndValidateRequestBody(incomingRequest: Request) {
 
 // 2) Основной обработчик POST
 export async function POST(incomingRequest: Request) {
-  // 2.1) Базовые заголовки безопасности (для всех ответов)
-  const securityHeaders = {
-    "Cache-Control": "no-store",
-    Pragma: "no-cache",
-    "X-Content-Type-Options": "nosniff",
-  };
+  // 2.1) Единые безопасные заголовки
 
   // 2.2) Валидируем тело запроса
   const validationResult = await readAndValidateRequestBody(incomingRequest);
@@ -138,30 +136,15 @@ export async function POST(incomingRequest: Request) {
   // ВАЖНО: secure=true у cookie в dev-сервере (http) не сработает.
   // Поэтому делаем привязку к окружению: secure = (NODE_ENV === 'production').
   const response = NextResponse.json(
-    { user: userPayload, session: sessionPayload },
+    { user: userPayload, session: sessionPayload } satisfies LoginResponse,
     { status: 200, headers: securityHeaders }
   );
 
-  const isProductionEnvironment = process.env.NODE_ENV === "production";
-
-  response.cookies.set({
-    name: "access_token",
-    value: accessTokenValue,
-    httpOnly: true,
-    sameSite: "lax",
-    secure: isProductionEnvironment,
-    path: "/",
-    maxAge: accessTokenTtlSeconds,
-  });
-
-  response.cookies.set({
-    name: "refresh_token",
-    value: refreshTokenValue,
-    httpOnly: true,
-    sameSite: "lax",
-    secure: isProductionEnvironment,
-    path: "/",
-    maxAge: refreshTokenTtlSeconds,
+  setAuthCookies(response, {
+    access: accessTokenValue,
+    refresh: refreshTokenValue,
+    accessTtlSeconds: accessTokenTtlSeconds,
+    refreshTtlSeconds: refreshTokenTtlSeconds,
   });
 
   return response;

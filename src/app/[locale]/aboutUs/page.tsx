@@ -1,20 +1,21 @@
 import { ReactNode } from "react";
-import { CommonPageTemplate } from "@/app/shared/ui/CommonPageTemplate/CommonPageTemplate";
-import { pageTemplate } from "@/app/shared/data/pageData";
+import { CommonPageTemplate } from "@/shared/ui/common-page-template/CommonPageTemplate";
+import { pageTemplate } from "@/shared/config/data/pageData";
 import { AboutUs } from "./AboutUs";
 import { getTranslations } from "next-intl/server";
-import { serviceCards } from "@/app/shared/data/serviceCards";
+import { serviceCards } from "@/shared/config/data/serviceCards";
 
 export default async function Page({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<ReactNode> {
+  const { locale } = await params;
   const contentData = pageTemplate.find((page) => page.titleKey === "aboutUs")!;
 
   const t = await getTranslations("CommonTemplateData");
   const sideMenuItems = serviceCards.map((item) => ({
-    href: `/${params.locale}/services/${item.titleKey}`,
+    href: `/${locale}/services/${item.titleKey}`,
     label: t(item.titleKey),
   }));
 

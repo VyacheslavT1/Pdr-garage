@@ -1,7 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
-import { montserrat } from "./shared/ui/fonts";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { montserrat } from "@/shared/ui/fonts";
 
 export const metadata = {
   title: "PDR Studio",

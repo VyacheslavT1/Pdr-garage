@@ -4,39 +4,22 @@
 // - Возвращает JSON с безопасными заголовками
 
 import { NextResponse } from "next/server";
-import { supabaseServer } from "../../../../lib/supabaseServer";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import { securityHeaders } from "@/shared/api/next/securityHeaders";
+import type { RequestItem } from "@/modules/requests/model/types";
+import { mapRowToRequestItem } from "@/modules/requests/lib/mappers";
+import { normalizeAndValidateCreate } from "@/modules/requests/model/validation";
+import { normalizeIncomingAttachments } from "@/modules/requests/lib/attachments";
+import { uploadAttachmentsForRequest } from "@/modules/requests/lib/storage";
+import { hasAccessTokenCookie } from "@/modules/auth/lib/cookies";
 
-// 1) Единые заголовки безопасности для всех ответов
-const securityHeaders = {
-  "Cache-Control": "no-store",
-  Pragma: "no-cache",
-  "X-Content-Type-Options": "nosniff",
-};
-
-// 2) Тип одной записи заявки — синхронизирован с таблицей на /admin/requests
-type RequestItem = {
-  id: string; // уникальный идентификатор
-  createdAt: string; // дата создания (ISO)
-  clientName: string; // имя клиента (из формы)
-  gender?: "male" | "female";
-  phone: string; // телефон (из формы)
-  email: string;
-  comment?: string | null; // комментарий (опционально)
-  status: "Non traité" | "Traité"; // статус обработки в админке
-  attachments?: Array<{
-    id: string;
-    name: string;
-    type: string;
-    size: number;
-    dataUrl?: string | null; // для изображений — превью (data:image/*;base64,...)
-  }>;
-};
+// Заголовки и типы вынесены в shared/modules
 
 // 4) Обработчик GET /api/requests (с сортировкой, пагинацией, статусом, поиском и диапазоном дат)
 export async function GET(incomingRequest: Request) {
   // 1) Авторизация по cookie (как у тебя было)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },
@@ -62,10 +45,10 @@ export async function GET(incomingRequest: Request) {
         : 10;
     const order: "asc" | "desc" = rawOrder === "asc" ? "asc" : "desc";
 
-    const allowedStatuses: RequestItem["status"][] = ["Non traité", "Traité"];
-    const normalizedStatus =
+    const allowedStatuses = ["Non traité", "Traité"] as const;
+    const normalizedStatus: RequestItem["status"] | null =
       typeof rawStatus === "string" &&
-      allowedStatuses.includes(rawStatus as any)
+      (allowedStatuses as readonly string[]).includes(rawStatus)
         ? (rawStatus as RequestItem["status"])
         : null;
 
@@ -117,19 +100,7 @@ export async function GET(incomingRequest: Request) {
     }
 
     // 9) Маппинг snake_case → camelCase под твой контракт (RequestItem)
-    const items: RequestItem[] = (data || []).map((row: any) => ({
-      id: row.id,
-      createdAt: row.created_at,
-      clientName: row.client_name,
-      gender: row.gender ?? undefined,
-      phone: row.phone,
-      email: row.email,
-      comment: row.comment ?? null,
-      status: row.status,
-      attachments: Array.isArray(row.attachments)
-        ? row.attachments
-        : row.attachments ?? [],
-    }));
+    const items: RequestItem[] = (data || []).map(mapRowToRequestItem);
 
     return NextResponse.json(
       { items },
@@ -149,16 +120,12 @@ export async function GET(incomingRequest: Request) {
 // ВАЖНО: этот эндпоинт БЕЗ авторизации — его вызывает публичная форма сайта.
 export async function POST(incomingRequest: Request) {
   // Локальные техзаголовки как в других методах (мы их не выносим — без рефакторинга)
-  const localSecurityHeaders = {
-    "Cache-Control": "no-store",
-    Pragma: "no-cache",
-    "X-Content-Type-Options": "nosniff",
-  };
+  const localSecurityHeaders = securityHeaders;
 
   // 1) Простая антиспам-проверка: "медовый горшок" — скрытое поле в форме должно быть ПУСТЫМ.
   //    Предлагаем имя поля "company" (или любое другое скрытое).
   //    Боты часто заполняют все поля — в таком случае мы тихо возвращаем 204 и НИЧЕГО не сохраняем.
-  let parsedBody: any = null;
+  let parsedBody: unknown = null;
   try {
     parsedBody = await incomingRequest.json();
   } catch {
@@ -167,10 +134,8 @@ export async function POST(incomingRequest: Request) {
       { status: 400, headers: localSecurityHeaders }
     );
   }
-  if (
-    typeof parsedBody?.company === "string" &&
-    parsedBody.company.trim().length > 0
-  ) {
+  const pb = (parsedBody ?? {}) as Record<string, unknown>;
+  if (typeof pb.company === "string" && pb.company.trim().length > 0) {
     // Тихий отказ: не подсказываем ботам, что поле было ловушкой
     return new NextResponse(null, {
       status: 204,
@@ -182,7 +147,7 @@ export async function POST(incomingRequest: Request) {
   //    ОКНО = 5 минут, ЛИМИТ = 8 заявок с одного IP.
   //    В проде лучше вынести в Redis/Upstash либо использовать готовый middleware.
   //    Не рефакторим: объявляем локальное хранилище, если его ещё нет.
-  // @ts-ignore - прикрепим на глобал, чтобы переживать горячие перезапуски dev-сервера
+  // "@ts-expect-error: расширяем глобал для переживания HMR в dev
   // 🔒 Тип корзины для лимита
   type RateLimitBucket = { count: number; windowStart: number };
 
@@ -226,66 +191,9 @@ export async function POST(incomingRequest: Request) {
     existingBucket.count += 1;
   }
 
-  // 3) Извлекаем и нормализуем поля формы (те, что показываем в админке)
-  const incomingPayload = {
-    clientName: (parsedBody?.clientName ?? "").toString().trim(),
-    phone: (parsedBody?.phone ?? "").toString().trim(),
-    comment:
-      typeof parsedBody?.comment === "string"
-        ? parsedBody.comment.trim()
-        : null,
-    email: (parsedBody?.email ?? "").toString().trim(),
-  };
-
-  // 4) Валидация (минимально достаточная под текущую таблицу)
-  const validationErrors: Record<string, string> = {};
-
-  if (!incomingPayload.clientName) {
-    validationErrors.clientName = "Le nom est obligatoire";
-  } else if (incomingPayload.clientName.length > 120) {
-    validationErrors.clientName = "Le nom est trop long";
-  }
-
-  // Телефон: разрешим + цифры, пробелы, дефисы, скобки; приведём к компактному виду для сохранения
-  if (!incomingPayload.phone) {
-    validationErrors.phone = "Le numéro de téléphone est obligatoire";
-  } else {
-    const rawPhone = incomingPayload.phone;
-    const normalizedPhone = rawPhone.replace(/[^\d+]/g, ""); // оставим + и цифры
-    if (!/^\+?\d{6,20}$/.test(normalizedPhone)) {
-      validationErrors.phone = "Format du numéro de téléphone invalide";
-    } else {
-      incomingPayload.phone = normalizedPhone;
-    }
-  }
-
-  if (incomingPayload.comment && incomingPayload.comment.length > 1000) {
-    validationErrors.comment = "Le commentaire est trop long";
-  }
-
-  if (Object.keys(validationErrors).length > 0) {
-    return NextResponse.json(
-      { error: "ValidationError", details: validationErrors },
-      { status: 400, headers: localSecurityHeaders }
-    );
-  }
-
-  // ⬇️ ПОДДЕРЖКА ГЕНДЕРА: принимаем из тела запроса 'male' | 'female' (опционально)
-  const rawGenderValue =
-    typeof parsedBody?.gender === "string"
-      ? parsedBody.gender.trim().toLowerCase()
-      : undefined;
-
-  // Если поле передано, но значение не из допустимых — вернём ошибку валидации
-  let normalizedGenderValue: "male" | "female" | undefined = undefined;
-  if (rawGenderValue !== undefined) {
-    if (rawGenderValue === "male" || rawGenderValue === "female") {
-      normalizedGenderValue = rawGenderValue;
-    } else {
-      validationErrors.gender = "Valeur de genre non autorisée";
-    }
-  }
-
+  // 3) Нормализация + валидация входа (модуль requests)
+  const { payload: incomingPayload, errors: validationErrors } =
+    normalizeAndValidateCreate(parsedBody);
   if (Object.keys(validationErrors).length > 0) {
     return NextResponse.json(
       { error: "ValidationError", details: validationErrors },
@@ -294,116 +202,16 @@ export async function POST(incomingRequest: Request) {
   }
 
   // ⬇️ ПРИЁМ вложений из тела запроса: ожидаем attachments как массив объектов
-  const incomingAttachmentsRaw = Array.isArray(parsedBody?.attachments)
-    ? parsedBody.attachments
-    : [];
+  const normalizedAttachments = normalizeIncomingAttachments(
+    (pb as { attachments?: unknown }).attachments
+  );
 
-  // Нормализуем и фильтруем вложения (в демо сохраняем только изображения с dataUrl)
-  const normalizedAttachments: RequestItem["attachments"] =
-    incomingAttachmentsRaw
-      .slice(0, 10) // ограничим до 10 на всякий случай
-      .map((it: any) => ({
-        id: typeof it?.id === "string" ? it.id : `att_${crypto.randomUUID()}`,
-        name: typeof it?.name === "string" ? it.name : "file",
-        type:
-          typeof it?.type === "string" ? it.type : "application/octet-stream",
-        size: Number.isFinite(it?.size) ? Number(it.size) : 0,
-        dataUrl:
-          typeof it?.dataUrl === "string" &&
-          it.dataUrl.startsWith("data:image/")
-            ? it.dataUrl
-            : null,
-      }))
-      // оставим только изображения ИЛИ метаданные с null-превью (на будущее)
-      .filter(
-        (att: { dataUrl?: string | null }) =>
-          att.dataUrl === null ||
-          (typeof att.dataUrl === "string" &&
-            att.dataUrl.startsWith("data:image/"))
-      );
-
-  // ---------- ⬇️ НОВЫЙ БЛОК: сохраняем вложения в Supabase Storage (bucket: requests)
-  // Генерируем id заявки (как и раньше)
+  // Генерируем id заявки и загружаем вложения через модуль
   const generatedRequestId = `rq_${crypto.randomUUID()}`;
-
-  // Если нужно уметь "выключать" загрузки — оставляем флаг как есть
-  const isStorageUploadsDisabled =
-    process.env.DISABLE_STORAGE_UPLOADS === "true";
-
-  let uploadedAttachments: RequestItem["attachments"];
-
-  if (isStorageUploadsDisabled) {
-    // Ничего не грузим, сохраняем как есть (base64 или null)
-    uploadedAttachments = normalizedAttachments || [];
-  } else {
-    const storageBucketName = "requests";
-
-    // ⚠️ функция с тем же именем, что у тебя раньше — чтобы не менять вызовы
-    async function saveImageDataUrlToStorage(args: {
-      requestId: string;
-      attachmentId: string;
-      name: string;
-      type: string;
-      dataUrl: string; // "data:image/png;base64,..."
-    }): Promise<{ publicUrl: string; bytes: number }> {
-      // отделяем метаданные от base64
-      const commaIndex = args.dataUrl.indexOf(",");
-      if (commaIndex < 0) {
-        throw new Error("Invalid dataUrl format");
-      }
-      const base64Part = args.dataUrl.slice(commaIndex + 1);
-      const buffer = Buffer.from(base64Part, "base64");
-
-      // безопасное имя файла
-      const safeName = args.name.replace(/[^a-zA-Z0-9._-]+/g, "_");
-      // путь хранения: сгруппировано по заявке
-      const objectPath = `requests/${args.requestId}/${args.attachmentId}_${safeName}`;
-
-      // загружаем в Supabase Storage
-      const { error: uploadError } = await supabaseServer.storage
-        .from(storageBucketName)
-        .upload(objectPath, buffer, {
-          contentType: args.type || "application/octet-stream",
-          upsert: true, // разрешим перезапись, чтобы не падать при повторе
-        });
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      // получаем публичный URL
-      const { data: publicData } = supabaseServer.storage
-        .from(storageBucketName)
-        .getPublicUrl(objectPath);
-
-      return { publicUrl: publicData.publicUrl, bytes: buffer.byteLength };
-    }
-
-    uploadedAttachments = await Promise.all(
-      (normalizedAttachments || []).map(async (att) => {
-        if (att.dataUrl && typeof att.dataUrl === "string") {
-          try {
-            const { publicUrl, bytes } = await saveImageDataUrlToStorage({
-              requestId: generatedRequestId,
-              attachmentId: att.id,
-              name: att.name,
-              type: att.type,
-              dataUrl: att.dataUrl,
-            });
-            return {
-              ...att,
-              size: Number.isFinite(att.size) ? att.size : bytes,
-              dataUrl: publicUrl, // теперь тут публичная ссылка с Supabase
-            };
-          } catch {
-            // не роняем весь запрос из-за одного файла
-            return { ...att, dataUrl: null };
-          }
-        }
-        return att;
-      })
-    );
-  }
+  const uploadedAttachments = await uploadAttachmentsForRequest(
+    generatedRequestId,
+    normalizedAttachments || []
+  );
 
   // ---------- ⬇️ НОВЫЙ БЛОК: собираем объект заявки и пишем в Supabase (PostgreSQL)
   const newRequestItemForFirestore: RequestItem = {
@@ -415,7 +223,7 @@ export async function POST(incomingRequest: Request) {
     comment: incomingPayload.comment,
     status: "Non traité",
     attachments: uploadedAttachments,
-    gender: normalizedGenderValue,
+    gender: incomingPayload.gender,
   };
 
   // ✅ Сохраняем заявку в Supabase (маппим camelCase → snake_case колонок таблицы)
@@ -451,18 +259,11 @@ export async function POST(incomingRequest: Request) {
 export async function PATCH(incomingRequest: Request) {
   // 1) Авторизация по cookie (как в GET)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },
-      {
-        status: 401,
-        headers: {
-          "Cache-Control": "no-store",
-          Pragma: "no-cache",
-          "X-Content-Type-Options": "nosniff",
-        },
-      }
+      { status: 401, headers: securityHeaders }
     );
   }
 
@@ -475,31 +276,25 @@ export async function PATCH(incomingRequest: Request) {
         error: "ValidationError",
         details: { id: "L’identifiant est obligatoire" },
       },
-      {
-        status: 400,
-        headers: {
-          "Cache-Control": "no-store",
-          Pragma: "no-cache",
-          "X-Content-Type-Options": "nosniff",
-        },
-      }
+      { status: 400, headers: securityHeaders }
     );
   }
 
   // 3) Пытаемся прочитать желаемый статус из тела запроса (опционально)
   //    По умолчанию переводим в 'Обработано'
-  let parsedBody: any = null;
+  let parsedBody: unknown = null;
   try {
     const raw = await incomingRequest.text(); // тело может быть пустым
-    parsedBody = raw ? JSON.parse(raw) : null;
+    parsedBody = raw ? (JSON.parse(raw) as unknown) : null;
   } catch {
     // игнорируем некорректный JSON — используем значение по умолчанию
   }
 
-  const requestedStatus =
-    parsedBody?.status === "Non traité" || parsedBody?.status === "Traité"
-      ? (parsedBody.status as RequestItem["status"])
-      : ("Traité" as RequestItem["status"]); // статус по умолчанию
+  const p = (parsedBody ?? {}) as Record<string, unknown>;
+  const requestedStatus: RequestItem["status"] =
+    p.status === "Non traité" || p.status === "Traité"
+      ? (p.status as RequestItem["status"])
+      : "Traité";
 
   try {
     // Обновляем только поле статуса по id и сразу читаем обновлённую строку
@@ -514,14 +309,7 @@ export async function PATCH(incomingRequest: Request) {
     if (error && /no rows|Row not found/i.test(error.message)) {
       return NextResponse.json(
         { error: "NotFound" },
-        {
-          status: 404,
-          headers: {
-            "Cache-Control": "no-store",
-            Pragma: "no-cache",
-            "X-Content-Type-Options": "nosniff",
-          },
-        }
+        { status: 404, headers: securityHeaders }
       );
     }
     if (error) {
@@ -529,44 +317,18 @@ export async function PATCH(incomingRequest: Request) {
     }
 
     // Маппим snake_case → твой контракт RequestItem (camelCase)
-    const updatedItem: RequestItem = {
-      id: data.id,
-      createdAt: data.created_at,
-      clientName: data.client_name,
-      gender: data.gender ?? undefined,
-      phone: data.phone,
-      email: data.email,
-      comment: data.comment ?? null,
-      status: data.status,
-      attachments: Array.isArray(data.attachments)
-        ? data.attachments
-        : data.attachments ?? [],
-    };
+    const updatedItem: RequestItem = mapRowToRequestItem(data);
 
     return NextResponse.json(
       { item: updatedItem },
-      {
-        status: 200,
-        headers: {
-          "Cache-Control": "no-store",
-          Pragma: "no-cache",
-          "X-Content-Type-Options": "nosniff",
-        },
-      }
+      { status: 200, headers: securityHeaders }
     );
   } catch (caughtError) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
     return NextResponse.json(
       { error: "ServerError", details: readable },
-      {
-        status: 500,
-        headers: {
-          "Cache-Control": "no-store",
-          Pragma: "no-cache",
-          "X-Content-Type-Options": "nosniff",
-        },
-      }
+      { status: 500, headers: securityHeaders }
     );
   }
 }
@@ -575,18 +337,11 @@ export async function PATCH(incomingRequest: Request) {
 export async function DELETE(incomingRequest: Request) {
   // 1) Авторизация по cookie (как в GET/PATCH)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },
-      {
-        status: 401,
-        headers: {
-          "Cache-Control": "no-store",
-          Pragma: "no-cache",
-          "X-Content-Type-Options": "nosniff",
-        },
-      }
+      { status: 401, headers: securityHeaders }
     );
   }
 
@@ -599,14 +354,7 @@ export async function DELETE(incomingRequest: Request) {
         error: "ValidationError",
         details: { id: "L’identifiant est obligatoire" },
       },
-      {
-        status: 400,
-        headers: {
-          "Cache-Control": "no-store",
-          Pragma: "no-cache",
-          "X-Content-Type-Options": "nosniff",
-        },
-      }
+      { status: 400, headers: securityHeaders }
     );
   }
 
@@ -623,14 +371,7 @@ export async function DELETE(incomingRequest: Request) {
       // Аналог твоего 404, если записи не было
       return NextResponse.json(
         { error: "NotFound" },
-        {
-          status: 404,
-          headers: {
-            "Cache-Control": "no-store",
-            Pragma: "no-cache",
-            "X-Content-Type-Options": "nosniff",
-          },
-        }
+        { status: 404, headers: securityHeaders }
       );
     }
     if (error) {
@@ -640,25 +381,14 @@ export async function DELETE(incomingRequest: Request) {
     // Успех: как и раньше — 204 No Content
     return new NextResponse(null, {
       status: 204,
-      headers: {
-        "Cache-Control": "no-store",
-        Pragma: "no-cache",
-        "X-Content-Type-Options": "nosniff",
-      },
+      headers: securityHeaders,
     });
   } catch (caughtError) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
     return NextResponse.json(
       { error: "ServerError", details: readable },
-      {
-        status: 500,
-        headers: {
-          "Cache-Control": "no-store",
-          Pragma: "no-cache",
-          "X-Content-Type-Options": "nosniff",
-        },
-      }
+      { status: 500, headers: securityHeaders }
     );
   }
 }

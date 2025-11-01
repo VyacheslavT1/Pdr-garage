@@ -1,6 +1,9 @@
+// src/app/admin/page.tsx
+
 "use client";
 
-import AdminNav from "./shared/AdminNav/AdminNav";
+import AdminNav from "@/shared/ui/admin-nav/AdminNav";
+import Link from "next/link";
 import styles from "./AdminHome.module.scss";
 import { Empty, Spin, Alert } from "antd";
 import { useEffect, useState } from "react";
@@ -11,7 +14,6 @@ const REVIEWS_COUNT_ENDPOINT =
   "/api/reviews/count?status=%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%B2%D0%B8%D0%BA"; // новые отзывы
 
 export default function AdminHomePage() {
-  // Ранее используемые имена сохраняю
   const [newRequestsCount, setNewRequestsCount] = useState<number>(0);
   const [newReviewsCount, setNewReviewsCount] = useState<number>(0);
   const [isLoadingCounts, setIsLoadingCounts] = useState<boolean>(true);
@@ -66,21 +68,22 @@ export default function AdminHomePage() {
     };
   }, []);
 
-  let descriptionText = "Pas de nouvelle";
-  if (newRequestsCount > 0 && newReviewsCount > 0) {
-    descriptionText = `Vous avez ${newReviewsCount} nouveaux avis et ${newRequestsCount} nouvelles demandes`;
-  } else if (newReviewsCount > 0) {
-    descriptionText = `Vous avez ${newReviewsCount} nouveaux avis`;
-  } else if (newRequestsCount > 0) {
-    descriptionText = `Vous avez ${newRequestsCount} nouvelles demandes`;
+  const noNewsText = "Pas de nouvelle";
+  function formatReviewsLine(n: number): string | null {
+    if (n <= 0) return null;
+    return `Vous avez ${n} ${n === 1 ? "nouvel avis" : "nouveaux avis"}`;
   }
+  function formatRequestsLine(n: number): string | null {
+    if (n <= 0) return null;
+    return `Vous avez ${n} ${n === 1 ? "nouvelle demande" : "nouvelles demandes"}`;
+  }
+  const reviewsLine = formatReviewsLine(newReviewsCount);
+  const requestsLine = formatRequestsLine(newRequestsCount);
 
   return (
     <div className={styles.pageRoot}>
       <AdminNav />
-      <div className={styles.headerRow}>
-        <h1 className={styles.title}>Panneau d’administration</h1>
-      </div>
+      <h1 className={styles.title}>Panneau d’administration</h1>
 
       <div className={styles.notifications}>
         {isLoadingCounts ? (
@@ -97,7 +100,34 @@ export default function AdminHomePage() {
             showIcon
           />
         ) : (
-          <Empty description={descriptionText} />
+          <Empty
+            description={
+              reviewsLine || requestsLine ? (
+                <div className={styles.noticeList}>
+                  {reviewsLine && (
+                    <Link
+                      href="/admin/reviews"
+                      className={styles.noticeLink}
+                    >
+                      <span className={styles.noticeStar}>*</span>
+                      <p>{reviewsLine}</p>
+                    </Link>
+                  )}
+                  {requestsLine && (
+                    <Link
+                      href="/admin/requests"
+                      className={styles.noticeLink}
+                    >
+                      <span className={styles.noticeStar}>*</span>
+                      <p>{requestsLine}</p>
+                    </Link>
+                  )}
+                </div>
+              ) : (
+                noNewsText
+              )
+            }
+          />
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import ContactSection from "@/app/widgets/ContactSection/ContactSection";
+import ContactSection from "@/widgets/contact-section/ContactSection";
 
 export default function Page() {
   return <ContactSection />;

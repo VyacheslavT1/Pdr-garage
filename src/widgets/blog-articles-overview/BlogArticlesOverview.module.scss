@@ -1,0 +1,43 @@
+@use "../../app/shared/styles/variables" as *;
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-inline: var(--padding-small);
+  @media (min-width: 576px) {
+    padding-inline: var(--padding-medium);
+  }
+  @media (min-width: 1200px) {
+    padding-inline: var(--padding-xlarge);
+  }
+  @media (min-width: 1440px) {
+    padding-inline: 0;
+  }
+
+  .mainTitle {
+    margin-bottom: var(--margin-large);
+    text-align: center;
+    font-size: var(--font-size-normal);
+    font-weight: var(--font-normal);
+    line-height: var(--line-height-regular);
+    letter-spacing: var(--letter-spacing-small);
+    text-transform: uppercase;
+    @media (min-width: 768px) {
+      font-size: var(--font-size-medium);
+    }
+  }
+
+  .articlesLayout {
+    display: flex;
+    max-width: 1200px;
+    gap: var(--gap-small);
+    margin-inline: auto;
+
+    .articlesContainer {
+      display: flex;
+      flex-direction: column;
+      flex: 2.5;
+    }
+  }
+}

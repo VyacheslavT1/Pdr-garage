@@ -1,0 +1,60 @@
+@use "../../../../../../app/shared/styles/variables" as *;
+@use "../../../../../../app/shared/styles/mixins" as *;
+
+.pageContainer {
+  padding: var(--padding-medium);
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--padding-small);
+
+    .title {
+      margin: 0;
+    }
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-small);
+    .inputSearch {
+      max-width: 25rem;
+    }
+  }
+  .errorMessage {
+    color: var(--color-error);
+  }
+}
+.clientCell {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xsmall);
+}
+
+.clientCell,
+.requestDetailsLink {
+  color: var(--color-dark);
+  @include hover {
+    color: var(--color-main);
+  }
+}
+
+/* Actions column responsive behavior */
+.actionsStack {
+  display: inline-flex;
+  gap: var(--gap-xsmall);
+}
+
+@media (max-width: 992px) {
+  .actionsStack {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .actionsStack > * {
+    width: 100%;
+  }
+  .actionsCol {
+    width: 8rem !important; // override antd inline width on small screens
+  }
+}

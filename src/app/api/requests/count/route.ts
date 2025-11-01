@@ -1,20 +1,17 @@
 // src/app/api/requests/count/route.ts
 import { NextResponse } from "next/server";
-import { supabaseServer } from "../../../../../lib/supabaseServer";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import { securityHeaders } from "@/shared/api/next/securityHeaders";
+import { hasAccessTokenCookie } from "@/modules/auth/lib/cookies";
 
-// Те же заголовки, что в /api/requests
-const securityHeaders = {
-  "Cache-Control": "no-store",
-  Pragma: "no-cache",
-  "X-Content-Type-Options": "nosniff",
-};
+// Те же заголовки, что в /api/requests — из shared
 
 type RequestStatus = "Non traité" | "Traité";
 
 export async function GET(incomingRequest: Request) {
   // Авторизация — как в твоём /api/requests
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },

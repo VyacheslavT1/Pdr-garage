@@ -1,0 +1,41 @@
+@import "@/app/shared/styles/_variables.scss";
+
+.pageContainer {
+  padding: var(--padding-medium);
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      margin: 0;
+      padding-block: var(--padding-small);
+    }
+  }
+}
+
+.expandedReplyRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xsmall);
+  padding-block: var(--padding-xsmall);
+
+  .replyTextarea {
+    width: 100%;
+  }
+
+  .replyRowActions {
+    display: flex;
+    gap: var(--gap-xsmall);
+    justify-content: flex-end;
+  }
+}
+
+.errorBlock {
+  margin-top: var(--margin-xsmall);
+
+  .errorMessage {
+    color: var(--color-error);
+  }
+}

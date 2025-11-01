@@ -1,17 +1,18 @@
 import { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { CommonPageTemplate } from "@/app/shared/ui/CommonPageTemplate/CommonPageTemplate";
+import { CommonPageTemplate } from "@/shared/ui/common-page-template/CommonPageTemplate";
 import CustomContent from "./CustomContent";
-import { article } from "@/app/shared/data/articleCards";
+import { article } from "@/shared/config/data/articleCards";
 import { getTranslations } from "next-intl/server";
 
 export default async function Page({
   params,
 }: {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<ReactNode> {
+  const { locale, slug } = await params;
   // текущая статья по slug (у тебя slug = titleKey)
-  const contentData = article.find((item) => item.titleKey === params.slug);
+  const contentData = article.find((item) => item.titleKey === slug);
   if (!contentData) {
     notFound();
   }
@@ -19,11 +20,11 @@ export default async function Page({
   // боковое меню = все статьи
   const t = await getTranslations("Blog");
   const sideMenuItems = article.map((item) => ({
-    href: `/${params.locale}/blog/${item.titleKey}`,
+    href: `/${locale}/blog/${item.titleKey}`,
     label: t(item.titleKey),
   }));
 
-  const isCustomContent = params.slug === "pdrMyths" || "parkingDamage";
+  const isCustomContent = slug === "pdrMyths" || slug === "parkingDamage";
 
   let customContent: React.ReactNode | undefined;
   if (isCustomContent) {

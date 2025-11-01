@@ -1,0 +1,23 @@
+@use "../../../app/shared/styles/variables" as *;
+
+.dropdownWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 10;
+  background-color: var(--color-grey-charcoal);
+  overflow: hidden;
+
+  .dropdownOption {
+    width: 100%;
+    border-bottom: 1px solid var(--color-grey-slate);
+    color: var(--color-light);
+    padding-block: var(--padding-small);
+    cursor: pointer;
+
+    &:hover,
+    &.is-active {
+      color: var(--color-main);
+    }
+  }
+}

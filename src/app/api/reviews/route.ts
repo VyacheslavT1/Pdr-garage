@@ -1,58 +1,25 @@
-// Назначение: API для отзывов.
-// GET /api/reviews            → список
-// GET /api/reviews?id=<id>    → один отзыв по id
-// PUT /api/reviews?id=<id>    → обновить отзыв по id (редактирование)
+// src/app/api/reviews/route.ts
 
 import { NextResponse } from "next/server";
-import { supabaseServer } from "../../../../lib/supabaseServer";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import { securityHeaders } from "@/shared/api/next/securityHeaders";
+import type { ReviewItem } from "@/modules/reviews/model/types";
+import { mapRowToReviewItem } from "@/modules/reviews/lib/mappers";
+import { normalizeAndValidateAdminUpdate, normalizeAndValidateAdminCreate } from "@/modules/reviews/model/validation";
+import { hasAccessTokenCookie } from "@/modules/auth/lib/cookies";
 
-// Единые безопасные заголовки
-const securityHeaders = {
-  "Cache-Control": "no-store",
-  Pragma: "no-cache",
-  "X-Content-Type-Options": "nosniff",
-};
+// Единые безопасные заголовки (shared)
 
-// Тип одной записи отзыва (синхронизирован со списком /admin/reviews)
-type ReviewItem = {
-  id: string; // уникальный id
-  clientName: string; // имя клиента
-  rating?: number | null; // рейтинг 1–5 (может быть null/не указан)
-  status: "Brouillon" | "Publié" | "Masqué"; // статус публикации
-  comment?: string | null;
-  date?: string | null; // дата отзыва (ISO) или null/не указана
-  updatedAt: string; // дата последнего изменения (ISO)
-
-  adminReply?: string | null;
-  adminReplyDate?: string | null;
-  adminReplyAuthor?: string | null;
-};
+// Тип перенесён в модуль reviews
 
 // Демо-хранилище (память процесса)
-const demoReviews: ReviewItem[] = [
-  {
-    id: "rv_001",
-    clientName: "Иван Петров",
-    rating: 5,
-    status: "Publié",
-    date: new Date(Date.now() - 5 * 86400000).toISOString(), // 5 дней назад
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "rv_002",
-    clientName: "Мария Смирнова",
-    rating: null,
-    status: "Brouillon",
-    date: null,
-    updatedAt: new Date(Date.now() - 2 * 86400000).toISOString(), // 2 дня назад
-  },
-];
+// const demoReviews: ReviewItem[] = [];
 
 // ---------- GET /api/reviews (список ИЛИ один по ?id=) ----------
 export async function GET(incomingRequest: Request) {
   // 1) Авторизация по cookie — оставляем как было
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },
@@ -81,15 +48,7 @@ export async function GET(incomingRequest: Request) {
       if (error) {
         throw new Error(error.message);
       }
-      const item: ReviewItem = {
-        id: data.id,
-        clientName: data.client_name,
-        comment: data.comment ?? null,
-        rating: data.rating ?? null,
-        status: data.status,
-        date: data.date ?? null,
-        updatedAt: data.updated_at,
-      };
+      const item: ReviewItem = mapRowToReviewItem(data);
       return NextResponse.json(
         { item },
         { status: 200, headers: securityHeaders }
@@ -106,15 +65,7 @@ export async function GET(incomingRequest: Request) {
       throw new Error(error.message);
     }
 
-    const items: ReviewItem[] = (data || []).map((row: any) => ({
-      id: row.id,
-      clientName: row.client_name,
-      comment: row.comment ?? null,
-      rating: row.rating ?? null,
-      status: row.status,
-      date: row.date ?? null,
-      updatedAt: row.updated_at,
-    }));
+    const items: ReviewItem[] = (data || []).map(mapRowToReviewItem);
 
     return NextResponse.json(
       { items },
@@ -136,7 +87,7 @@ export async function GET(incomingRequest: Request) {
 export async function PUT(incomingRequest: Request) {
   // 1) Auth
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },
@@ -158,7 +109,7 @@ export async function PUT(incomingRequest: Request) {
   }
 
   // 3) body JSON
-  let parsedBody: any;
+  let parsedBody: unknown;
   try {
     parsedBody = await incomingRequest.json();
   } catch {
@@ -168,94 +119,9 @@ export async function PUT(incomingRequest: Request) {
     );
   }
 
-  // 4) partial update (tous les champs optionnels)
-  const update = {
-    clientName:
-      typeof parsedBody?.clientName === "string"
-        ? parsedBody.clientName.trim()
-        : undefined,
-    rating:
-      parsedBody?.rating === null
-        ? null
-        : typeof parsedBody?.rating === "number"
-        ? parsedBody.rating
-        : undefined,
-    status: parsedBody?.status as
-      | ("Brouillon" | "Publié" | "Masqué")
-      | undefined,
-    date:
-      parsedBody?.date === null
-        ? null
-        : typeof parsedBody?.date === "string"
-        ? parsedBody.date
-        : undefined,
-
-    // ↓ nouveaux champs de réponse admin
-    adminReply:
-      parsedBody?.adminReply === null
-        ? null
-        : typeof parsedBody?.adminReply === "string"
-        ? parsedBody.adminReply.trim()
-        : undefined,
-    adminReplyAuthor:
-      parsedBody?.adminReplyAuthor === null
-        ? null
-        : typeof parsedBody?.adminReplyAuthor === "string"
-        ? parsedBody.adminReplyAuthor.trim()
-        : undefined,
-  };
-
-  // 5) validations FR (seulement pour les champs présents)
-  const validationErrors: Record<string, string> = {};
-
-  if (update.clientName !== undefined) {
-    if (update.clientName.length === 0)
-      validationErrors.clientName = "Le nom est obligatoire";
-    if (update.clientName.length > 120)
-      validationErrors.clientName = "Le nom est trop long";
-  }
-
-  if (update.rating !== undefined) {
-    const value = update.rating;
-    const isNull = value === null;
-    const isValidNumber =
-      Number.isFinite(value as number) &&
-      (value as number) >= 1 &&
-      (value as number) <= 5;
-    if (!(isNull || isValidNumber)) {
-      validationErrors.rating =
-        "La note doit être comprise entre 1 et 5 ou null";
-    }
-  }
-
-  if (
-    update.status !== undefined &&
-    !["Brouillon", "Publié", "Masqué"].includes(update.status)
-  ) {
-    validationErrors.status = "Statut non autorisé";
-  }
-
-  if (update.date !== undefined) {
-    if (update.date !== null && Number.isNaN(Date.parse(update.date))) {
-      validationErrors.date = "Format de date invalide (ISO requis ou null)";
-    }
-  }
-
-  if (update.adminReply !== undefined) {
-    if (update.adminReply !== null && update.adminReply.length > 4000) {
-      validationErrors.adminReply =
-        "La réponse de l’administrateur est trop longue";
-    }
-  }
-
-  if (update.adminReplyAuthor !== undefined) {
-    if (
-      update.adminReplyAuthor !== null &&
-      update.adminReplyAuthor.length > 120
-    ) {
-      validationErrors.adminReplyAuthor = "Le nom de l’auteur est trop long";
-    }
-  }
+  // 4) partial update + validation (module)
+  const { update, errors: validationErrors } =
+    normalizeAndValidateAdminUpdate(parsedBody);
 
   if (Object.keys(validationErrors).length > 0) {
     return NextResponse.json(
@@ -266,7 +132,7 @@ export async function PUT(incomingRequest: Request) {
 
   // 6) mapping snake_case + updated_at
   const nowIso = new Date().toISOString();
-  const updateRow: Record<string, any> = { updated_at: nowIso };
+  const updateRow: Record<string, unknown> = { updated_at: nowIso };
 
   if (update.clientName !== undefined)
     updateRow.client_name = update.clientName;
@@ -303,17 +169,7 @@ export async function PUT(incomingRequest: Request) {
     }
 
     // 7) réponse: enrichie с полями admin*
-    const item: ReviewItem = {
-      id: data.id,
-      clientName: data.client_name,
-      rating: data.rating ?? null,
-      status: data.status,
-      date: data.date ?? null,
-      updatedAt: data.updated_at,
-      adminReply: data.admin_reply ?? null,
-      adminReplyDate: data.admin_reply_date ?? null,
-      adminReplyAuthor: data.admin_reply_author ?? null,
-    };
+    const item: ReviewItem = mapRowToReviewItem(data);
 
     return NextResponse.json(
       { item },
@@ -333,7 +189,7 @@ export async function PUT(incomingRequest: Request) {
 export async function POST(incomingRequest: Request) {
   // 1) Авторизация по cookie (единый подход во всех наших эндпоинтах)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },
@@ -342,7 +198,7 @@ export async function POST(incomingRequest: Request) {
   }
 
   // 2) Читаем JSON-тело запроса
-  let parsedBody: any;
+  let parsedBody: unknown;
   try {
     parsedBody = await incomingRequest.json();
   } catch {
@@ -352,80 +208,44 @@ export async function POST(incomingRequest: Request) {
     );
   }
 
-  // 3) Извлекаем и нормализуем поля (ровно те, что есть в форме)
-  const payload = {
-    clientName: (parsedBody?.clientName ?? "").toString().trim(),
-    rating:
-      parsedBody?.rating === null
-        ? null
-        : typeof parsedBody?.rating === "number"
-        ? parsedBody.rating
-        : undefined,
-    status: parsedBody?.status as ReviewItem["status"],
-    date:
-      parsedBody?.date === null
-        ? null
-        : typeof parsedBody?.date === "string"
-        ? parsedBody.date
-        : undefined,
-  };
-
-  // 4) Валидация
-  const validationErrors: Record<string, string> = {};
-
-  if (!payload.clientName)
-    validationErrors.clientName = "Le nom est obligatoire";
-  else if (payload.clientName.length > 120)
-    validationErrors.clientName = "Le nom est trop long";
-
-  if (payload.rating !== undefined) {
-    const value = payload.rating;
-    const isNull = value === null;
-    const isValidNumber =
-      Number.isFinite(value as number) &&
-      (value as number) >= 1 &&
-      (value as number) <= 5;
-    if (!(isNull || isValidNumber)) {
-      validationErrors.rating =
-        "La note doit être comprise entre 1 et 5 ou null";
-    }
-  }
-
-  if (!["Brouillon", "Publié", "Masqué"].includes(payload.status)) {
-    validationErrors.status = "Statut non autorisé";
-  }
-
-  if (payload.date !== undefined) {
-    if (payload.date !== null && Number.isNaN(Date.parse(payload.date))) {
-      validationErrors.date = "Format de date invalide (ISO requis ou null)";
-    }
-  }
-
-  if (Object.keys(validationErrors).length > 0) {
+  // 3) Нормализация + валидация (модуль)
+  const { payload, errors } = normalizeAndValidateAdminCreate(parsedBody);
+  if (Object.keys(errors).length > 0) {
     return NextResponse.json(
-      { error: "ValidationError", details: validationErrors },
+      { error: "ValidationError", details: errors },
       { status: 400, headers: securityHeaders }
     );
   }
 
-  // 5) Сужаем тип статуса, чтобы исключить undefined для TS
-  const finalStatusValue: ReviewItem["status"] =
-    payload.status as ReviewItem["status"];
-
-  // 6) Создаём запись в демо-хранилище
-  const newItem: ReviewItem = {
-    id: `rv_${crypto.randomUUID()}`,
-    clientName: payload.clientName,
+  // 4) Вставка в Supabase
+  const id = `rv_${crypto.randomUUID()}`;
+  const nowIso = new Date().toISOString();
+  const insertRow: Record<string, unknown> = {
+    id,
+    client_name: payload.clientName,
     rating: payload.rating ?? null,
-    status: finalStatusValue,
+    status: payload.status,
     date: payload.date ?? null,
-    updatedAt: new Date().toISOString(),
+    updated_at: nowIso,
+    created_at: nowIso,
   };
-  demoReviews.push(newItem);
 
-  // 7) Отдаём 201 Created
+  const { data, error } = await supabaseServer
+    .from("reviews")
+    .insert([insertRow])
+    .select("*")
+    .single();
+
+  if (error) {
+    return NextResponse.json(
+      { error: "ServerError", details: error.message },
+      { status: 500, headers: securityHeaders }
+    );
+  }
+
+  const item: ReviewItem = mapRowToReviewItem(data);
   return NextResponse.json(
-    { item: newItem },
+    { item },
     { status: 201, headers: securityHeaders }
   );
 }
@@ -433,7 +253,7 @@ export async function POST(incomingRequest: Request) {
 export async function DELETE(incomingRequest: Request) {
   // 1) Авторизация по cookie — как у тебя в остальных методах
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
-  const hasAccessToken = /(?:^|;\s*)access_token=/.test(cookieHeader);
+  const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
     return NextResponse.json(
       { error: "Unauthorized" },

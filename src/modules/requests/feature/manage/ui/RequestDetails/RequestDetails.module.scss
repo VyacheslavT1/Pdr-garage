@@ -1,0 +1,63 @@
+@use "../../../../../../app/shared/styles/variables" as *;
+@use "../../../../../../app/shared/styles/mixins" as *;
+
+.pageContainer {
+  margin: var(--margin-small);
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      margin: 0;
+      padding-block: var(--padding-small);
+    }
+  }
+
+  .card {
+    margin-top: var(--margin-small);
+
+    .loadingWrap {
+      display: flex;
+      justify-content: center;
+      padding-block: var(--padding-large);
+    }
+  }
+
+  .descriptionsRoot :global(.ant-descriptions-item-label) {
+    width: 12rem;
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--margin-small);
+  }
+  .photosSection,
+  .photosTitle {
+    margin-top: var(--margin-medium);
+  }
+
+  .photosGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: var(--gap-small);
+  }
+  .photoItem {
+    @include size(100%, 10rem);
+    object-fit: cover;
+    border-radius: var(--border-radius);
+  }
+
+  .replyBox {
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--padding-small);
+
+    .replyActions {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--gap-xsmall);
+      padding-block: var(--padding-small);
+    }
+  }
+}

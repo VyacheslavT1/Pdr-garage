@@ -4,48 +4,20 @@
 // - Метод именно POST (а не GET), чтобы не плодить CSRF-риски
 
 import { NextResponse } from "next/server";
+import { securityHeaders } from "@/shared/api/next/securityHeaders";
+import { clearAuthCookies } from "@/modules/auth/lib/cookies";
 
 export async function POST() {
-  // 1) Базовые заголовки безопасности для всех ответов этого эндпоинта
-  const securityHeaders = {
-    "Cache-Control": "no-store",
-    Pragma: "no-cache",
-    "X-Content-Type-Options": "nosniff",
-  };
-
   // 2) Готовим JSON-ответ (можно расширить при необходимости)
   const response = NextResponse.json(
     { success: true },
     { status: 200, headers: securityHeaders }
   );
 
-  // 3) В проде cookie должны быть secure; в dev — нет (иначе не установятся по http)
-  const isProductionEnvironment = process.env.NODE_ENV === "production";
+  // 3) Сбрасываем auth-cookies
+  clearAuthCookies(response);
 
-  // 4) Удаляем access_token:
-  //    Технически это делается установкой такого же cookie с maxAge=0 (или expires в прошлом)
-  response.cookies.set({
-    name: "access_token",
-    value: "",
-    httpOnly: true,
-    sameSite: "lax",
-    secure: isProductionEnvironment,
-    path: "/",
-    maxAge: 0,
-  });
-
-  // 5) И refresh_token — тем же способом
-  response.cookies.set({
-    name: "refresh_token",
-    value: "",
-    httpOnly: true,
-    sameSite: "lax",
-    secure: isProductionEnvironment,
-    path: "/",
-    maxAge: 0,
-  });
-
-  // 6) Возвращаем ответ; middleware на следующем запросе в /admin уже не увидит токен
+  // 4) Возвращаем ответ; middleware на следующем запросе в /admin уже не увидит токен
   //    и отправит пользователя на /admin/login
   return response;
 }

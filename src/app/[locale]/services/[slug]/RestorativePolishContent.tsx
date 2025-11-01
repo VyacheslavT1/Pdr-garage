@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import CheckIcon from "@/app/shared/Icons/check.svg";
-import ArrowDownIcon from "@/app/shared/Icons/arrow-down.svg";
+import CheckIcon from "@/shared/Icons/check.svg";
+import ArrowDownIcon from "@/shared/Icons/arrow-down.svg";
 
 interface RestorativePolishProps {
   contentData: ContentData;

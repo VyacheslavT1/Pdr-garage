@@ -1,0 +1,60 @@
+@use "../../../app/shared/styles/variables" as *;
+
+/* BaseCard styles */
+.cardWrapper {
+  margin-bottom: var(--margin-large);
+  border: 1px solid var(--color-grey-70);
+  border-radius: var(--border-radius);
+  // box-shadow: var(--color-grey-dark) 0 0 18px 10px;
+
+  .cardImage {
+    position: relative;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 3/2;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3/2;
+      border-radius: var(--border-radius);
+    }
+  }
+  .cardText {
+    padding: var(--padding-xsmall);
+
+    .cardTitle {
+      margin-top: var(--margin-small);
+      font-size: var(--font-size-medium);
+      color: var(--color-cool-silver);
+      font-weight: var(--font-medium);
+    }
+    .cardDescription {
+      padding-block: var(--padding-small);
+      letter-spacing: var(--letter-spacing-small);
+    }
+
+    .cardLink {
+      padding-bottom: var(--margin-large);
+      a {
+        width: 100%;
+        background: var(--gradient-color);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 100%;
+        color: transparent;
+        &:hover {
+          animation: shine 1s linear infinite;
+        }
+      }
+    }
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% 0;
+  }
+}

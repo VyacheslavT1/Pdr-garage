@@ -1,0 +1,20 @@
+@use "../../../app/shared/styles/variables" as *;
+@use "../../../app/shared/styles/mixins" as *;
+
+.stickyButton {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 1rem;
+  z-index: 100;
+  transition: all var(--transition);
+  opacity: 0;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  svg {
+    @include size(2rem, 2rem);
+  }
+}

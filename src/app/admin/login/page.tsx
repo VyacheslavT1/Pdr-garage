@@ -2,26 +2,27 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Роутер для перехода на /admin после логина
-import { Form, Input, Button, Checkbox, Typography, Card, message } from "antd"; // Компоненты AntD
-import styles from "./AdminLogin.module.css";
+import { Form, Input, Button, Checkbox, Typography, Card } from "antd"; // Компоненты AntD
+import styles from "./AdminLogin.module.scss";
 
 const { Title, Text } = Typography;
 
-// Тип значений формы. Названия полей совпадают с name в <Form.Item>
 type LoginFormValues = {
-  email: string; // Email администратора
-  password: string; // Пароль администратора
-  rememberMe?: boolean; // Флаг «Оставаться в системе»
+  email: string;
+  password: string;
+  rememberMe?: boolean;
 };
 
 export default function AdminLoginPage() {
   const routerInstance = useRouter(); // Редирект по успеху
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // Состояние отправки
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string>("");
 
   // Обработчик успешной валидации формы AntD (onFinish)
   async function handleSubmit(formValues: LoginFormValues) {
     try {
-      setIsSubmitting(true); // Блокируем кнопку на время запроса
+      setIsSubmitting(true);
+      setFormError("");
 
       // POST /api/auth/login — сервер устанавливает httpOnly-cookie с токенами
       const response = await fetch("/api/auth/login", {
@@ -36,15 +37,12 @@ export default function AdminLoginPage() {
       });
 
       if (!response.ok) {
-        // Сообщение общее — не раскрываем, что именно неверно
-        message.error("Identifiants incorrects");
+        setFormError("Identifiants incorrects");
         return;
       }
-
-      message.success("Connexion réussie");
       routerInstance.push("/admin"); // Переходим в защищённый раздел
     } catch {
-      message.error("Erreur réseau. Réessayez");
+      setFormError("Erreur réseau. Réessayez");
     } finally {
       setIsSubmitting(false);
     }
@@ -52,7 +50,7 @@ export default function AdminLoginPage() {
 
   // Разметка с классами из SCSS-модуля. Вся inline-стилизация перенесена в .scss
   return (
-    <div className={styles.loginRoot}>
+    <div className={styles.loginContainer}>
       <Card className={styles.loginCard}>
         <div className={styles.loginHeader}>
           <Title level={3} className={styles.loginTitle}>
@@ -115,6 +113,12 @@ export default function AdminLoginPage() {
             </Button>
           </Form.Item>
         </Form>
+
+        {formError && (
+          <div className={styles.formError} role="alert">
+            {formError}
+          </div>
+        )}
       </Card>
     </div>
   );
