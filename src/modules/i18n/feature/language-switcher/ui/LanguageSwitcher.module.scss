@@ -1,4 +1,4 @@
-@use "../../../../../app/shared/styles/mixins" as *;
+@use "../../../../../app/shared/styles/tokens.pure.scss" as *;
 
 .languageSwitcher {
   display: inline-flex;
@@ -14,7 +14,7 @@
         @media (min-width: 768px) {
           @include size(1.5rem, 1.5rem);
         }
-        color: var(--color-light);
+
         @include hover {
           color: var(--color-main);
         }

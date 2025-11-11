@@ -1,5 +1,5 @@
 // src/app/shared/ui/InputField/InputField.module.scss
-@use "../../../../../../../../app/shared/styles/mixins" as *;
+@use "../../../../../../../../app/shared/styles/tokens.pure.scss" as *;
 
 .inputField {
   margin-block: var(--margin-small);

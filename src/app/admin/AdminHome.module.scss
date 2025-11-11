@@ -1,9 +1,9 @@
 // src/app/admin/AdminHome.module.scss
 
-@use "../shared/styles/mixins" as *;
+@use "../shared/styles/tokens.pure.scss" as *;
 
 .pageRoot {
-  background-color: #fff;
+  background-color: var(--color-light);
   padding: var(--padding-small);
 
   @media (min-width: 768px) {

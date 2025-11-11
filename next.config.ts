@@ -1,4 +1,4 @@
-// next.config.js
+// next.config.ts
 const withPlugins = require("next-compose-plugins");
 const withSvgr = require("next-plugin-svgr");
 const createNextIntlPlugin = require("next-intl/plugin");
