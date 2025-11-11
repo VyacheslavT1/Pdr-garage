@@ -13,7 +13,7 @@ import {
   Popconfirm,
 } from "antd";
 import { useParams, useRouter } from "next/navigation";
-import styles from "./RequestDetails.module.css";
+import styles from "./RequestDetails.module.scss";
 
 const { Title, Text } = Typography;
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import UpArrowIcon from "@/shared/Icons/up-arrow.svg";
-import styles from "./ScrollToTopButton.module.css";
+import styles from "./ScrollToTopButton.module.scss";
 
 export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState<boolean>(false);

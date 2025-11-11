@@ -13,7 +13,7 @@ import { Link } from "@/i18n/navigation";
 import { COMPANY_ADDRESS } from "@/shared/config/siteInfo";
 import { useServiceOptions } from "@/shared/config/data/serviceOptions";
 import { ebGaramond } from "@/shared/ui/fonts";
-import styles from "./Footer.module.css";
+import styles from "./Footer.module.scss";
 import { FaInstagram, FaFacebookF, FaTelegram } from "react-icons/fa";
 
 export default function Footer() {

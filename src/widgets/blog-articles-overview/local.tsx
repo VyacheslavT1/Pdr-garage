@@ -6,7 +6,7 @@ import CardsOverview from "@/shared/ui/cards-overview/CardsOverview";
 import ArticleCard from "@/shared/ui/article-card/ArticleCard";
 import SideMenuList from "@/shared/ui/side-menu-list/SideMenuList";
 import { article } from "@/shared/config/data/articleCards";
-import styles from "./BlogArticlesOverview.module.css";
+import styles from "./BlogArticlesOverview.module.scss";
 
 export default function BlogArticlesOverview() {
   const t = useTranslations("Blog");

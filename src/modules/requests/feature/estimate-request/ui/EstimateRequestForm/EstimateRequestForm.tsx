@@ -16,7 +16,7 @@ import Checkbox from "./parts/Checkbox/Checkbox";
 import Button from "@/shared/ui/button/Button";
 
 import { formDataToValues } from "./utils/formValues";
-import styles from "./EstimateRequestForm.module.css";
+import styles from "./EstimateRequestForm.module.scss";
 
 const initialSubmitState: SubmitEstimateResult = { ok: false };
 

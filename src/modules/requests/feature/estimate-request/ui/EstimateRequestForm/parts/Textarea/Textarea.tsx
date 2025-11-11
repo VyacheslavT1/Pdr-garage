@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import styles from "./Textarea.module.css";
+import styles from "./Textarea.module.scss";
 
 export interface TextAreaProps {
   id: string;

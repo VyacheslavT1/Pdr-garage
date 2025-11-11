@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styles from "./RadioButton.module.css";
+import styles from "./RadioButton.module.scss";
 
 type RadioButtonProps = {
   id: string;

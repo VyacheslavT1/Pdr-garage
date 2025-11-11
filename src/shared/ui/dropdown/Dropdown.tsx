@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useLocale } from "next-intl";
-import styles from "./Dropdown.module.css";
+import styles from "./Dropdown.module.scss";
 
 interface Options { value: string; label: string }
 

@@ -3,7 +3,7 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import styles from "./BaseCard.module.css";
+import styles from "./BaseCard.module.scss";
 
 interface BaseCardProps {
   src: StaticImageData | string;

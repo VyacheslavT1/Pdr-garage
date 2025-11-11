@@ -13,7 +13,7 @@ import Dropdown from "@/shared/ui/dropdown/Dropdown";
 import { LanguageSwitcher } from "@/modules/i18n/feature/language-switcher/ui/LanguageSwitcher";
 import { useServiceOptions } from "@/shared/config/data/serviceOptions";
 import { useTranslations } from "next-intl";
-import styles from "./Header.module.css";
+import styles from "./Header.module.scss";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

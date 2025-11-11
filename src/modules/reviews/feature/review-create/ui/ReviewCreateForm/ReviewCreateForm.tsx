@@ -6,7 +6,7 @@ import InputField from "@/modules/requests/feature/estimate-request/ui/EstimateR
 import Textarea from "@/modules/requests/feature/estimate-request/ui/EstimateRequestForm/parts/Textarea/Textarea";
 import Button from "@/shared/ui/button/Button";
 import Select from "@/shared/ui/select/Select";
-import styles from "./ReviewCreateForm.module.css";
+import styles from "./ReviewCreateForm.module.scss";
 
 type ReviewCreatePayload = {
   clientName: string;

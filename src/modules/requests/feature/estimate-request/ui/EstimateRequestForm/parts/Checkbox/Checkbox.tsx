@@ -6,7 +6,7 @@ import CheckboxIcon from "@/shared/Icons/checkbox-line.svg";
 import CheckboxCheckedIcon from "@/shared/Icons/checkbox-fill.svg";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import styles from "./Checkbox.module.css";
+import styles from "./Checkbox.module.scss";
 import { inter } from "@/shared/ui/fonts";
 
 export type CheckboxVariant = "default" | "labeled";

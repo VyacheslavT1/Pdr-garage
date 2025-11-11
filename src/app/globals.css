@@ -3,6 +3,7 @@
 
 /* Сбрасываем базовые браузерные стили AntD-ресетом в своём слое */
 @import "antd/dist/reset.css" layer(reset);
+@import "shared/styles/_variables.scss";
 
 * {
   box-sizing: border-box;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./Select.module.css";
+import styles from "./Select.module.scss";
 
 export interface SelectProps { label: string; options: string[]; value?: string; onChange: (value: string) => void }
 

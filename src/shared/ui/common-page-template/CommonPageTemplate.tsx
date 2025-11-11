@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import SideMenuList, { SideMenuItem } from "@/shared/ui/side-menu-list/SideMenuList";
 import { ContentData } from "@/app/shared/types/page.types";
-import styles from "./CommonPageTemplate.module.css";
+import styles from "./CommonPageTemplate.module.scss";
 
 interface CommonPageTemplateProps {
   contentData: ContentData;

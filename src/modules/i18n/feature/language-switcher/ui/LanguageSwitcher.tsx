@@ -7,7 +7,7 @@ import { useLocale } from "next-intl";
 import Dropdown from "@/shared/ui/dropdown/Dropdown";
 import GlobeIcon from "@/shared/Icons/globe.svg";
 import Button from "@/shared/ui/button/Button";
-import styles from "./LanguageSwitcher.module.css";
+import styles from "./LanguageSwitcher.module.scss";
 
 const locales = ["fr", "en", "ru"];
 

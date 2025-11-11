@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import styles from "./Breadcrumb.module.css";
+import styles from "./Breadcrumb.module.scss";
 
 export default function Breadcrumb() {
   const t = useTranslations("Breadcrumb");

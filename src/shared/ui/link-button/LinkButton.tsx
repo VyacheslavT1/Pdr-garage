@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
-import styles from "./LinkButton.module.css";
+import styles from "./LinkButton.module.scss";
 
 export interface LinkButtonProps {
   href: string;

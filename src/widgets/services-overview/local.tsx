@@ -4,7 +4,7 @@ import ServiceCard from "@/shared/ui/service-card/ServiceCard";
 import CardsOverview from "@/shared/ui/cards-overview/CardsOverview";
 import { serviceCards } from "@/shared/config/data/serviceCards";
 import { useTranslations } from "next-intl";
-import styles from "./ServicesOverview.module.css";
+import styles from "./ServicesOverview.module.scss";
 
 export default function ServicesOverview() {
   const t = useTranslations("ServicesOverview");

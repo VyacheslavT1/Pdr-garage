@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import LinkButton from "@/shared/ui/link-button/LinkButton";
 import ArrowRight from "@/shared/Icons/arrow-right-long.svg";
-import styles from "./ShortDescription.module.css";
+import styles from "./ShortDescription.module.scss";
 
 export default function AboutUs() {
   const t = useTranslations("ShortDescription");

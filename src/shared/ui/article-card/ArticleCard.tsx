@@ -2,7 +2,7 @@
 
 import { StaticImageData } from "next/image";
 import BaseCard from "@/shared/ui/base-card/BaseCard";
-import styles from "./ArticleCard.module.css";
+import styles from "./ArticleCard.module.scss";
 
 interface ArticleCardProps {
   src: StaticImageData | string;

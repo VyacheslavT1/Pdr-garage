@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import styles from "./SideMenuList.module.css";
+import styles from "./SideMenuList.module.scss";
 
 export interface SideMenuItem { href: string; label: string }
 

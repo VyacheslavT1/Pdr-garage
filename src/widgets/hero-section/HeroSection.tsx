@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import LinkButton from "@/shared/ui/link-button/LinkButton";
-import styles from "./HeroSection.module.css";
+import styles from "./HeroSection.module.scss";
 
 export default function HeroSection() {
   const t = useTranslations("HeroSection");

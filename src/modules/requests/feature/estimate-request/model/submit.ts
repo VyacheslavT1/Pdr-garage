@@ -22,8 +22,8 @@ const ALLOWED_ATTACHMENT_TYPES = ["application/pdf"]; // plus any image/*
 const MAX_NAME_LENGTH = 60;
 const MAX_MESSAGE_LENGTH = 2000;
 
-function isValidName(firstName: string, lastName: string) {
-  return /^[A-Za-zА-Яа-я]+$/.test(firstName || lastName);
+function isValidName(value: string) {
+  return /^[A-Za-zА-Яа-я]+$/.test(value);
 }
 
 function isValidEmail(email: string) {
@@ -109,7 +109,7 @@ export async function submitEstimateRequest(
       fieldErrors.firstName = "validationFirstNameRequired";
     } else if (firstName.length > MAX_NAME_LENGTH) {
       fieldErrors.firstName = "validationFirstNameMax";
-    } else if (!isValidName) {
+    } else if (!isValidName(firstName)) {
       fieldErrors.firstName = "validationFirstNameSymbols";
     }
 
@@ -117,7 +117,7 @@ export async function submitEstimateRequest(
       fieldErrors.lastName = "validationLastNameRequired";
     } else if (lastName.length > MAX_NAME_LENGTH) {
       fieldErrors.lastName = "validationLastNameMax";
-    } else if (!isValidName) {
+    } else if (!isValidName(lastName)) {
       fieldErrors.lastName = "validationLastNameSymbols";
     }
 
