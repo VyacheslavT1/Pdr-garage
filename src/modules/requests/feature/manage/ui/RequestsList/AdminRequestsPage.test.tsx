@@ -3,6 +3,17 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AdminRequestsPage from "./AdminRequestsPage";
 
+// ————————————————————————————————
+// УТИЛИТА ДЛЯ NODE_ENV БЕЗ ПРЯМОГО ПРИСВАИВАНИЯ
+// ————————————————————————————————
+function setNodeEnv(value: string | undefined) {
+  Object.defineProperty(process.env, "NODE_ENV", {
+    value,
+    configurable: true,
+    writable: true,
+  });
+}
+
 jest.mock("@/shared/ui/admin-nav/AdminNav", () => ({
   __esModule: true,
   default: () => <nav data-testid="admin-nav" />,
@@ -62,7 +73,7 @@ jest.mock("antd", () => {
     );
   };
 
-  // ВАЖНО: два триггера — обычный поиск "doe" и пустой поиск ""
+  // два триггера — обычный поиск "doe" и пустой поиск ""
   const Input = {
     Search: ({ onSearch }: { onSearch?: (value: string) => void }) => (
       <div>
@@ -261,47 +272,9 @@ describe("AdminRequestsPage", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
   });
 
-  it("renders gender prefix 'M.' for male and 'Mme' for female in client cell", async () => {
-    // Ответ начальной загрузки: две строки с разным полом
-    fetchMock.mockResolvedValueOnce(
-      createResponse({
-        items: [
-          {
-            id: "req-male",
-            createdAt: "2024-01-02T09:00:00.000Z",
-            clientName: "Monsieur Client",
-            phone: "+3300000001",
-            email: "m@example.com",
-            status: "Non traité" as const,
-            gender: "male" as const,
-          },
-          {
-            id: "req-female",
-            createdAt: "2024-01-02T10:00:00.000Z",
-            clientName: "Madame Cliente",
-            phone: "+3300000002",
-            email: "f@example.com",
-            status: "Traité" as const,
-            gender: "female" as const,
-          },
-        ],
-      }) as unknown as Response
-    );
-
-    render(<AdminRequestsPage />);
-
-    // Проверяем, что отрисованы и префиксы, и имена
-    await screen.findByText("Monsieur Client");
-    await screen.findByText("Madame Cliente");
-
-    // Префиксы пола
-    expect(screen.getByText("M.")).toBeInTheDocument();
-    expect(screen.getByText("Mme")).toBeInTheDocument();
-  });
-
   it("shows technical error message in development mode", async () => {
     const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
+    setNodeEnv("development");
     fetchMock.mockResolvedValueOnce(
       createResponse({}, 500) as unknown as Response
     );
@@ -312,7 +285,7 @@ describe("AdminRequestsPage", () => {
       "Informations techniques: Erreur de chargement: 500"
     );
 
-    process.env.NODE_ENV = originalEnv;
+    setNodeEnv(originalEnv);
   });
 
   it("triggers search requests and clears table on unauthorized response", async () => {
@@ -466,7 +439,7 @@ describe("AdminRequestsPage", () => {
 
   it("shows search error message in development when request fails", async () => {
     const previousEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
+    setNodeEnv("development");
     try {
       const user = userEvent.setup();
       fetchMock
@@ -486,7 +459,7 @@ describe("AdminRequestsPage", () => {
         "Informations techniques: Erreur de chargement: 500"
       );
     } finally {
-      process.env.NODE_ENV = previousEnv;
+      setNodeEnv(previousEnv);
     }
   });
 
@@ -561,7 +534,7 @@ describe("AdminRequestsPage", () => {
 
   it("shows error when manual refresh fails", async () => {
     const previousEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
+    setNodeEnv("development");
     try {
       const user = userEvent.setup();
       fetchMock
@@ -584,7 +557,7 @@ describe("AdminRequestsPage", () => {
         "Informations techniques: Erreur de chargement: 500"
       );
     } finally {
-      process.env.NODE_ENV = previousEnv;
+      setNodeEnv(previousEnv);
     }
   });
 
@@ -610,7 +583,7 @@ describe("AdminRequestsPage", () => {
 
   it("shows error when date range request fails in development", async () => {
     const previousEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
+    setNodeEnv("development");
     try {
       const user = userEvent.setup();
       fetchMock
@@ -631,7 +604,7 @@ describe("AdminRequestsPage", () => {
         "Informations techniques: Erreur de chargement: 500"
       );
     } finally {
-      process.env.NODE_ENV = previousEnv;
+      setNodeEnv(previousEnv);
     }
   });
 
@@ -658,7 +631,7 @@ describe("AdminRequestsPage", () => {
 
   it("displays status filter error message in development on failure", async () => {
     const prevEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
+    setNodeEnv("development");
     try {
       const user = userEvent.setup();
       fetchMock
@@ -674,11 +647,11 @@ describe("AdminRequestsPage", () => {
 
       await screen.findByText("Informations techniques: status failed");
     } finally {
-      process.env.NODE_ENV = prevEnv;
+      setNodeEnv(prevEnv);
     }
   });
 
-  // ДОБАВЛЕНО: ветка "Tous" (пустой value) должна сбрасывать на базовый список
+  // ветка "Tous" (пустой value) — сброс на базовый список
   it("resets to base list when status filter 'Tous' (empty) is selected", async () => {
     const user = userEvent.setup();
 
@@ -716,7 +689,6 @@ describe("AdminRequestsPage", () => {
 
     await screen.findByText("John Doe");
 
-    // Выбор пустого значения (Tous) в селекте
     await user.selectOptions(screen.getByTestId("status-filter"), "");
 
     await waitFor(() =>
@@ -729,7 +701,7 @@ describe("AdminRequestsPage", () => {
     await screen.findByText("Reset To Base");
   });
 
-  // ДОБАВЛЕНО: ветка пустого поиска (сброс на /api/requests)
+  // ветка пустого поиска (сброс на /api/requests)
   it("resets to base list when search query is empty", async () => {
     fetchMock
       .mockResolvedValueOnce(
@@ -766,7 +738,6 @@ describe("AdminRequestsPage", () => {
 
     await screen.findByText("John Doe");
 
-    // Кликаем скрытую кнопку пустого поиска
     await user.click(screen.getByTestId("search-empty-button"));
 
     await waitFor(() =>
@@ -777,5 +748,41 @@ describe("AdminRequestsPage", () => {
     );
 
     await screen.findByText("Empty Query Result");
+  });
+
+  // ДОБАВЛЕНО: префикс пола в ячейке клиента
+  it("renders gender prefix 'M.' for male and 'Mme' for female in client cell", async () => {
+    fetchMock.mockResolvedValueOnce(
+      createResponse({
+        items: [
+          {
+            id: "req-male",
+            createdAt: "2024-01-02T09:00:00.000Z",
+            clientName: "Monsieur Client",
+            phone: "+3300000001",
+            email: "m@example.com",
+            status: "Non traité" as const,
+            gender: "male" as const,
+          },
+          {
+            id: "req-female",
+            createdAt: "2024-01-02T10:00:00.000Z",
+            clientName: "Madame Cliente",
+            phone: "+3300000002",
+            email: "f@example.com",
+            status: "Traité" as const,
+            gender: "female" as const,
+          },
+        ],
+      }) as unknown as Response
+    );
+
+    render(<AdminRequestsPage />);
+
+    await screen.findByText("Monsieur Client");
+    await screen.findByText("Madame Cliente");
+
+    expect(screen.getByText("M.")).toBeInTheDocument();
+    expect(screen.getByText("Mme")).toBeInTheDocument();
   });
 });

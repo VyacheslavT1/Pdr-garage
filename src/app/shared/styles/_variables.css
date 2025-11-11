@@ -1,5 +1,4 @@
-:root {
-  // Colors
+:global(:root) {
   --color-main: #00c950;
   --color-accent-dark: #006529;
   --gradient-color: linear-gradient(to right, #104e10, #00cc00, #104e10);
@@ -35,7 +34,6 @@
   --color-nav-blue-hover: #1677ff14;
   --color-nav-blue-active: #1677ff26;
 
-  // social icons color
   --facebook-color: #3382ea;
   --facebook-shadow-color: #1166d4;
   --instagram-color: #fc3b64;
@@ -43,11 +41,9 @@
   --telegram-color: #1fa2e2;
   --telegram-shadow-color: #1084be;
 
-  // Borders
   --border-radius: 0.5rem;
   --border-radius-small: 0.25rem;
 
-  // Spacing (padding & margin)
   --padding-xxl: 7.5rem;
   --padding-xlarge: 5rem;
   --padding-large: 2rem;
@@ -74,17 +70,14 @@
 
   --margin-all-medium: 2rem 1rem;
 
-  // text-indents
   --text-indent-small: 1rem;
 
-  // Gap (spacing between elements)
   --gap-large: 2.5rem;
   --gap-regular: 2rem;
   --gap-medium: 1.5rem;
   --gap-small: 1rem;
   --gap-xsmall: 0.5rem;
 
-  // Fonts
   --font-size-large: 2.5rem;
   --font-size-medium: 1.5rem;
   --font-size-regular: 1.25rem;
@@ -107,10 +100,8 @@
   --text-underline-offset-small: 0.5rem;
   --text-underline-offset-xsmall: 0.25rem;
 
-  // Letter-spacing
   --letter-spacing-small: 0.1em;
   --letter-spacing-xsmall: 0.05em;
 
-  // Transition
   --transition: 500ms ease-in-out;
 }

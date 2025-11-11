@@ -2,11 +2,8 @@
 
 @use "../shared/styles/mixins" as *;
 
-body {
-  background-color: #fff;
-}
-
 .pageRoot {
+  background-color: #fff;
   padding: var(--padding-small);
 
   @media (min-width: 768px) {
