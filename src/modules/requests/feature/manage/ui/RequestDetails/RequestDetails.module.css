@@ -1,0 +1,55 @@
+.pageContainer {
+  margin: var(--margin-small);
+}
+.pageContainer .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pageContainer .header .title {
+  margin: 0;
+  padding-block: var(--padding-small);
+}
+.pageContainer .card {
+  margin-top: var(--margin-small);
+}
+.pageContainer .card .loadingWrap {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--padding-large);
+}
+.pageContainer .descriptionsRoot :global(.ant-descriptions-item-label) {
+  width: 12rem;
+}
+.pageContainer .actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--margin-small);
+}
+.pageContainer .photosSection,
+.pageContainer .photosTitle {
+  margin-top: var(--margin-medium);
+}
+.pageContainer .photosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--gap-small);
+}
+.pageContainer .photoItem {
+  width: 100%;
+  height: 10rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: var(--border-radius);
+}
+.pageContainer .replyBox {
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--padding-small);
+}
+.pageContainer .replyBox .replyActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-xsmall);
+  padding-block: var(--padding-small);
+}/*# sourceMappingURL=RequestDetails.module.css.map */

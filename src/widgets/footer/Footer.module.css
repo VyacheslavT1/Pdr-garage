@@ -1,0 +1,217 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--color-grey-dark);
+}
+.footer .footerContent {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: var(--padding-medium);
+}
+.footer .footerContent .motto .logoLink {
+  display: flex;
+  justify-content: center;
+}
+.footer .footerContent .motto .logoIcon {
+  width: 8rem;
+}
+.footer .footerContent .motto .mottoText {
+  font-size: var(--font-size-regular);
+  font-style: italic;
+  line-height: var(--line-height-xlarge);
+  letter-spacing: var(--letter-spacing-xsmall);
+  padding-block: var(--padding-small);
+  text-align: center;
+}
+.footer .footerContent .motto .mottoText strong {
+  color: var(--color-main);
+}
+.footer .footerContent .services,
+.footer .footerContent .usefulLinks,
+.footer .footerContent .contacts {
+  margin-block: var(--margin-large);
+}
+.footer .footerContent .services h3,
+.footer .footerContent .usefulLinks h3,
+.footer .footerContent .contacts h3 {
+  padding-bottom: var(--padding-small);
+  font-size: var(--font-size-normal);
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: var(--color-main);
+  text-underline-offset: var(--text-underline-offset-small);
+}
+.footer .footerContent .services > ul > li,
+.footer .footerContent .usefulLinks > ul > li,
+.footer .footerContent .contacts > ul > li {
+  padding-block: var(--padding-xsmall);
+  font-size: var(--font-size-base);
+}
+.footer .footerContent .services > ul > li > a,
+.footer .footerContent .usefulLinks > ul > li > a,
+.footer .footerContent .contacts > ul > li > a {
+  display: flex;
+  align-items: center;
+  color: inherit;
+  transition: color var(--transition);
+}
+.footer .footerContent .services > ul > li > a:hover, .footer .footerContent .services > ul > li > a:focus-visible,
+.footer .footerContent .usefulLinks > ul > li > a:hover,
+.footer .footerContent .usefulLinks > ul > li > a:focus-visible,
+.footer .footerContent .contacts > ul > li > a:hover,
+.footer .footerContent .contacts > ul > li > a:focus-visible {
+  color: var(--color-main);
+}
+.footer .footerContent .services > ul > li > a:focus-visible,
+.footer .footerContent .usefulLinks > ul > li > a:focus-visible,
+.footer .footerContent .contacts > ul > li > a:focus-visible {
+  outline: 2px solid var(--color-main);
+  outline-offset: 2px;
+}
+.footer .footerContent .services > ul > li .icon,
+.footer .footerContent .usefulLinks > ul > li .icon,
+.footer .footerContent .contacts > ul > li .icon {
+  margin-right: var(--margin-xsmall);
+}
+.footer .footerContent .contacts li .icon {
+  color: var(--color-main);
+}
+.footer .footerContent .contacts li:nth-child(4) {
+  display: flex;
+  align-items: center;
+}
+.footer .footerContent .contacts .socialTitle {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.footer .footerContent .contacts .socialList {
+  display: flex;
+  gap: var(--gap-medium);
+  padding-inline: var(--padding-mini);
+}
+.footer .footerContent .contacts .socialList .socialItem {
+  margin-inline: var(--margin-mini);
+}
+.footer .footerContent .contacts .socialList .socialItem a {
+  position: relative;
+  top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  gap: var(--gap-xsmall);
+  border-radius: var(--border-radius);
+  background-color: var(--color-light);
+  text-decoration: none;
+  transform: rotate(-30deg) skew(25deg) translate(0, 0);
+  transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: -1px 1px 0 var(--color-grey-70), -2px 2px 0 var(--color-grey-70), -3px 3px 0 var(--color-grey-70), -4px 4px 0 var(--color-grey-70), -5px 5px 0 var(--color-grey-70);
+}
+.footer .footerContent .contacts .socialList .socialItem a:hover, .footer .footerContent .contacts .socialList .socialItem a:focus-visible {
+  transform: rotate(-30deg) skew(25deg) translate(0.4rem, -0.4rem);
+  box-shadow: -1px 1px 0 var(--color-grey-70), -2px 2px 0 var(--color-grey-70), -3px 3px 0 var(--color-grey-70), -4px 4px 0 var(--color-grey-70), -5px 5px 0 var(--color-grey-70);
+}
+.footer .footerContent .contacts .socialList .socialItem a:focus-visible {
+  outline: 2px solid var(--color-light);
+  outline-offset: 2px;
+}
+.footer .footerContent .contacts .socialList .socialItem a svg {
+  color: var(--color-grey-dark);
+}
+.footer .footerContent .contacts .socialList .socialItem:nth-child(1) a:hover, .footer .footerContent .contacts .socialList .socialItem:nth-child(1) a:focus-visible {
+  background-color: var(--facebook-color);
+  box-shadow: -1px 1px 0 var(--facebook-shadow-color), -2px 2px 0 var(--facebook-shadow-color), -3px 3px 0 var(--facebook-shadow-color), -4px 4px 0 var(--facebook-shadow-color), -5px 5px 0 var(--facebook-shadow-color), -20px 20px 10px var(--facebook-shadow-color);
+}
+.footer .footerContent .contacts .socialList .socialItem:nth-child(1) a:hover svg, .footer .footerContent .contacts .socialList .socialItem:nth-child(1) a:focus-visible svg {
+  color: var(--color-light);
+}
+.footer .footerContent .contacts .socialList .socialItem:nth-child(2) a:hover, .footer .footerContent .contacts .socialList .socialItem:nth-child(2) a:focus-visible {
+  background-color: var(--instagram-color);
+  box-shadow: -1px 1px 0 var(--instagram-shadow-color), -2px 2px 0 var(--instagram-shadow-color), -3px 3px 0 var(--instagram-shadow-color), -4px 4px 0 var(--instagram-shadow-color), -5px 5px 0 var(--instagram-shadow-color), -20px 20px 10px var(--instagram-shadow-color);
+}
+.footer .footerContent .contacts .socialList .socialItem:nth-child(2) a:hover svg, .footer .footerContent .contacts .socialList .socialItem:nth-child(2) a:focus-visible svg {
+  color: var(--color-light);
+}
+.footer .footerContent .contacts .socialList .socialItem:nth-child(3) a:hover, .footer .footerContent .contacts .socialList .socialItem:nth-child(3) a:focus-visible {
+  background-color: var(--telegram-color);
+  box-shadow: -1px 1px 0 var(--telegram-shadow-color), -2px 2px 0 var(--telegram-shadow-color), -3px 3px 0 var(--telegram-shadow-color), -4px 4px 0 var(--telegram-shadow-color), -5px 5px 0 var(--telegram-shadow-color), -20px 20px 10px var(--telegram-shadow-color);
+}
+.footer .footerContent .contacts .socialList .socialItem:nth-child(3) a:hover svg, .footer .footerContent .contacts .socialList .socialItem:nth-child(3) a:focus-visible svg {
+  color: var(--color-light);
+}
+.footer .copyright {
+  padding: var(--padding-small);
+  text-align: center;
+  font-size: var(--font-size-small);
+  border-top: 1px solid var(--color-grey-70);
+}
+@media (min-width: 576px) {
+  .footer .footerContent {
+    padding-inline: var(--padding-medium);
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .footer .footerContent .services h3,
+  .footer .footerContent .usefulLinks h3,
+  .footer .footerContent .contacts h3 {
+    text-align: left;
+  }
+  .footer .footerContent .usefulLinks,
+  .footer .footerContent .contacts {
+    flex: 0 0 50%;
+  }
+}
+@media (576px <= width < 768px) {
+  .footer .services {
+    width: 100%;
+  }
+}
+@media (min-width: 768px) {
+  .footer .footerContent .usefulLinks,
+  .footer .footerContent .contacts {
+    flex: 1;
+    margin: 0;
+  }
+  .footer .footerContent .services {
+    flex: 1.5;
+    margin: 0;
+  }
+}
+
+@media (768px <= width < 1200px) {
+  .footerContent {
+    gap: var(--gap-small);
+  }
+}
+@media (min-width: 1200px) {
+  .footer {
+    padding-inline: var(--padding-xlarge);
+  }
+  .footer .footerContent {
+    padding-inline: 0;
+  }
+  .footer .footerContent .motto {
+    flex: 1;
+    padding-right: var(--padding-large);
+  }
+}
+@media (min-width: 1440px) {
+  .footer .footerContent {
+    padding-inline: 0;
+  }
+  .footer .footerContent .motto {
+    padding-right: var(--padding-xlarge);
+  }
+}/*# sourceMappingURL=Footer.module.css.map */

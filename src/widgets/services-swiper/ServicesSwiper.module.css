@@ -1,0 +1,115 @@
+@charset "UTF-8";
+.servicesSectionWrapper {
+  width: 100%;
+  padding-inline: var(--padding-small);
+  margin-block: var(--padding-small);
+}
+.servicesSectionWrapper .servicesSection {
+  position: relative;
+  margin-block: var(--margin-medium);
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.servicesSectionWrapper .servicesSection .servicesHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
+  padding-bottom: var(--padding-medium);
+}
+.servicesSectionWrapper .servicesSection .servicesHeader h3 {
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-normal);
+  color: var(--color-grey-cool);
+}
+.servicesSectionWrapper .servicesSection .servicesHeader h2 {
+  padding-bottom: var(--padding-small);
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--letter-spacing-small);
+  text-transform: uppercase;
+  color: var(--color-grey-cool-light);
+  text-decoration: underline;
+  text-decoration-color: var(--color-main);
+  text-underline-offset: var(--text-underline-offset-large);
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper {
+  position: relative;
+  width: 100%;
+  margin-top: var(--margin-medium);
+  /* Слайды */
+  /* Кнопки навигации */
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .swiper {
+  width: 100%;
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper :global(.swiper-wrapper) {
+  align-items: stretch;
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .slide {
+  display: flex;
+  flex-direction: column;
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .navButton {
+  position: absolute;
+  z-index: 50;
+  transition: all var(--transition);
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .navButton.prev {
+  top: -6.25rem;
+  right: 4rem;
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .navButton.next {
+  top: -6.25rem;
+  right: 0;
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .navButton button {
+  border: 1px solid var(--color-light);
+}
+@media (hover: hover) {
+  .servicesSectionWrapper .servicesSection .carouselWrapper .navButton button:hover,
+  .servicesSectionWrapper .servicesSection .carouselWrapper .navButton button.is-active {
+    color: var(--color-main);
+    border-color: var(--color-main);
+  }
+}
+@media (hover: none) {
+  .servicesSectionWrapper .servicesSection .carouselWrapper .navButton button:active,
+  .servicesSectionWrapper .servicesSection .carouselWrapper .navButton button.is-active {
+    color: var(--color-main);
+    border-color: var(--color-main);
+  }
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .pagination {
+  margin-top: var(--margin-large);
+  display: flex;
+  justify-content: center;
+  /* активная bullet */
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .pagination :global(.swiper-pagination-bullet) {
+  width: 1.5rem;
+  height: 5px;
+  background-color: var(--color-grey-70);
+  border-radius: 2px;
+  opacity: 1;
+  margin: 0 4px;
+  transition: background var(--transition);
+}
+.servicesSectionWrapper .servicesSection .carouselWrapper .pagination :global(.swiper-pagination-bullet-active) {
+  background: var(--color-main);
+}
+
+@media (min-width: 576px) {
+  .servicesSectionWrapper {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1200px) {
+  .servicesSectionWrapper {
+    padding-inline: var(--padding-xlarge);
+  }
+}
+@media (min-width: 1440px) {
+  .servicesSectionWrapper {
+    padding-inline: 0;
+  }
+}/*# sourceMappingURL=ServicesSwiper.module.css.map */

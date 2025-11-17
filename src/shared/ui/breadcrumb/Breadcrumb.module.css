@@ -1,0 +1,21 @@
+.breadcrumbWrapper {
+  display: block;
+  margin-block: var(--margin-large);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.breadcrumbWrapper .breadcrumbList {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  line-height: var(--line-height-xlarge);
+}
+.breadcrumbWrapper .breadcrumbList .separator {
+  padding-inline: var(--padding-small);
+}
+
+.disabled {
+  color: var(--color-main);
+}/*# sourceMappingURL=Breadcrumb.module.css.map */

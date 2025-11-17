@@ -1,0 +1,51 @@
+.pageRoot {
+  background-color: var(--color-light);
+  padding: var(--padding-small);
+}
+@media (min-width: 768px) {
+  .pageRoot {
+    padding: var(--padding-custom-medium);
+  }
+}
+@media (min-width: 1200px) {
+  .pageRoot {
+    padding: var(--padding-custom-large);
+  }
+}
+.pageRoot .title {
+  text-align: center;
+  padding: var(--padding-small);
+}
+.pageRoot .noticeList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--margin-small);
+}
+.pageRoot .noticeList .loadingPlaceholder {
+  width: 100%;
+  min-height: 5rem;
+}
+.pageRoot .noticeList .noticeLink {
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--margin-medium);
+  gap: var(--gap-xsmall);
+  color: var(--color-dark);
+  text-decoration: none;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-bold);
+}
+@media (hover: hover) {
+  .pageRoot .noticeList .noticeLink:hover, .pageRoot .noticeList .noticeLink.is-active {
+    color: var(--color-main);
+  }
+}
+@media (hover: none) {
+  .pageRoot .noticeList .noticeLink:active, .pageRoot .noticeList .noticeLink.is-active {
+    color: var(--color-main);
+  }
+}
+.pageRoot .noticeList .noticeStar {
+  color: var(--color-error);
+}/*# sourceMappingURL=AdminHome.module.css.map */

@@ -1,0 +1,28 @@
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100dvh;
+  padding: var(--padding-medium);
+}
+.loginContainer .loginCard {
+  width: 100%;
+  max-width: 30rem;
+}
+.loginContainer .loginCard .loginHeader {
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--padding-xsmall);
+  margin-bottom: var(--margin-xsmall);
+}
+.loginContainer .loginCard .loginHeader .loginTitle {
+  margin: 0;
+  padding-block: var(--padding-xsmall);
+}
+.loginContainer .loginCard .loginHeader .loginSubtitle {
+  color: var(--color-grey-cool-light);
+}
+.loginContainer .loginCard .submitRow {
+  margin-top: var(--margin-small);
+  margin-bottom: 0;
+}/*# sourceMappingURL=AdminLogin.module.css.map */

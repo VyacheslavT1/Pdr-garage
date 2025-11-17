@@ -1,0 +1,84 @@
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding-inline: var(--padding-small);
+}
+@media (min-width: 576px) {
+  .contentWrapper {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1200px) {
+  .contentWrapper {
+    padding-inline: var(--padding-xlarge);
+  }
+}
+@media (min-width: 1440px) {
+  .contentWrapper {
+    padding-inline: 0;
+  }
+}
+.contentWrapper .serviceContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.contentWrapper .mainTitle {
+  margin-bottom: var(--margin-large);
+  text-align: center;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-normal);
+  line-height: var(--line-height-regular);
+  letter-spacing: var(--letter-spacing-small);
+  text-transform: uppercase;
+}
+.contentWrapper .contentRow {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-small);
+}
+.contentWrapper .mediaSection {
+  flex: 2.5;
+}
+.contentWrapper .imageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+}
+.contentWrapper .serviceImage {
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: var(--border-radius);
+}
+.contentWrapper .fullDesc {
+  padding-top: var(--padding-small);
+  text-align: left;
+}
+.contentWrapper .fullDesc h3 {
+  padding-bottom: var(--padding-xsmall);
+  text-decoration: underline;
+  text-underline-offset: var(--text-underline-offset-small);
+  text-decoration-color: var(--color-grey-cool);
+}
+.contentWrapper .fullDesc h2,
+.contentWrapper .fullDesc h3,
+.contentWrapper .fullDesc p,
+.contentWrapper .fullDesc li {
+  line-height: var(--line-height-regular);
+  letter-spacing: var(--letter-spacing-xsmall);
+}
+.contentWrapper .fullDesc li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-xsmall);
+}
+.contentWrapper .fullDesc p,
+.contentWrapper .fullDesc li {
+  padding-bottom: var(--padding-medium);
+}
+.contentWrapper .fullDesc h2 {
+  padding-block: var(--padding-large);
+}/*# sourceMappingURL=CommonPageTemplate.module.css.map */

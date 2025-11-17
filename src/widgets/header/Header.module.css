@@ -1,0 +1,313 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  padding-inline: var(--padding-small);
+  background-color: var(--color-dark);
+  box-shadow: var(--color-grey-dark) 0px 4px 6px -1px, var(--color-overlay-dark) 0px 2px 4px -1px;
+}
+.header .nav {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.header .nav .logoLink {
+  display: flex;
+}
+@media (max-width: 439px) {
+  .header .nav .logoLink {
+    padding-block: var(--padding-xsmall);
+  }
+}
+.header .nav .logoLink .logoIcon {
+  width: 6rem;
+}
+@media (min-width: 768px) {
+  .header .nav .logoLink .logoIcon {
+    width: 7rem;
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .logoLink .logoIcon {
+    width: 8rem;
+  }
+}
+.header .nav .menuList {
+  display: none;
+  position: relative;
+}
+.header .nav .menuList .servicesLink,
+.header .nav .menuList .menuLink {
+  position: relative;
+}
+.header .nav .menuList .servicesLink::before,
+.header .nav .menuList .menuLink::before {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-main);
+  transition: width var(--transition), left var(--transition);
+}
+@media (hover: hover) {
+  .header .nav .menuList .servicesLink:hover,
+  .header .nav .menuList .servicesLink.is-active,
+  .header .nav .menuList .menuLink:hover,
+  .header .nav .menuList .menuLink.is-active {
+    color: var(--color-main);
+  }
+  .header .nav .menuList .servicesLink:hover::before,
+  .header .nav .menuList .servicesLink.is-active::before,
+  .header .nav .menuList .menuLink:hover::before,
+  .header .nav .menuList .menuLink.is-active::before {
+    width: 100%;
+    left: 0;
+  }
+}
+@media (hover: none) {
+  .header .nav .menuList .servicesLink:active,
+  .header .nav .menuList .servicesLink.is-active,
+  .header .nav .menuList .menuLink:active,
+  .header .nav .menuList .menuLink.is-active {
+    color: var(--color-main);
+  }
+  .header .nav .menuList .servicesLink:active::before,
+  .header .nav .menuList .servicesLink.is-active::before,
+  .header .nav .menuList .menuLink:active::before,
+  .header .nav .menuList .menuLink.is-active::before {
+    width: 100%;
+    left: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .menuList {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-small);
+    color: var(--color-light);
+  }
+}
+@media (min-width: 1200px) {
+  .header .nav .menuList {
+    gap: var(--gap-medium);
+  }
+}
+.header .nav .menuList .menuItem {
+  padding-block: var(--padding-medium);
+}
+.header .nav .menuList .menuItem .servicesLink {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xsmall);
+}
+.header .nav .menuList .menuItem .servicesLink .chevronDownIcon {
+  display: block;
+}
+.header .nav .menuList .menuItem .servicesLink .chevronUpIcon {
+  display: none;
+}
+@media (hover: hover) {
+  .header .nav .menuList .menuItem .servicesLink:hover .chevronDownIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronDownIcon {
+    display: none;
+  }
+  .header .nav .menuList .menuItem .servicesLink:hover .chevronUpIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronUpIcon {
+    display: block;
+  }
+}
+@media (hover: none) {
+  .header .nav .menuList .menuItem .servicesLink:active .chevronDownIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronDownIcon {
+    display: none;
+  }
+  .header .nav .menuList .menuItem .servicesLink:active .chevronUpIcon, .header .nav .menuList .menuItem .servicesLink.is-active .chevronUpIcon {
+    display: block;
+  }
+}
+.header .nav .menuList .menuItem .serviceOptions {
+  position: absolute;
+  top: 100%;
+  box-shadow: var(--color-grey-dark) 0px 4px 6px -1px, var(--color-overlay-dark) 0px 2px 4px -1px;
+  z-index: 50;
+  transition: all var(--transition);
+  opacity: 0;
+  transform: scaleY(0.75);
+  transform-origin: top;
+  visibility: hidden;
+  text-indent: var(--text-indent-small);
+}
+@media (hover: hover) and (pointer: fine) {
+  .header .nav .menuList .menuItem:hover .serviceOptions, .header .nav .menuList .menuItem.is-active .serviceOptions {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (hover: none) {
+  .header .nav .menuList .menuItem:active .serviceOptions, .header .nav .menuList .menuItem.is-active .serviceOptions {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .header .nav .menuList .menuItem:focus-within .serviceOptions {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+  }
+}
+.header .nav .controls {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--gap-small);
+  position: relative;
+}
+.header .nav .controls .languageSwitcher {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 1rem;
+  display: flex;
+}
+.header .nav .controls .requestQuoteButton {
+  display: none;
+}
+@media (min-width: 440px) {
+  .header .nav .controls .requestQuoteButton {
+    display: block;
+    padding-block: var(--padding-xsmall);
+    padding-right: var(--padding-large);
+  }
+}
+@media (min-width: 768px) {
+  .header .nav .controls .languageSwitcher {
+    right: 2rem;
+  }
+  .header .nav .controls .menuButton {
+    padding-left: var(--padding-medium);
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .controls .requestQuoteButton {
+    display: block;
+    padding-right: 0;
+  }
+  .header .nav .controls .languageSwitcher {
+    right: 13rem;
+  }
+}
+.header .nav .controls .menuButton {
+  display: flex;
+}
+.header .nav .controls .menuButton button {
+  padding: 0;
+}
+.header .nav .controls .menuButton button svg {
+  color: var(--color-light);
+}
+@media (min-width: 768px) {
+  .header .nav .controls .menuButton button svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .header .nav .controls .menuButton {
+    display: none;
+  }
+}
+.header .nav .mobileMenuOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background-color: var(--color-dark);
+  color: var(--color-light);
+  transition: height var(--transition), background-color var(--transition);
+}
+.header .nav .mobileMenuOverlay--open {
+  height: 100vh;
+}
+.header .nav .mobileMenuOverlay--closed {
+  height: 0;
+}
+.header .nav .mobileMenuOverlay .closeButtonWrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--padding-large);
+}
+.header .nav .mobileMenuOverlay .closeButtonWrapper svg {
+  color: var(--color-error);
+}
+.header .nav .mobileMenuOverlay .mobileMenuList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-regular);
+  margin-top: var(--margin-xxl);
+}
+@media (hover: hover) {
+  .header .nav .mobileMenuOverlay .mobileMenuList a:hover,
+  .header .nav .mobileMenuOverlay .mobileMenuList a.is-active {
+    color: var(--color-main);
+  }
+}
+@media (hover: none) {
+  .header .nav .mobileMenuOverlay .mobileMenuList a:active,
+  .header .nav .mobileMenuOverlay .mobileMenuList a.is-active {
+    color: var(--color-main);
+  }
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .mobileServiceItem {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .serviceOptionsIcon {
+  position: absolute;
+  margin-left: var(--margin-small);
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .serviceOptionsWrapper {
+  overflow: hidden;
+  transition: max-height var(--transition);
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .serviceOptionsWrapper--open {
+  max-height: 500px;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .serviceOptionsWrapper--closed {
+  max-height: 0;
+}
+.header .nav .mobileMenuOverlay .mobileMenuList .callToAction {
+  padding-top: var(--padding-xxl);
+}
+@media (min-width: 576px) {
+  .header {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1024px) {
+  .header {
+    padding-inline: var(--padding-small);
+  }
+}
+@media (min-width: 1050px) {
+  .header {
+    padding-inline: var(--padding-medium);
+  }
+}
+@media (min-width: 1200px) {
+  .header {
+    padding-inline: var(--padding-xlarge);
+  }
+}
+@media (min-width: 1440px) {
+  .header {
+    padding-inline: 0;
+  }
+}/*# sourceMappingURL=Header.module.css.map */

@@ -1,0 +1,28 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-small);
+  padding: var(--padding-medium);
+  border: 1px solid var(--color-grey-70);
+  border-radius: var(--border-radius);
+  box-shadow: var(--color-grey-dark) 0px 0px 18px 10px;
+  margin-block: var(--margin-medium);
+  background-color: var(--color-dark);
+}
+.form .formTitle {
+  padding-bottom: var(--padding-small);
+}
+.form .formError,
+.form .formSuccess {
+  font-size: var(--font-size-base);
+  margin-top: var(--margin-mini);
+}
+.form .formError {
+  color: var(--color-error);
+}
+.form .formSuccess {
+  color: var(--color-main);
+}
+.form .actions {
+  align-self: flex-end;
+}/*# sourceMappingURL=ReviewCreateForm.module.css.map */

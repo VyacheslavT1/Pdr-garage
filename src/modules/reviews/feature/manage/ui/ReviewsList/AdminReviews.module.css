@@ -1,0 +1,34 @@
+.pageContainer {
+  padding: var(--padding-medium);
+}
+.pageContainer .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pageContainer .header .title {
+  margin: 0;
+  padding-block: var(--padding-small);
+}
+
+.expandedReplyRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xsmall);
+  padding-block: var(--padding-xsmall);
+}
+.expandedReplyRow .replyTextarea {
+  width: 100%;
+}
+.expandedReplyRow .replyRowActions {
+  display: flex;
+  gap: var(--gap-xsmall);
+  justify-content: flex-end;
+}
+
+.errorBlock {
+  margin-top: var(--margin-xsmall);
+}
+.errorBlock .errorMessage {
+  color: var(--color-error);
+}/*# sourceMappingURL=AdminReviews.module.css.map */
