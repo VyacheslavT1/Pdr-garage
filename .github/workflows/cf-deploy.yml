@@ -8,18 +8,19 @@ on:
 
 jobs:
   check:
-  - name: Debug env
-  run: |
-    echo "URL= $NEXT_PUBLIC_SUPABASE_URL"
-    echo "ANON= $NEXT_PUBLIC_SUPABASE_ANON_KEY"
-    echo "SERVICE_ROLE= $SUPABASE_SERVICE_ROLE_KEY"
     name: Build checks (PR & main)
     runs-on: ubuntu-latest
-env:
-  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
     steps:
+      - name: Debug env
+        run: |
+          echo "URL= $NEXT_PUBLIC_SUPABASE_URL"
+          echo "ANON= $NEXT_PUBLIC_SUPABASE_ANON_KEY"
+          echo "SERVICE_ROLE= $SUPABASE_SERVICE_ROLE_KEY"
+
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -50,3 +51,4 @@ env:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+
