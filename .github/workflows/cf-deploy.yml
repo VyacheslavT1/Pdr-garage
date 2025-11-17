@@ -8,6 +8,11 @@ on:
 
 jobs:
   check:
+  - name: Debug env
+  run: |
+    echo "URL= $NEXT_PUBLIC_SUPABASE_URL"
+    echo "ANON= $NEXT_PUBLIC_SUPABASE_ANON_KEY"
+    echo "SERVICE_ROLE= $SUPABASE_SERVICE_ROLE_KEY"
     name: Build checks (PR & main)
     runs-on: ubuntu-latest
 env:
