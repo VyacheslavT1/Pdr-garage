@@ -23,7 +23,7 @@ export default function AboutUs() {
             <p>{t("about4")}</p>
           </div>
           <div className={styles.actions}>
-            <LinkButton href="/about">
+            <LinkButton href="/aboutUs">
               {t("detailsLink")}
               <ArrowRight />
             </LinkButton>

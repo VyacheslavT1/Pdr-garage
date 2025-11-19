@@ -33,7 +33,13 @@ jest.mock("next/image", () => ({
 
 jest.mock("@/shared/ui/link-button/LinkButton", () => ({
   __esModule: true,
-  default: ({ href, children }: { href: string; children: React.ReactNode }) => (
+  default: ({
+    href,
+    children,
+  }: {
+    href: string;
+    children: React.ReactNode;
+  }) => (
     <a data-testid="link-button" href={href}>
       {children}
     </a>
@@ -49,8 +55,12 @@ describe("ShortDescription", () => {
   it("отображает заголовки, описания и ссылку на подробности", () => {
     render(<ShortDescription />);
 
-    expect(screen.getByRole("heading", { level: 3, name: "En quelques mots" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2, name: "À propos de PDR Studio" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "En quelques mots" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "À propos de PDR Studio" })
+    ).toBeInTheDocument();
 
     expect(screen.getByText("Paragraphe 1")).toBeInTheDocument();
     expect(screen.getByText("Paragraphe 2")).toBeInTheDocument();
@@ -58,7 +68,7 @@ describe("ShortDescription", () => {
     expect(screen.getByText("Paragraphe 4")).toBeInTheDocument();
 
     const link = screen.getByTestId("link-button");
-    expect(link).toHaveAttribute("href", "/about");
+    expect(link).toHaveAttribute("href", "/aboutUs");
     expect(link).toHaveTextContent("En savoir plus");
     expect(screen.getByTestId("arrow-icon")).toBeInTheDocument();
   });

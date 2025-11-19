@@ -1,4 +1,9 @@
 /* BaseCard styles */
+.cardLink:hover {
+  transform: scale(1.05);
+  transition: var(--transition);
+}
+
 .cardWrapper {
   margin-bottom: var(--margin-large);
   border: 1px solid var(--color-grey-70);
@@ -31,10 +36,7 @@
   padding-block: var(--padding-small);
   letter-spacing: var(--letter-spacing-small);
 }
-.cardWrapper .cardText .cardLink {
-  padding-bottom: var(--margin-large);
-}
-.cardWrapper .cardText .cardLink a {
+.cardWrapper .cardText .details {
   width: 100%;
   background: var(--gradient-color);
   -webkit-background-clip: text;
@@ -43,7 +45,7 @@
   background-size: 200% 100%;
   color: transparent;
 }
-.cardWrapper .cardText .cardLink a:hover {
+.cardWrapper .cardText .details:hover {
   animation: shine 1s linear infinite;
 }
 

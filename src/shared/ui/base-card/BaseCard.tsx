@@ -16,6 +16,7 @@ interface BaseCardProps {
   LinkWrapper?: React.ComponentType<{
     href: string;
     children: React.ReactNode;
+    className?: string;
   }>;
   imagePriority?: boolean;
   imageSizes?: string;
@@ -41,25 +42,25 @@ export default function BaseCard({
   const LinkComponent = LinkWrapper ?? Link;
 
   return (
-    <div className={`${styles.cardWrapper} ${className ?? ""}`}>
-      <div className={styles.cardImage}>
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          priority={imagePriority}
-          sizes={imageSizes}
-        />
-      </div>
-      <div className={styles.cardText}>
-        <h2 className={styles.cardTitle}>{t(titleKey)}</h2>
-        <p className={styles.cardDescription}>{t(descKey)}</p>
-        <div className={styles.cardLink}>
-          <LinkComponent href={detailsUrl} className={linkClassName ?? ""}>
-            {t(linkLabelKey)}
-          </LinkComponent>
+    <div className={styles.cardLink}>
+      <LinkComponent href={detailsUrl} className={linkClassName ?? ""}>
+        <div className={`${styles.cardWrapper} ${className ?? ""}`}>
+          <div className={styles.cardImage}>
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              priority={imagePriority}
+              sizes={imageSizes}
+            />
+          </div>
+          <div className={styles.cardText}>
+            <h2 className={styles.cardTitle}>{t(titleKey)}</h2>
+            <p className={styles.cardDescription}>{t(descKey)}</p>
+            <span className={styles.details}>{t(linkLabelKey)}</span>
+          </div>
         </div>
-      </div>
+      </LinkComponent>
     </div>
   );
 }

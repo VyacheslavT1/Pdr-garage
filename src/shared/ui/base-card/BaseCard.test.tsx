@@ -28,20 +28,32 @@ jest.mock("next/image", () => ({
 
 jest.mock("next/link", () => {
   const React = require("react");
+
   return {
     __esModule: true,
-    default: React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithoutRef<"a">>(
-      ({ children, ...props }, ref) => (
+    default: React.forwardRef(
+      (
+        { children, ...props }: React.ComponentPropsWithoutRef<"a">,
+        ref: React.Ref<HTMLAnchorElement>
+      ) => (
         <a ref={ref} {...props}>
           {children}
         </a>
-      ),
+      )
     ),
   };
 });
 
-const CustomLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a data-testid="custom-link" href={href}>
+const CustomLink = ({
+  href,
+  children,
+  className,
+}: {
+  href: string;
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <a data-testid="custom-link" href={href} className={className}>
     {children}
   </a>
 );
@@ -57,13 +69,18 @@ describe("BaseCard", () => {
         detailsUrl="/details"
         tNamespace="someNamespace"
         linkLabelKey="link"
-      />,
+      />
     );
 
     expect(screen.getByAltText("Sample")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2, name: "Titre" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Titre" })
+    ).toBeInTheDocument();
     expect(screen.getByText("Description")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Lire plus" })).toHaveAttribute("href", "/details");
+
+    const linkElement = screen.getByRole("link");
+    expect(linkElement).toHaveAttribute("href", "/details");
+    expect(screen.getByText("Lire plus")).toBeInTheDocument();
   });
 
   it("использует кастомный LinkWrapper, если передан", () => {
@@ -77,9 +94,12 @@ describe("BaseCard", () => {
         tNamespace="someNamespace"
         linkLabelKey="link"
         LinkWrapper={CustomLink}
-      />,
+      />
     );
 
-    expect(screen.getByTestId("custom-link")).toHaveAttribute("href", "/details");
+    expect(screen.getByTestId("custom-link")).toHaveAttribute(
+      "href",
+      "/details"
+    );
   });
 });

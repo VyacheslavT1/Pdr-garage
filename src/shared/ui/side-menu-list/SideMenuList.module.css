@@ -29,4 +29,9 @@
   .menuItem:hover {
     animation: shine 2s linear infinite;
   }
+}
+@keyframes shine {
+  to {
+    background-position: 200% 0;
+  }
 }/*# sourceMappingURL=SideMenuList.module.css.map */

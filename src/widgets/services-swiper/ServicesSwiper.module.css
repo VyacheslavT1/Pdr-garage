@@ -41,6 +41,7 @@
 }
 .servicesSectionWrapper .servicesSection .carouselWrapper .swiper {
   width: 100%;
+  padding: 0.75rem 0.6rem;
 }
 .servicesSectionWrapper .servicesSection .carouselWrapper :global(.swiper-wrapper) {
   align-items: stretch;
