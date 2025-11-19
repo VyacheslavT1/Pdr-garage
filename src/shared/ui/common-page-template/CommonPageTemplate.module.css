@@ -75,6 +75,10 @@
   align-items: flex-start;
   gap: var(--gap-xsmall);
 }
+.contentWrapper .fullDesc li svg {
+  flex-shrink: 0;
+  transform: translateY(5px);
+}
 .contentWrapper .fullDesc p,
 .contentWrapper .fullDesc li {
   padding-bottom: var(--padding-medium);
