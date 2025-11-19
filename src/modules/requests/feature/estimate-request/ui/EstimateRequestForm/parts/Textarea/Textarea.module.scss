@@ -30,9 +30,9 @@
     outline: none;
     resize: none;
     text-indent: 1rem;
-    border-bottom: 1px solid var(--color-grey-80);
+    border: 1px solid var(--color-grey-80);
     background-color: inherit;
-    line-height: var(--line-hight-medium);
+    line-height: var(--line-height-medium);
     color: var(--color-light);
 
     &:focus,
