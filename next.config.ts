@@ -45,33 +45,4 @@ const baseConfig: import("next").NextConfig = {
   },
 };
 
-module.exports = withPlugins(
-  [
-    // 1) SVGR-плагин: удаляем width/height, добавляем currentColor
-    [
-      withSvgr,
-      {
-        svgrOptions: {
-          // гарантированно убирает width/height из корневого <svg>
-          dimensions: false, // :contentReference[oaicite:0]{index=0}
-          svgo: true,
-          svgoConfig: {
-            plugins: [
-              {
-                name: "removeDimensions",
-                active: true,
-              },
-            ],
-          },
-          // позволяет задавать цвет иконки через CSS (text-color)
-          svgProps: {
-            fill: "currentColor",
-          },
-        },
-      },
-    ],
-    // 2) плагин интернационализации
-    withNextIntl,
-  ],
-  baseConfig
-);
+module.exports = withPlugins([withSvgr, withNextIntl], baseConfig);
