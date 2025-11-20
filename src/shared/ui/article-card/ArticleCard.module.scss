@@ -1,19 +1,4 @@
-
 .articleCardLink {
-  background: var(--gradient-color);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 100%;
-  color: transparent;
-
-  &:hover {
-    animation: shine 1s linear infinite;
-  }
-}
-
-@keyframes shine {
-  to {
-    background-position: 200% 0;
-  }
+  display: block;
+  color: inherit;
 }

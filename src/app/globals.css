@@ -12,13 +12,13 @@
 }
 
 body {
-  background-color: var(--color-dark);
+  background: var(--gradient-body);
   color: var(--color-light-semi-transparent);
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding: var(--padding-xlarge);
+  scroll-padding: var(--padding-back-to-top);
 }
 
 input[type="number"] {
@@ -48,16 +48,27 @@ a {
   --gradient-color: linear-gradient(to right, #104e10, #00cc00, #104e10);
   --gradient-color-light: linear-gradient(
     to right,
-    #8a8a8a,
+    #c5c5c5,
     #f2f2f2,
     #ffffff,
-    #8a8a8a
+    #c5c5c5
   );
   --gradient-color-dark: linear-gradient(to right, #1b941b, #0a300a);
+  --gradient-body: linear-gradient(
+    to right,
+    var(--color-body-bg),
+    var(--color-body-bg-mid),
+    var(--color-body-bg-2),
+    var(--color-body-bg-mid),
+    var(--color-body-bg)
+  );
 
   --color-light: #fafafa;
   --color-light-semi-transparent: #fafafae6;
-  --color-dark: #222;
+  --color-dark: #1f2430;
+  --color-body-bg: #161c29;
+  --color-body-bg-mid: #232f41;
+  --color-body-bg-2: #31405a;
   --color-overlay-dark: #000000bf;
 
   --color-error: #e7000b;
@@ -88,6 +99,7 @@ a {
   --border-radius: 0.5rem;
   --border-radius-small: 0.25rem;
 
+  --padding-back-to-top: 10rem;
   --padding-xxl: 7.5rem;
   --padding-xlarge: 5rem;
   --padding-large: 2rem;

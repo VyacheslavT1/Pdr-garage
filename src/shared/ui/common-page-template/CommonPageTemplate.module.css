@@ -29,7 +29,7 @@
 .contentWrapper .mainTitle {
   margin-bottom: var(--margin-large);
   text-align: center;
-  font-size: var(--font-size-normal);
+  font-size: var(--font-size-medium);
   font-weight: var(--font-normal);
   line-height: var(--line-height-regular);
   letter-spacing: var(--letter-spacing-small);

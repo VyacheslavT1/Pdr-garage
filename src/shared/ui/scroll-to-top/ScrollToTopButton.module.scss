@@ -8,6 +8,9 @@
   transition: all var(--transition);
   opacity: 0;
   pointer-events: none;
+  &:hover {
+    color: var(--color-main);
+  }
 
   &.visible {
     opacity: 1;
