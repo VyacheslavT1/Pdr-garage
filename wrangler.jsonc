@@ -14,5 +14,9 @@
       "service": "pdr-studio"
     }
   ],
-  "account_id": "490631d61328120b313e7107a8deb4d1"
+  "account_id": "490631d61328120b313e7107a8deb4d1",
+  "vars": {
+    "ADMIN_EMAIL": "admin@example.com",
+    "ADMIN_PASSWORD": "yourStrongPassword"
+  }
 }
