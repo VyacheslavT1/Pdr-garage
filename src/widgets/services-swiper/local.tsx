@@ -39,8 +39,8 @@ export default function ServicesSwiper() {
     <section className={styles.servicesSectionWrapper}>
       <div className={styles.servicesSection}>
         <div className={styles.servicesHeader}>
-          <h3>{t("weOffer")}</h3>
-          <h2>{t("serviceTypes")}</h2>
+          <h2>{t("weOffer")}</h2>
+          <h3>{t("serviceTypes")}</h3>
         </div>
 
         <div className={styles.carouselWrapper}>
@@ -58,7 +58,8 @@ export default function ServicesSwiper() {
             pagination={{
               el: `.${styles.pagination}`,
               clickable: true,
-              renderBullet: (_i, className) => `<span class="${className}"></span>`,
+              renderBullet: (_i, className) =>
+                `<span class="${className}"></span>`,
             }}
           >
             {serviceCards.map((card, idx) => (
@@ -76,10 +77,14 @@ export default function ServicesSwiper() {
           </Swiper>
 
           <div ref={prevRef} className={`${styles.navButton} ${styles.prev}`}>
-            <Button variant="secondary"><ChevronLeft /></Button>
+            <Button variant="secondary">
+              <ChevronLeft />
+            </Button>
           </div>
           <div ref={nextRef} className={`${styles.navButton} ${styles.next}`}>
-            <Button variant="secondary"><ChevronRight /></Button>
+            <Button variant="secondary">
+              <ChevronRight />
+            </Button>
           </div>
           <div className={styles.pagination} />
         </div>

@@ -22,13 +22,13 @@
       gap: var(--gap-medium);
       padding-bottom: var(--padding-medium);
 
-      h3 {
+      h2 {
         font-size: var(--font-size-regular);
         font-weight: var(--font-normal);
-        color: var(--color-grey-cool);
+        color: var(--color-grey-60);
       }
 
-      h2 {
+      h3 {
         padding-bottom: var(--padding-small);
         font-size: var(--font-size-medium);
         font-weight: var(--font-medium);
@@ -37,7 +37,7 @@
         color: var(--color-grey-cool-light);
         text-decoration: underline;
         text-decoration-color: var(--color-main);
-        text-underline-offset: var(--text-underline-offset-large);
+        text-underline-offset: var(--text-underline-offset-small);
       }
     }
 

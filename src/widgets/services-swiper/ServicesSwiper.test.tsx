@@ -83,16 +83,16 @@ describe("ServicesSwiper", () => {
     render(<ServicesSwiper />);
 
     expect(
-      screen.getByRole("heading", { level: 3, name: "Nous proposons" }),
+      screen.getByRole("heading", { level: 2, name: "Nous proposons" })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: "Types de services" }),
+      screen.getByRole("heading", { level: 3, name: "Types de services" })
     ).toBeInTheDocument();
 
     const slides = screen.getAllByTestId("swiper-slide");
     expect(slides).toHaveLength(2);
     expect(screen.getAllByTestId("service-card")[0]).toHaveTextContent(
-      "serviceA.title",
+      "serviceA.title"
     );
 
     const navigationButtons = screen.getAllByTestId("nav-button");
