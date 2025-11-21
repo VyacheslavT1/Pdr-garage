@@ -4,8 +4,19 @@
 
 @media (min-width: 992px) {
   .sideMenu {
+    position: sticky;
     display: block;
+    top: 4.5rem;
     flex: 1;
+    align-self: flex-start;
+    max-height: -moz-fit-content;
+    max-height: fit-content;
+    margin-bottom: var(--margin-large);
+    background-color: var(--color-dark);
+    padding: var(--padding-xsmall);
+    border-radius: var(--border-radius);
+    box-shadow: var(--color-grey-dark) 0px 0px 18px 10px;
+    overflow-y: auto;
   }
   .menuItem {
     position: relative;
@@ -28,6 +39,9 @@
   }
   .menuItem:hover {
     animation: shine 2s linear infinite;
+  }
+  .menuItem:last-child {
+    margin-bottom: 0;
   }
 }
 @keyframes shine {

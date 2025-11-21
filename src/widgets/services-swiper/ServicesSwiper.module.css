@@ -2,7 +2,9 @@
 .servicesSectionWrapper {
   width: 100%;
   padding-inline: var(--padding-small);
-  margin-block: var(--padding-small);
+  margin-top: var(--padding-small);
+  padding-block: var(--padding-medium);
+  background: linear-gradient(135deg, var(--color-grey-60) 0%, var(--color-grey-cool-light) 50%, var(--color-grey-60) 100%);
 }
 .servicesSectionWrapper .servicesSection {
   position: relative;
