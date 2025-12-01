@@ -59,14 +59,14 @@ export default function CookieConsentBanner() {
   const [preferences, setPreferences] =
     useState<Preferences>(DEFAULT_PREFERENCES);
 
-  // useEffect(() => {
-  //   const stored = getStoredConsent();
-  //   if (!stored) {
-  //     setIsVisible(true);
-  //   } else {
-  //     setPreferences(stored.preferences);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const stored = getStoredConsent();
+    if (!stored) {
+      setIsVisible(true);
+    } else {
+      setPreferences(stored.preferences);
+    }
+  }, []);
 
   function acceptAll() {
     // When preferences are visible, respect the custom toggles; otherwise accept everything.
