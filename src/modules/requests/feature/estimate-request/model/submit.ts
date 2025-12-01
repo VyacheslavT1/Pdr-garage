@@ -74,7 +74,7 @@ export async function submitEstimateRequest(
       name: string;
       type: string;
       size: number;
-      dataUrl: string | null;
+      // dataUrl: string | null;
     }>;
     for (
       let index = 0;
@@ -84,18 +84,18 @@ export async function submitEstimateRequest(
       const currentFile = imageFiles[index];
       if (!currentFile.type.startsWith("image/")) continue;
 
-      const fileBuffer = Buffer.from(await currentFile.arrayBuffer());
-      const dataUrl =
-        fileBuffer.byteLength <= maxPreviewBytesPerImage
-          ? `data:${currentFile.type};base64,${fileBuffer.toString("base64")}`
-          : null;
+      // const fileBuffer = Buffer.from(await currentFile.arrayBuffer());
+      // const dataUrl =
+      //   fileBuffer.byteLength <= maxPreviewBytesPerImage
+      //     ? `data:${currentFile.type};base64,${fileBuffer.toString("base64")}`
+      //     : null;
 
       attachmentsPayload.push({
         id: `att_${crypto.randomUUID()}`,
         name: currentFile.name,
         type: currentFile.type,
         size: currentFile.size,
-        dataUrl,
+        // dataUrl,
       });
     }
 

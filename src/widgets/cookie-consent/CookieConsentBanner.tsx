@@ -61,10 +61,11 @@ export default function CookieConsentBanner() {
 
   useEffect(() => {
     const stored = getStoredConsent();
-    if (!stored) {
-      setIsVisible(true);
-    } else {
+    if (stored) {
       setPreferences(stored.preferences);
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
     }
   }, []);
 
