@@ -72,6 +72,28 @@
     "hailPDR": "PDR after hail: restoring a car without painting",
     "contacts": "Contact Us"
   },
+  "CookieConsent": {
+    "title": "Cookies",
+    "description": "We use cookies to improve the site and your experience. You can accept or reject optional cookies.",
+    "accept": "Accept",
+    "reject": "Reject",
+    "customize": "Customize",
+    "savePreferences": "Save preferences",
+    "categories": {
+      "essential": {
+        "label": "Essential",
+        "description": "Needed for core site functionality. Always enabled."
+      },
+      "analytics": {
+        "label": "Analytics",
+        "description": "Helps us understand site usage to improve performance."
+      },
+      "marketing": {
+        "label": "Marketing",
+        "description": "Used to deliver relevant offers and measure campaigns."
+      }
+    }
+  },
   "CommonTemplateData": {
     "bodyRepair": "Body Repair & Painting",
     "spotTouchUp": "Spot Touch-Up",

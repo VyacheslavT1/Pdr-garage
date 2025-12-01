@@ -21,5 +21,5 @@ export type LoginResponse = {
 export const AUTH_COOKIE = {
   access: "access_token",
   refresh: "refresh_token",
+  remember: "remember_me",
 } as const;
-

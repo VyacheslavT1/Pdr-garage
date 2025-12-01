@@ -50,6 +50,31 @@ describe("auth cookies helpers", () => {
     );
   });
 
+  it("опционально выставляет remember_me cookie", () => {
+    process.env.NODE_ENV = "test";
+    const response = createResponseMock();
+
+    setAuthCookies(response, {
+      access: "access-token",
+      refresh: "refresh-token",
+      accessTtlSeconds: 60,
+      refreshTtlSeconds: 120,
+      rememberMe: true,
+    });
+
+    expect(response.cookies.set).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({
+        name: AUTH_COOKIE.remember,
+        value: "1",
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        maxAge: 120,
+      }),
+    );
+  });
+
   it("использует secure=true в production", () => {
     process.env.NODE_ENV = "production";
     const response = createResponseMock();
@@ -86,6 +111,14 @@ describe("auth cookies helpers", () => {
       2,
       expect.objectContaining({
         name: AUTH_COOKIE.refresh,
+        value: "",
+        maxAge: 0,
+      }),
+    );
+    expect(response.cookies.set).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({
+        name: AUTH_COOKIE.remember,
         value: "",
         maxAge: 0,
       }),

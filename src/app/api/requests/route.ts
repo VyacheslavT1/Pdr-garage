@@ -360,15 +360,41 @@ export async function DELETE(incomingRequest: Request) {
 
   try {
     // Удаляем запись по id и просим вернуть удалённую строку, чтобы понять — была ли она
+    const { data: existingRequest, error: selectError } = await supabaseServer
+      .from("requests")
+      .select("id, attachment_paths") // вернуть хотя бы id удалённой записи
+      .eq("id", idParam)
+      .single(); // ожидаем ровно одну запись
+
+    if (selectError && /no rows|Row not found/i.test(selectError.message)) {
+      return NextResponse.json(
+        { error: "NotFound" },
+        { status: 404, headers: securityHeaders }
+      );
+    }
+
+    // 2.2) Удаляем файлы из Storage, если они есть
+    const attachmentPaths: string[] = existingRequest?.attachment_paths ?? [];
+    if (attachmentPaths.length > 0) {
+      const { error: storageError } = await supabaseServer.storage
+        .from("requests") // <-- имя bucket'а в Storage
+        .remove(attachmentPaths);
+
+      if (storageError) {
+        return NextResponse.json(
+          { error: "ServerError", details: storageError.message },
+          { status: 500, headers: securityHeaders }
+        );
+      }
+    }
     const { data, error } = await supabaseServer
       .from("requests")
       .delete()
       .eq("id", idParam)
-      .select("id") // вернуть хотя бы id удалённой записи
-      .single(); // ожидаем ровно одну запись
+      .select("id")
+      .single();
 
     if (error && /no rows|Row not found/i.test(error.message)) {
-      // Аналог твоего 404, если записи не было
       return NextResponse.json(
         { error: "NotFound" },
         { status: 404, headers: securityHeaders }

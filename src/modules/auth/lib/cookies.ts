@@ -9,6 +9,7 @@ export function setAuthCookies(
     refresh: string;
     accessTtlSeconds: number;
     refreshTtlSeconds: number;
+    rememberMe?: boolean;
   }
 ) {
   const isProduction = process.env.NODE_ENV === "production";
@@ -32,6 +33,18 @@ export function setAuthCookies(
     path: "/",
     maxAge: args.refreshTtlSeconds,
   });
+
+  if (typeof args.rememberMe === "boolean") {
+    response.cookies.set({
+      name: AUTH_COOKIE.remember,
+      value: args.rememberMe ? "1" : "0",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: isProduction,
+      path: "/",
+      maxAge: args.refreshTtlSeconds,
+    });
+  }
 }
 
 export function clearAuthCookies(response: NextResponse) {
@@ -49,6 +62,16 @@ export function clearAuthCookies(response: NextResponse) {
 
   response.cookies.set({
     name: AUTH_COOKIE.refresh,
+    value: "",
+    httpOnly: true,
+    sameSite: "lax",
+    secure: isProduction,
+    path: "/",
+    maxAge: 0,
+  });
+
+  response.cookies.set({
+    name: AUTH_COOKIE.remember,
     value: "",
     httpOnly: true,
     sameSite: "lax",

@@ -80,7 +80,14 @@ export default function ContactSection() {
           </div>
 
           <div className={styles.team}>
-            <Image src={TeamPhoto} alt="Photo of the PDR Studio team" width={300} height={400} className={styles.teamPhoto} />
+            <Image
+              src={TeamPhoto}
+              alt="Photo of the PDR Studio team"
+              width={300}
+              height={400}
+              className={styles.teamPhoto}
+              priority
+            />
             <Image src={GaragePhoto} alt="Photo of the PDR Studio garage" width={300} height={400} className={styles.garagePhoto} />
           </div>
 

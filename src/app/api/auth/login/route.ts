@@ -10,6 +10,11 @@ import { NextResponse } from "next/server";
 import { securityHeaders } from "@/shared/api/next/securityHeaders";
 import { setAuthCookies } from "@/modules/auth/lib/cookies";
 import type { LoginResponse } from "@/modules/auth/model/types";
+import {
+  ACCESS_TOKEN_TTL_SECONDS,
+  REFRESH_TOKEN_TTL_LONG_SECONDS,
+  REFRESH_TOKEN_TTL_SHORT_SECONDS,
+} from "@/modules/auth/lib/tokenConfig";
 
 // 1) Утилита: безопасно читаем JSON-тело и валидируем минимально
 async function readAndValidateRequestBody(incomingRequest: Request) {
@@ -107,10 +112,10 @@ export async function POST(incomingRequest: Request) {
   const refreshTokenValue = crypto.randomUUID(); // долгоживущий
 
   // 2.7) Вычисляем сроки действия, как в контракте
-  const accessTokenTtlSeconds = 15 * 60; // 15 минут
+  const accessTokenTtlSeconds = ACCESS_TOKEN_TTL_SECONDS;
   const refreshTokenTtlSeconds = rememberMeValue
-    ? 30 * 24 * 60 * 60
-    : 7 * 24 * 60 * 60; // 30 дней или 7 дней
+    ? REFRESH_TOKEN_TTL_LONG_SECONDS
+    : REFRESH_TOKEN_TTL_SHORT_SECONDS; // 30 дней или 7 дней
 
   const accessExpiresAtIso = new Date(
     Date.now() + accessTokenTtlSeconds * 1000
@@ -145,6 +150,7 @@ export async function POST(incomingRequest: Request) {
     refresh: refreshTokenValue,
     accessTtlSeconds: accessTokenTtlSeconds,
     refreshTtlSeconds: refreshTokenTtlSeconds,
+    rememberMe: rememberMeValue,
   });
 
   return response;

@@ -1,6 +1,10 @@
 import { POST } from "./route";
 import { NextResponse } from "next/server";
 import { readResponseJson } from "@/tests/utils/readResponseJson";
+import {
+  ACCESS_TOKEN_TTL_SECONDS,
+  REFRESH_TOKEN_TTL_SHORT_SECONDS,
+} from "@/modules/auth/lib/tokenConfig";
 
 jest.mock("@/shared/api/next/securityHeaders", () => ({
   securityHeaders: { "x-test-header": "1" },
@@ -155,8 +159,8 @@ describe("/api/auth/login POST", () => {
     expect(setAuthCookies).toHaveBeenCalledWith(
       expect.any(NextResponse),
       expect.objectContaining({
-        accessTtlSeconds: 15 * 60,
-        refreshTtlSeconds: 7 * 24 * 60 * 60,
+        accessTtlSeconds: ACCESS_TOKEN_TTL_SECONDS,
+        refreshTtlSeconds: REFRESH_TOKEN_TTL_SHORT_SECONDS,
       }),
     );
 

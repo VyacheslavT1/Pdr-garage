@@ -72,6 +72,28 @@
     "hailPDR": "PDR après la grêle : restaurer une voiture sans peinture",
     "contacts": "Contactez-nous"
   },
+  "CookieConsent": {
+    "title": "Cookies",
+    "description": "Nous utilisons des cookies pour améliorer le site et votre expérience. Vous pouvez accepter ou refuser les cookies facultatifs.",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "customize": "Paramétrer",
+    "savePreferences": "Enregistrer les préférences",
+    "categories": {
+      "essential": {
+        "label": "Essentiels",
+        "description": "Nécessaires au fonctionnement du site. Toujours activés."
+      },
+      "analytics": {
+        "label": "Analytics",
+        "description": "Nous aide à comprendre l’usage du site pour l’améliorer."
+      },
+      "marketing": {
+        "label": "Marketing",
+        "description": "Utilisés pour proposer des offres pertinentes et mesurer les campagnes."
+      }
+    }
+  },
   "CommonTemplateData": {
     "bodyRepair": "Réparation de la carrosserie et peinture",
     "spotTouchUp": "Retouche peinture localisée",
