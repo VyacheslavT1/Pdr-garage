@@ -1,3 +1,5 @@
+// src/modules/requests/feature/estimate-request/model/submit.ts
+
 "use server";
 
 import { headers } from "next/headers";
@@ -17,10 +19,18 @@ export type SubmitEstimateResult = {
   formError?: string;
 };
 
-const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
-const ALLOWED_ATTACHMENT_TYPES = ["application/pdf"]; // plus any image/*
 const MAX_NAME_LENGTH = 60;
 const MAX_MESSAGE_LENGTH = 2000;
+
+type AttachmentsMetadataItem = {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  storagePath: string;
+  uploadUrl?: string | null;
+  uploadToken?: string | null;
+};
 
 function isValidName(value: string) {
   return /^[A-Za-zА-Яа-я]+$/.test(value);
@@ -55,48 +65,45 @@ export async function submitEstimateRequest(
     const company = String(formData.get("company") ?? "").trim();
     const consentAccepted = formData.has("consentToContact");
 
-    const attachmentEntry = formData.get("attachment");
-    const attachmentFile =
-      attachmentEntry instanceof File ? (attachmentEntry as File) : null;
-    const hasRealAttachment =
-      !!attachmentFile && !!attachmentFile.name && attachmentFile.size > 0;
-
-    const attachmentsFromForm = formData.getAll("attachment");
-    const imageFiles = attachmentsFromForm.filter(
-      (entry) => entry instanceof File
-    ) as File[];
-
-    const maxPreviewImages = 6;
-    const maxPreviewBytesPerImage = 1_500_000;
-
+    const attachmentsMetadataRaw = formData.get("attachmentsMetadata");
     const attachmentsPayload = [] as Array<{
       id: string;
       name: string;
       type: string;
       size: number;
-      // dataUrl: string | null;
+      storagePath: string;
     }>;
-    for (
-      let index = 0;
-      index < imageFiles.length && attachmentsPayload.length < maxPreviewImages;
-      index += 1
+
+    if (
+      typeof attachmentsMetadataRaw === "string" &&
+      attachmentsMetadataRaw.trim() !== " "
     ) {
-      const currentFile = imageFiles[index];
-      if (!currentFile.type.startsWith("image/")) continue;
-
-      // const fileBuffer = Buffer.from(await currentFile.arrayBuffer());
-      // const dataUrl =
-      //   fileBuffer.byteLength <= maxPreviewBytesPerImage
-      //     ? `data:${currentFile.type};base64,${fileBuffer.toString("base64")}`
-      //     : null;
-
-      attachmentsPayload.push({
-        id: `att_${crypto.randomUUID()}`,
-        name: currentFile.name,
-        type: currentFile.type,
-        size: currentFile.size,
-        // dataUrl,
-      });
+      try {
+        const parsed = JSON.parse(
+          attachmentsMetadataRaw
+        ) as AttachmentsMetadataItem[];
+        if (Array.isArray(parsed)) {
+          for (const currentItem of parsed) {
+            if (
+              !currentItem ||
+              !currentItem.id ||
+              !currentItem.name ||
+              !currentItem.type ||
+              !currentItem.size ||
+              !currentItem.storagePath
+            ) {
+              continue;
+            }
+            attachmentsPayload.push({
+              id: currentItem.id,
+              name: currentItem.name,
+              type: currentItem.type,
+              size: currentItem.size,
+              storagePath: currentItem.storagePath,
+            });
+          }
+        }
+      } catch {}
     }
 
     const fieldErrors: SubmitEstimateResult["fieldErrors"] = {};
@@ -139,18 +146,6 @@ export async function submitEstimateRequest(
       fieldErrors.message = "validationMessageRequired";
     } else if (message.length > MAX_MESSAGE_LENGTH) {
       fieldErrors.message = "validationMessageMax";
-    }
-
-    if (hasRealAttachment) {
-      const mimeType = attachmentFile.type || "";
-      const isImage = mimeType.startsWith("image/");
-      const isPdf = ALLOWED_ATTACHMENT_TYPES.includes(mimeType);
-
-      if (!isImage && !isPdf) {
-        fieldErrors.attachment = "validationAttachmentType";
-      } else if (attachmentFile.size > MAX_ATTACHMENT_SIZE_BYTES) {
-        fieldErrors.attachment = "validationAttachmentSize";
-      }
     }
 
     if (!consentAccepted) {

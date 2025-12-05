@@ -8,13 +8,13 @@ import {
   submitEstimateRequest,
   type SubmitEstimateResult,
 } from "@/modules/requests/feature/estimate-request/model/submit";
+import { processAttachmentsBeforeSubmit } from "@/modules/requests/feature/estimate-request/utils/processAttachmentsBeforeSubmit";
 import { useTranslations } from "next-intl";
 import RadioButton from "./parts/RadioButton/RadioButton";
 import InputField, { InputType } from "./parts/InputField/InputField";
 import Textarea from "./parts/Textarea/Textarea";
 import Checkbox from "./parts/Checkbox/Checkbox";
 import Button from "@/shared/ui/button/Button";
-
 import { formDataToValues } from "./utils/formValues";
 import styles from "./EstimateRequestForm.module.scss";
 
@@ -41,6 +41,7 @@ export default function EstimateRequestForm() {
       setInlineErrors(errors);
       return { ok: false, fieldErrors: errors };
     }
+    const safeFormData = await processAttachmentsBeforeSubmit(formData);
 
     const result = await submitEstimateRequest(formData);
     return result;
