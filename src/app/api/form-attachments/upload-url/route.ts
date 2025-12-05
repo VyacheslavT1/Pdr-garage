@@ -13,16 +13,6 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const SUPABASE_ATTACHMENTS_BUCKET =
   process.env.SUPABASE_ATTACHMENTS_BUCKET || "form-attachments";
 
-const supabaseServerForUploads = createClient(
-  SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY,
-  {
-    auth: {
-      persistSession: false,
-    },
-  }
-);
-
 type IncomingFileMeta = {
   name: string;
   type: string;
@@ -57,6 +47,16 @@ export async function POST(incomingRequest: Request): Promise<Response> {
         { status: 500 }
       );
     }
+
+    const supabaseServerForUploads = createClient(
+      SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          persistSession: false,
+        },
+      }
+    );
 
     // читаем json из запроса
     const body = await incomingRequest.json().catch(() => null);
