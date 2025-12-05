@@ -3,7 +3,7 @@
 type UploadDescriptor = {
   id: string;
   fileName: string;
-  mimetype: string;
+  mimeType: string;
   size: number;
   storagePath: string;
   uploadUrl: string | null;
@@ -38,7 +38,7 @@ export async function processAttachmentsBeforeSubmit(
     size: currentFile.size,
   }));
 
-  const uploadUrlResponse = await fetch("api/form-attachments/upload-url", {
+  const uploadUrlResponse = await fetch("/api/form-attachments/upload-url", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ files: filesMetadata }),
@@ -62,7 +62,7 @@ export async function processAttachmentsBeforeSubmit(
       (currentFile) =>
         currentFile.name === currentUpload.fileName &&
         currentFile.size === currentUpload.size &&
-        currentFile.type === currentUpload.mimetype
+        currentFile.type === currentUpload.mimeType
     );
 
     if (!matchedFile) {
@@ -71,7 +71,7 @@ export async function processAttachmentsBeforeSubmit(
 
     const uploadResult = await fetch(currentUpload.uploadUrl, {
       method: "PUT",
-      headers: { "Content-Type": currentUpload.mimetype },
+      headers: { "Content-Type": currentUpload.mimeType },
       body: matchedFile,
     });
 

@@ -60,7 +60,7 @@ export async function POST(incomingRequest: Request): Promise<Response> {
 
     // читаем json из запроса
     const body = await incomingRequest.json().catch(() => null);
-    if (!body || Array.isArray(body.files)) {
+    if (!body || !Array.isArray(body.files)) {
       return NextResponse.json<UploadUrlResponse>(
         { ok: false, error: "invalidPayload" },
         { status: 400 }
@@ -92,7 +92,7 @@ export async function POST(incomingRequest: Request): Promise<Response> {
       const isImage = mimeType.startsWith("image/");
       const isPdf = mimeType === "application/pdf";
 
-      if (!isImage || !isPdf) {
+      if (!isImage && !isPdf) {
         continue;
       }
 
