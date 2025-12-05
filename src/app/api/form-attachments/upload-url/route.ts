@@ -3,13 +3,11 @@
 "use server";
 
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseServer } from "@/shared/api/supabase/server";
 
 const MAX_ATTACHMENTS_SIZE_BYTES = 10 * 1024 * 1024; //10 MB
 const MAX_FILES_PER_REQUEST = 6;
 
-const SUPABASE_URL = process.env.SUPABASE_URL || "";
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const SUPABASE_ATTACHMENTS_BUCKET =
   process.env.SUPABASE_ATTACHMENTS_BUCKET || "form-attachments";
 
@@ -41,22 +39,7 @@ type UploadUrlResponse =
 
 export async function POST(incomingRequest: Request): Promise<Response> {
   try {
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      return NextResponse.json<UploadUrlResponse>(
-        { ok: false, error: "supabaseNotConfigured" },
-        { status: 500 }
-      );
-    }
-
-    const supabaseServerForUploads = createClient(
-      SUPABASE_URL,
-      SUPABASE_SERVICE_ROLE_KEY,
-      {
-        auth: {
-          persistSession: false,
-        },
-      }
-    );
+    const supabaseServerForUploads = supabaseServer;
 
     // читаем json из запроса
     const body = await incomingRequest.json().catch(() => null);
