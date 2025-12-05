@@ -24,8 +24,10 @@ const MAX_MESSAGE_LENGTH = 2000;
 
 type AttachmentsMetadataItem = {
   id: string;
-  name: string;
-  type: string;
+  fileName?: string;
+  mimeType?: string;
+  name?: string;
+  type?: string;
   size: number;
   storagePath: string;
   uploadUrl?: string | null;
@@ -87,8 +89,8 @@ export async function submitEstimateRequest(
             if (
               !currentItem ||
               !currentItem.id ||
-              !currentItem.name ||
-              !currentItem.type ||
+              !(currentItem.fileName || currentItem.name) ||
+              !(currentItem.mimeType || currentItem.type) ||
               !currentItem.size ||
               !currentItem.storagePath
             ) {
@@ -96,8 +98,8 @@ export async function submitEstimateRequest(
             }
             attachmentsPayload.push({
               id: currentItem.id,
-              name: currentItem.name,
-              type: currentItem.type,
+              name: currentItem.fileName ?? currentItem.name!,
+              type: currentItem.mimeType ?? currentItem.type!,
               size: currentItem.size,
               storagePath: currentItem.storagePath,
             });

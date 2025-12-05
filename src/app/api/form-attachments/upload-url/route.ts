@@ -8,8 +8,7 @@ import { supabaseServer } from "@/shared/api/supabase/server";
 const MAX_ATTACHMENTS_SIZE_BYTES = 10 * 1024 * 1024; //10 MB
 const MAX_FILES_PER_REQUEST = 6;
 
-const SUPABASE_ATTACHMENTS_BUCKET =
-  process.env.SUPABASE_ATTACHMENTS_BUCKET || "form-attachments";
+const SUPABASE_ATTACHMENTS_BUCKET = "requests";
 
 type IncomingFileMeta = {
   name: string;

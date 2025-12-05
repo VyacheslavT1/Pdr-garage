@@ -43,7 +43,7 @@ export default function EstimateRequestForm() {
     }
     const safeFormData = await processAttachmentsBeforeSubmit(formData);
 
-    const result = await submitEstimateRequest(formData);
+    const result = await submitEstimateRequest(safeFormData);
     return result;
   }, initialSubmitState);
 
