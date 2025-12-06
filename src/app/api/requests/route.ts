@@ -114,6 +114,15 @@ export async function GET(incomingRequest: Request) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
 
+    // логгируем ошибку на сервере
+    console.error({
+      type: "request_error",
+      route: "/api/requests",
+      method: "GET",
+      status: 500,
+      errorMessage: readable,
+      errorStack: caughtError instanceof Error ? caughtError.stack : null,
+    });
     return NextResponse.json(
       { error: "ServerError", details: readable },
       { status: 500, headers: securityHeaders }
@@ -129,6 +138,15 @@ export async function POST(incomingRequest: Request) {
   try {
     parsedBody = await incomingRequest.json();
   } catch {
+    // игнорируем некорректный JSON
+    console.error({
+      type: "request_error",
+      route: "/api/requests",
+      method: "POST",
+      status: 400,
+      errorMessage: "Invalid JSON",
+    });
+
     return NextResponse.json(
       { error: "ValidationError", details: { body: "Invalid JSON" } },
       { status: 400, headers: localSecurityHeaders }
@@ -176,6 +194,16 @@ export async function POST(incomingRequest: Request) {
     rateLimitStore.set(clientIp, { count: 1, windowStart: currentTime });
   } else {
     if (existingBucket.count >= limitPerWindow) {
+      // логгируем событие превышения лимита на сервере
+      console.error({
+        type: "rate_limit_exceeded",
+        route: "/api/requests",
+        method: "POST",
+        status: 429,
+        clientIp,
+        errorMessage: "Rate limit exceeded",
+      });
+
       return NextResponse.json(
         { error: "TooManyRequests" },
         { status: 429, headers: localSecurityHeaders }
@@ -319,6 +347,17 @@ export async function PATCH(incomingRequest: Request) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
 
+    // логгируем ошибку на сервере
+    console.error({
+      type: "request_error",
+      route: "/api/requests",
+      method: "PATCH",
+      status: 500,
+      requestedId: idParam,
+      errorMessage: readable,
+      errorStack: caughtError instanceof Error ? caughtError.stack : null,
+    });
+
     return NextResponse.json(
       { error: "ServerError", details: readable },
       { status: 500, headers: securityHeaders }
@@ -408,6 +447,17 @@ export async function DELETE(incomingRequest: Request) {
   } catch (caughtError) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
+
+    // логгируем ошибку на сервере
+    console.error({
+      type: "request_error",
+      route: "/api/requests",
+      method: "DELETE",
+      status: 500,
+      requestedId: idParam,
+      errorMessage: readable,
+      errorStack: caughtError instanceof Error ? caughtError.stack : null,
+    });
 
     return NextResponse.json(
       { error: "ServerError", details: readable },
