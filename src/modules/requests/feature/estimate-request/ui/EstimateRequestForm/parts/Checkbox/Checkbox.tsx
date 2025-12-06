@@ -72,7 +72,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           <span className={`${inter.className} ${styles.text}`}>
             {label}{" "}
             <span className={styles.policyNote}>
-              <Link href="/privacy" target="_blank" rel="noopener noreferrer">
+              <Link href="/privacy">
                 {t("consentPrivacyLink")}
               </Link>
             </span>

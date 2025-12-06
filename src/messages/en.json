@@ -314,6 +314,123 @@
       "byUnknown": "Administration"
     }
   },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: {year}",
+    "actions": {
+      "accept": "Accept",
+      "decline": "Decline"
+    },
+    "sections": {
+      "controller": {
+        "title": "1. Data Controller",
+        "paragraphs": [
+          "The data controller is:",
+          "PDR Garage / PDR Studio",
+          "Email: [your email]",
+          "Address: [your address or “France” if you prefer not to specify]",
+          "In accordance with GDPR (EU) 2016/679 and the French Data Protection Act, we are committed to protecting your personal data."
+        ]
+      },
+      "data": {
+        "title": "2. Data We Collect",
+        "items": [
+          "First and last name",
+          "Phone number",
+          "Email address",
+          "Information submitted via forms (quotes, messages, comments)",
+          "Files or photos you choose to upload",
+          "Technical data (IP address, browser, pages viewed)",
+          "This data is collected only when you provide it voluntarily or when using the site."
+        ]
+      },
+      "purposes": {
+        "title": "3. Purposes of Processing",
+        "items": [
+          "Respond to your requests submitted via our forms",
+          "Contact you for a quote or service",
+          "Manage appointments",
+          "Improve the quality of our site",
+          "Secure the platform",
+          "Comply with our legal obligations",
+          "We never sell your data to third parties."
+        ]
+      },
+      "legalBases": {
+        "title": "4. Legal Basis",
+        "items": [
+          "Your consent (forms, newsletter)",
+          "Performance of a contract or pre-contractual measures (quotes, contact)",
+          "Legitimate interest (site security, fraud prevention)",
+          "Compliance with legal obligations"
+        ]
+      },
+      "retention": {
+        "title": "5. Retention Periods",
+        "items": [
+          "Form submissions: up to 3 years",
+          "Data related to a service: 5 to 10 years depending on accounting requirements",
+          "Cookies: variable duration depending on type (see our cookie banner)"
+        ]
+      },
+      "sharing": {
+        "title": "6. Data Sharing",
+        "paragraphs": [
+          "We may share your data only with trusted providers:"
+        ],
+        "items": [
+          "Website host",
+          "Web analytics services",
+          "Technical providers necessary for site operation",
+          "Storage platforms (e.g., Supabase)",
+          "No transfers outside the EU are made without GDPR-compliant safeguards."
+        ]
+      },
+      "rights": {
+        "title": "7. Your Rights (GDPR)",
+        "paragraphs": [
+          "You have the following rights:",
+          "To exercise your rights: 📧 [your email]"
+        ],
+        "items": [
+          "Right of access",
+          "Right to rectification",
+          "Right to erasure (“right to be forgotten”)",
+          "Right to object",
+          "Right to restriction of processing",
+          "Right to data portability",
+          "Right to withdraw consent",
+          "Right to lodge a complaint with the CNIL"
+        ]
+      },
+      "security": {
+        "title": "8. Data Security",
+        "paragraphs": [
+          "We implement technical and organizational measures to protect your data against:",
+          "Unauthorized access",
+          "Loss or alteration",
+          "Unauthorized disclosure",
+          "However, no system is completely secure."
+        ]
+      },
+      "cookies": {
+        "title": "9. Cookies",
+        "items": [
+          "Improve user experience",
+          "Analyze traffic",
+          "Ensure proper functioning of the site",
+          "You can manage your preferences from our cookie banner."
+        ]
+      },
+      "changes": {
+        "title": "10. Policy Changes",
+        "paragraphs": [
+          "This policy may be updated at any time.",
+          "The most recent version is always available on this page."
+        ]
+      }
+    }
+  },
   "ReviewCreateForm": {
     "title": "Leave a review",
     "fields": {

@@ -315,6 +315,123 @@
       "byUnknown": "Administration"
     }
   },
+  "PrivacyPolicy": {
+    "title": "Politique de confidentialité",
+    "updated": "Dernière mise à jour : {year}",
+    "actions": {
+      "accept": "Accepter",
+      "decline": "Refuser"
+    },
+    "sections": {
+      "controller": {
+        "title": "1. Responsable du traitement",
+        "paragraphs": [
+          "Le responsable du traitement des données est :",
+          "PDR Garage / PDR Studio",
+          "E-mail : [ton email]",
+          "Adresse : [ton adresse ou “France” si tu ne veux pas préciser]",
+          "Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi française Informatique et Libertés, nous nous engageons à protéger vos données personnelles."
+        ]
+      },
+      "data": {
+        "title": "2. Données que nous collectons",
+        "items": [
+          "Nom et prénom",
+          "Numéro de téléphone",
+          "Adresse e-mail",
+          "Informations envoyées via les formulaires (demande de devis, messages, commentaires)",
+          "Fichiers ou photos que vous choisissez de télécharger",
+          "Données techniques (adresse IP, navigateur, pages consultées)",
+          "Ces données ne sont collectées que lorsque vous les fournissez volontairement ou lors de l’utilisation du site."
+        ]
+      },
+      "purposes": {
+        "title": "3. Finalités du traitement",
+        "items": [
+          "Répondre à vos demandes envoyées via nos formulaires",
+          "Prendre contact avec vous pour un devis ou une prestation",
+          "Gérer les rendez-vous",
+          "Améliorer la qualité de notre site",
+          "Sécuriser la plateforme",
+          "Respecter nos obligations légales",
+          "Nous ne vendons jamais vos données à des tiers."
+        ]
+      },
+      "legalBases": {
+        "title": "4. Base légale du traitement",
+        "items": [
+          "Votre consentement (formulaire, newsletter)",
+          "L’exécution d’un contrat ou de mesures précontractuelles (devis, prise de contact)",
+          "L’intérêt légitime (sécurité du site, prévention de fraude)",
+          "Le respect des obligations légales"
+        ]
+      },
+      "retention": {
+        "title": "5. Durée de conservation",
+        "items": [
+          "Demandes via formulaire : 3 ans maximum",
+          "Données liées à une prestation : 5 à 10 ans selon les obligations comptables",
+          "Cookies : durée variable selon leur type (voir notre bannière cookies)"
+        ]
+      },
+      "sharing": {
+        "title": "6. Partage des données",
+        "paragraphs": [
+          "Nous pouvons partager vos données uniquement avec des prestataires de confiance :"
+        ],
+        "items": [
+          "Hébergeur du site",
+          "Services d’analyse web",
+          "Prestataires techniques nécessaires au fonctionnement du site",
+          "Plateformes de stockage (ex : Supabase)",
+          "Aucun transfert hors UE n'est effectué sans garanties conformes RGPD."
+        ]
+      },
+      "rights": {
+        "title": "7. Vos droits (RGPD)",
+        "paragraphs": [
+          "Vous disposez des droits suivants :",
+          "Pour exercer vos droits : 📧 [ton email]"
+        ],
+        "items": [
+          "Droit d’accès",
+          "Droit de rectification",
+          "Droit d’effacement (« droit à l’oubli »)",
+          "Droit d’opposition",
+          "Droit à la limitation du traitement",
+          "Droit à la portabilité des données",
+          "Droit de retirer votre consentement",
+          "Droit d’introduire une réclamation auprès de la CNIL"
+        ]
+      },
+      "security": {
+        "title": "8. Sécurité des données",
+        "paragraphs": [
+          "Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données contre :",
+          "L’accès non autorisé",
+          "La perte ou l’altération",
+          "La divulgation non autorisée",
+          "Cependant, aucun système n’est totalement sécurisé."
+        ]
+      },
+      "cookies": {
+        "title": "9. Cookies",
+        "items": [
+          "Améliorer l’expérience utilisateur",
+          "Analyser le trafic",
+          "Assurer le bon fonctionnement du site",
+          "Vous pouvez gérer vos préférences depuis notre bannière de cookies."
+        ]
+      },
+      "changes": {
+        "title": "10. Modifications de la politique",
+        "paragraphs": [
+          "Cette politique peut être mise à jour à tout moment.",
+          "La version la plus récente est toujours disponible sur cette page."
+        ]
+      }
+    }
+  },
   "ReviewCreateForm": {
     "title": "Laisser un avis",
     "fields": {

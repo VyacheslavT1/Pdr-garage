@@ -17,11 +17,16 @@ import Checkbox from "./parts/Checkbox/Checkbox";
 import Button from "@/shared/ui/button/Button";
 import { formDataToValues } from "./utils/formValues";
 import styles from "./EstimateRequestForm.module.scss";
+import { useSearchParams } from "next/navigation";
 
 const initialSubmitState: SubmitEstimateResult = { ok: false };
 
 export default function EstimateRequestForm() {
   const t = useTranslations("EstimateRequestForm");
+  const searchParams = useSearchParams();
+  const consentFromQuery = searchParams?.get("consent");
+  const defaultConsentChecked = consentFromQuery === "accept";
+
   const [gender, setGender] = useState("");
   const [formResetKey, setFormResetKey] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -217,6 +222,7 @@ export default function EstimateRequestForm() {
           name="consentToContact"
           variant="labeled"
           label={t("consentPrivacyText")}
+          checked={defaultConsentChecked}
           required
           hasError={Boolean(displayErrors.consent)}
           errorMessage={
