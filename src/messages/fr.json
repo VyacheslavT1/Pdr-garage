@@ -72,28 +72,6 @@
     "hailPDR": "PDR après la grêle : restaurer une voiture sans peinture",
     "contacts": "Contactez-nous"
   },
-  "CookieConsent": {
-    "title": "Cookies",
-    "description": "Nous utilisons des cookies pour améliorer le site et votre expérience. Vous pouvez accepter ou refuser les cookies facultatifs.",
-    "accept": "Accepter",
-    "reject": "Refuser",
-    "customize": "Paramétrer",
-    "savePreferences": "Enregistrer les préférences",
-    "categories": {
-      "essential": {
-        "label": "Essentiels",
-        "description": "Nécessaires au fonctionnement du site. Toujours activés."
-      },
-      "analytics": {
-        "label": "Analytics",
-        "description": "Nous aide à comprendre l’usage du site pour l’améliorer."
-      },
-      "marketing": {
-        "label": "Marketing",
-        "description": "Utilisés pour proposer des offres pertinentes et mesurer les campagnes."
-      }
-    }
-  },
   "CommonTemplateData": {
     "bodyRepair": "Réparation de la carrosserie et peinture",
     "spotTouchUp": "Retouche peinture localisée",
@@ -319,8 +297,7 @@
     "title": "Politique de confidentialité",
     "updated": "Dernière mise à jour : {year}",
     "actions": {
-      "accept": "Accepter",
-      "decline": "Refuser"
+      "contact": "Nous contacter"
     },
     "sections": {
       "controller": {
@@ -370,8 +347,7 @@
         "title": "5. Durée de conservation",
         "items": [
           "Demandes via formulaire : 3 ans maximum",
-          "Données liées à une prestation : 5 à 10 ans selon les obligations comptables",
-          "Cookies : durée variable selon leur type (voir notre bannière cookies)"
+          "Données liées à une prestation : 5 à 10 ans selon les obligations comptables"
         ]
       },
       "sharing": {
@@ -414,17 +390,8 @@
           "Cependant, aucun système n’est totalement sécurisé."
         ]
       },
-      "cookies": {
-        "title": "9. Cookies",
-        "items": [
-          "Améliorer l’expérience utilisateur",
-          "Analyser le trafic",
-          "Assurer le bon fonctionnement du site",
-          "Vous pouvez gérer vos préférences depuis notre bannière de cookies."
-        ]
-      },
       "changes": {
-        "title": "10. Modifications de la politique",
+        "title": "9. Modifications de la politique",
         "paragraphs": [
           "Cette politique peut être mise à jour à tout moment.",
           "La version la plus récente est toujours disponible sur cette page."

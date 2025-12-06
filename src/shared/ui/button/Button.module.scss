@@ -42,7 +42,6 @@
     }
     &:hover:not(:disabled) {
       color: var(--color-main);
-      outline: 1px solid var(--color-main);
     }
     &:active:not(:disabled) {
       background-color: var(--color-dark);

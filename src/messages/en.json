@@ -72,28 +72,6 @@
     "hailPDR": "PDR after hail: restoring a car without painting",
     "contacts": "Contact Us"
   },
-  "CookieConsent": {
-    "title": "Cookies",
-    "description": "We use cookies to improve the site and your experience. You can accept or reject optional cookies.",
-    "accept": "Accept",
-    "reject": "Reject",
-    "customize": "Customize",
-    "savePreferences": "Save preferences",
-    "categories": {
-      "essential": {
-        "label": "Essential",
-        "description": "Needed for core site functionality. Always enabled."
-      },
-      "analytics": {
-        "label": "Analytics",
-        "description": "Helps us understand site usage to improve performance."
-      },
-      "marketing": {
-        "label": "Marketing",
-        "description": "Used to deliver relevant offers and measure campaigns."
-      }
-    }
-  },
   "CommonTemplateData": {
     "bodyRepair": "Body Repair & Painting",
     "spotTouchUp": "Spot Touch-Up",
@@ -318,8 +296,7 @@
     "title": "Privacy Policy",
     "updated": "Last updated: {year}",
     "actions": {
-      "accept": "Accept",
-      "decline": "Decline"
+      "contact": "Contact us"
     },
     "sections": {
       "controller": {
@@ -369,8 +346,7 @@
         "title": "5. Retention Periods",
         "items": [
           "Form submissions: up to 3 years",
-          "Data related to a service: 5 to 10 years depending on accounting requirements",
-          "Cookies: variable duration depending on type (see our cookie banner)"
+          "Data related to a service: 5 to 10 years depending on accounting requirements"
         ]
       },
       "sharing": {
@@ -413,17 +389,8 @@
           "However, no system is completely secure."
         ]
       },
-      "cookies": {
-        "title": "9. Cookies",
-        "items": [
-          "Improve user experience",
-          "Analyze traffic",
-          "Ensure proper functioning of the site",
-          "You can manage your preferences from our cookie banner."
-        ]
-      },
       "changes": {
-        "title": "10. Policy Changes",
+        "title": "9. Policy Changes",
         "paragraphs": [
           "This policy may be updated at any time.",
           "The most recent version is always available on this page."

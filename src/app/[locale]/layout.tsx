@@ -7,7 +7,6 @@ import { routing } from "@/i18n/routing";
 import Header from "@/widgets/header/Header";
 import Footer from "@/widgets/footer/Footer";
 import ScrollToTopButton from "@/shared/ui/scroll-to-top/ScrollToTopButton";
-import CookieConsentBanner from "@/widgets/cookie-consent/CookieConsentBanner";
 
 export default async function LocaleLayout({
   children,
@@ -32,7 +31,6 @@ export default async function LocaleLayout({
       <main>{children}</main>
       <ScrollToTopButton />
       <Footer />
-      <CookieConsentBanner />
     </NextIntlClientProvider>
   );
 }
