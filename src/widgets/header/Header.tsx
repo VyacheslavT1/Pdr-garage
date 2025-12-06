@@ -173,7 +173,9 @@ const Header: React.FC = () => {
               </Link>
             </li>
             <li className={styles.callToAction}>
-              <Button variant="primary">{t("requestQuoteButton")}</Button>
+              <LinkButton href="/contacts" onClick={() => setIsMenuOpen(false)}>
+                {t("requestQuoteButton")}
+              </LinkButton>
             </li>
           </ul>
         </div>
