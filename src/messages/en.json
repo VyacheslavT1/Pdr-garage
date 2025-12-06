@@ -280,6 +280,7 @@
     "submitPending": "Sending...",
     "submitLabel": "Send",
     "submitSuccess": "Your request has been submitted successfully",
+    "formSubmitFailed": "Failed to submit the form. Please try again.",
 
     "placeholderText": "No file chosen",
     "uploadButtonLabel": "Upload photo",

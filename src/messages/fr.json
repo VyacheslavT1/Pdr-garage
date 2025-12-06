@@ -281,6 +281,7 @@
     "submitPending": "Envoi...",
     "submitLabel": "Envoyer",
     "submitSuccess": "Votre demande a été envoyée avec succès",
+    "formSubmitFailed": "Échec de l’envoi du formulaire. Veuillez réessayer.",
 
     "placeholderText": "Aucun fichier sélectionné",
     "uploadButtonLabel": "Joindre une photo",

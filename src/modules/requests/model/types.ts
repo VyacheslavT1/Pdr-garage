@@ -7,7 +7,9 @@ export type RequestAttachment = {
   name: string;
   type: string;
   size: number;
-  dataUrl?: string | null;
+  storagePath: string | null; // обязательное для новых заявок
+  publicUrl?: string | null; // заполнено, если заранее получили ссылку
+  dataUrl?: string | null; // legacy inline data для старых записей
 };
 
 export type RequestItem = {
@@ -20,5 +22,5 @@ export type RequestItem = {
   comment?: string | null;
   status: RequestStatus;
   attachments?: RequestAttachment[];
+  storagePaths: string[];
 };
-

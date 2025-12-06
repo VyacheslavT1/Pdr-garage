@@ -1,7 +1,8 @@
-// Назначение: обработчик GET /api/requests
-// - Возвращает массив заявок
-// - Защищён: без cookie access_token вернёт 401 (как и раздел /admin/**)
-// - Возвращает JSON с безопасными заголовками
+// Назначение: обработчик /api/requests
+// - GET: возвращает массив заявок (с сортировкой, фильтрами, пагинацией)
+// - POST: создаёт новую заявку (публичная форма, без авторизации)
+// - PATCH: меняет статус заявки
+// - DELETE: удаляет заявку и привязанные файлы из Supabase Storage
 
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/shared/api/supabase/server";
@@ -10,14 +11,17 @@ import type { RequestItem } from "@/modules/requests/model/types";
 import { mapRowToRequestItem } from "@/modules/requests/lib/mappers";
 import { normalizeAndValidateCreate } from "@/modules/requests/model/validation";
 import { normalizeIncomingAttachments } from "@/modules/requests/lib/attachments";
-import { uploadAttachmentsForRequest } from "@/modules/requests/lib/storage";
+import {
+  populateAttachmentUrls,
+  uploadAttachmentsForRequest,
+} from "@/modules/requests/lib/storage";
 import { hasAccessTokenCookie } from "@/modules/auth/lib/cookies";
 
-// Заголовки и типы вынесены в shared/modules
+const ATTACHMENTS_BUCKET =
+  process.env.SUPABASE_ATTACHMENTS_BUCKET || "requests";
 
-// 4) Обработчик GET /api/requests (с сортировкой, пагинацией, статусом, поиском и диапазоном дат)
+// ---------- GET /api/requests ----------
 export async function GET(incomingRequest: Request) {
-  // 1) Авторизация по cookie (как у тебя было)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
   const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
@@ -28,15 +32,14 @@ export async function GET(incomingRequest: Request) {
   }
 
   try {
-    // 2) Разбор query-параметров (без переименований твоих переменных)
     const url = new URL(incomingRequest.url);
     const rawPage = Number(url.searchParams.get("page") || 1);
     const rawPageSize = Number(url.searchParams.get("pageSize") || 10);
     const rawOrder = (url.searchParams.get("order") || "desc").toLowerCase();
-    const rawStatus = url.searchParams.get("status"); // "Не обработано" | "Обработано" | null
-    const rawSearch = url.searchParams.get("search"); // строка или null
-    const rawFrom = url.searchParams.get("from"); // YYYY-MM-DD или null
-    const rawTo = url.searchParams.get("to"); // YYYY-MM-DD или null
+    const rawStatus = url.searchParams.get("status");
+    const rawSearch = url.searchParams.get("search");
+    const rawFrom = url.searchParams.get("from");
+    const rawTo = url.searchParams.get("to");
 
     const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
     const pageSize =
@@ -63,44 +66,45 @@ export async function GET(incomingRequest: Request) {
     const fromIso = hasFrom ? `${rawFrom}T00:00:00.000Z` : null;
     const toIso = hasTo ? `${rawTo}T23:59:59.999Z` : null;
 
-    // 3) Базовый запрос к Supabase (public.requests), сортировка по created_at
-    //    В БД: created_at, client_name, ... (snake_case)
-    //    В ответе: createdAt, clientName, ... (camelCase) — маппим после выборки
     let query = supabaseServer
       .from("requests")
       .select("*")
       .order("created_at", { ascending: order === "asc" });
 
-    // 4) Фильтр по статусу (если передан)
     if (normalizedStatus) {
       query = query.eq("status", normalizedStatus);
     }
 
-    // 5) Фильтры по дате (если переданы границы)
     if (fromIso) query = query.gte("created_at", fromIso);
     if (toIso) query = query.lte("created_at", toIso);
 
-    // 6) Поиск по имени/телефону (OR). Используем ilike с шаблоном %...%
     if (hasSearch) {
-      // client_name ILIKE %term% OR phone ILIKE %term%
       query = query.or(
         `client_name.ilike.%${searchValue}%,phone.ilike.%${searchValue}%`
       );
     }
 
-    // 7) Пагинация (range — включительно по end)
     const start = (page - 1) * pageSize;
     const end = start + pageSize - 1;
     query = query.range(start, end);
 
-    // 8) Выполняем запрос
     const { data, error } = await query;
     if (error) {
       throw new Error(error.message);
     }
 
-    // 9) Маппинг snake_case → camelCase под твой контракт (RequestItem)
-    const items: RequestItem[] = (data || []).map(mapRowToRequestItem);
+    const itemsWithRawAttachments: RequestItem[] = (data || []).map(
+      mapRowToRequestItem
+    );
+
+    const items: RequestItem[] = await Promise.all(
+      itemsWithRawAttachments.map(async (item) => ({
+        ...item,
+        attachments: item.attachments
+          ? await populateAttachmentUrls(item.attachments)
+          : [],
+      }))
+    );
 
     return NextResponse.json(
       { items },
@@ -109,6 +113,7 @@ export async function GET(incomingRequest: Request) {
   } catch (caughtError) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
+
     return NextResponse.json(
       { error: "ServerError", details: readable },
       { status: 500, headers: securityHeaders }
@@ -117,14 +122,9 @@ export async function GET(incomingRequest: Request) {
 }
 
 // ---------- POST /api/requests (публичное создание заявки) ----------
-// ВАЖНО: этот эндпоинт БЕЗ авторизации — его вызывает публичная форма сайта.
 export async function POST(incomingRequest: Request) {
-  // Локальные техзаголовки как в других методах (мы их не выносим — без рефакторинга)
   const localSecurityHeaders = securityHeaders;
 
-  // 1) Простая антиспам-проверка: "медовый горшок" — скрытое поле в форме должно быть ПУСТЫМ.
-  //    Предлагаем имя поля "company" (или любое другое скрытое).
-  //    Боты часто заполняют все поля — в таком случае мы тихо возвращаем 204 и НИЧЕГО не сохраняем.
   let parsedBody: unknown = null;
   try {
     parsedBody = await incomingRequest.json();
@@ -134,29 +134,24 @@ export async function POST(incomingRequest: Request) {
       { status: 400, headers: localSecurityHeaders }
     );
   }
+
   const pb = (parsedBody ?? {}) as Record<string, unknown>;
+
+  // honeypot
   if (typeof pb.company === "string" && pb.company.trim().length > 0) {
-    // Тихий отказ: не подсказываем ботам, что поле было ловушкой
     return new NextResponse(null, {
       status: 204,
       headers: localSecurityHeaders,
     });
   }
 
-  // 2) Простейший rate-limit по IP, чтобы не зафлудили (in-memory, только для dev/preview)
-  //    ОКНО = 5 минут, ЛИМИТ = 8 заявок с одного IP.
-  //    В проде лучше вынести в Redis/Upstash либо использовать готовый middleware.
-  //    Не рефакторим: объявляем локальное хранилище, если его ещё нет.
-  // "@ts-expect-error: расширяем глобал для переживания HMR в dev
-  // 🔒 Тип корзины для лимита
+  // rate-limit (in-memory)
   type RateLimitBucket = { count: number; windowStart: number };
 
-  // ✅ Безопасно «расширяем» globalThis в рамках этого файла (без .d.ts)
   const globalForRateLimit = globalThis as unknown as {
     __requestsRateLimitStore?: Map<string, RateLimitBucket>;
   };
 
-  // Инициализируем один раз (переживает HMR/fast refresh в dev)
   if (!globalForRateLimit.__requestsRateLimitStore) {
     globalForRateLimit.__requestsRateLimitStore = new Map<
       string,
@@ -164,10 +159,8 @@ export async function POST(incomingRequest: Request) {
     >();
   }
 
-  // Рабочее хранилище для кода ниже — тип строго известен
-  const rateLimitStore = globalForRateLimit.__requestsRateLimitStore!;
+  const rateLimitStore = globalForRateLimit.__requestsRateLimitStore;
 
-  // Определяем IP (за прокси/верчелем берём первый из X-Forwarded-For, иначе remote address недоступен)
   const forwardedHeader = incomingRequest.headers.get("x-forwarded-for") || "";
   const clientIp = forwardedHeader.split(",")[0].trim() || "unknown";
 
@@ -191,7 +184,6 @@ export async function POST(incomingRequest: Request) {
     existingBucket.count += 1;
   }
 
-  // 3) Нормализация + валидация входа (модуль requests)
   const { payload: incomingPayload, errors: validationErrors } =
     normalizeAndValidateCreate(parsedBody);
   if (Object.keys(validationErrors).length > 0) {
@@ -201,19 +193,24 @@ export async function POST(incomingRequest: Request) {
     );
   }
 
-  // ⬇️ ПРИЁМ вложений из тела запроса: ожидаем attachments как массив объектов
+  // attachments из тела запроса (после processAttachmentsBeforeSubmit на клиенте)
   const normalizedAttachments = normalizeIncomingAttachments(
     (pb as { attachments?: unknown }).attachments
   );
 
-  // Генерируем id заявки и загружаем вложения через модуль
   const generatedRequestId = `rq_${crypto.randomUUID()}`;
+
+  // uploadAttachmentsForRequest сейчас просто возвращает attachments как есть
   const uploadedAttachments = await uploadAttachmentsForRequest(
     generatedRequestId,
     normalizedAttachments || []
   );
 
-  // ---------- ⬇️ НОВЫЙ БЛОК: собираем объект заявки и пишем в Supabase (PostgreSQL)
+  const storagePaths =
+    uploadedAttachments
+      .map((att) => att.storagePath)
+      .filter((p): p is string => typeof p === "string" && p.length > 0) ?? [];
+
   const newRequestItemForFirestore: RequestItem = {
     id: generatedRequestId,
     createdAt: new Date().toISOString(),
@@ -224,9 +221,9 @@ export async function POST(incomingRequest: Request) {
     status: "Non traité",
     attachments: uploadedAttachments,
     gender: incomingPayload.gender,
+    storagePaths,
   };
 
-  // ✅ Сохраняем заявку в Supabase (маппим camelCase → snake_case колонок таблицы)
   const { error: insertError } = await supabaseServer.from("requests").insert([
     {
       id: newRequestItemForFirestore.id,
@@ -248,16 +245,14 @@ export async function POST(incomingRequest: Request) {
     );
   }
 
-  // ⬇️ Отдаём тот же контракт, что и раньше — ничего не меняем
   return NextResponse.json(
     { item: newRequestItemForFirestore },
     { status: 201, headers: localSecurityHeaders }
   );
 }
 
-// ---------- PATCH /api/requests?id=<id> (смена статуса заявки) ----------
+// ---------- PATCH /api/requests?id=<id> ----------
 export async function PATCH(incomingRequest: Request) {
-  // 1) Авторизация по cookie (как в GET)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
   const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
@@ -267,7 +262,6 @@ export async function PATCH(incomingRequest: Request) {
     );
   }
 
-  // 2) Берём id заявки из query (?id=...)
   const currentUrl = new URL(incomingRequest.url);
   const idParam = currentUrl.searchParams.get("id");
   if (!idParam) {
@@ -280,14 +274,12 @@ export async function PATCH(incomingRequest: Request) {
     );
   }
 
-  // 3) Пытаемся прочитать желаемый статус из тела запроса (опционально)
-  //    По умолчанию переводим в 'Обработано'
   let parsedBody: unknown = null;
   try {
-    const raw = await incomingRequest.text(); // тело может быть пустым
+    const raw = await incomingRequest.text();
     parsedBody = raw ? (JSON.parse(raw) as unknown) : null;
   } catch {
-    // игнорируем некорректный JSON — используем значение по умолчанию
+    // игнорируем некорректный JSON
   }
 
   const p = (parsedBody ?? {}) as Record<string, unknown>;
@@ -297,15 +289,13 @@ export async function PATCH(incomingRequest: Request) {
       : "Traité";
 
   try {
-    // Обновляем только поле статуса по id и сразу читаем обновлённую строку
     const { data, error } = await supabaseServer
       .from("requests")
       .update({ status: requestedStatus })
       .eq("id", idParam)
       .select("*")
-      .single(); // ожидаем ровно одну запись
+      .single();
 
-    // Если записи с таким id нет — отдаём 404 (поведение сохраняем)
     if (error && /no rows|Row not found/i.test(error.message)) {
       return NextResponse.json(
         { error: "NotFound" },
@@ -316,8 +306,10 @@ export async function PATCH(incomingRequest: Request) {
       throw new Error(error.message);
     }
 
-    // Маппим snake_case → твой контракт RequestItem (camelCase)
     const updatedItem: RequestItem = mapRowToRequestItem(data);
+    updatedItem.attachments = updatedItem.attachments
+      ? await populateAttachmentUrls(updatedItem.attachments)
+      : [];
 
     return NextResponse.json(
       { item: updatedItem },
@@ -326,6 +318,7 @@ export async function PATCH(incomingRequest: Request) {
   } catch (caughtError) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
+
     return NextResponse.json(
       { error: "ServerError", details: readable },
       { status: 500, headers: securityHeaders }
@@ -333,9 +326,8 @@ export async function PATCH(incomingRequest: Request) {
   }
 }
 
-// ---------- DELETE /api/requests?id=<id> (удаление заявки + файлов Storage) ----------
+// ---------- DELETE /api/requests?id=<id> ----------
 export async function DELETE(incomingRequest: Request) {
-  // 1) Авторизация по cookie (как в GET/PATCH)
   const cookieHeader = incomingRequest.headers.get("cookie") || "";
   const hasAccessToken = hasAccessTokenCookie(cookieHeader);
   if (!hasAccessToken) {
@@ -345,7 +337,6 @@ export async function DELETE(incomingRequest: Request) {
     );
   }
 
-  // 2) Берём id из query (?id=...)
   const currentUrl = new URL(incomingRequest.url);
   const idParam = currentUrl.searchParams.get("id");
   if (!idParam) {
@@ -359,12 +350,11 @@ export async function DELETE(incomingRequest: Request) {
   }
 
   try {
-    // Удаляем запись по id и просим вернуть удалённую строку, чтобы понять — была ли она
     const { data: existingRequest, error: selectError } = await supabaseServer
       .from("requests")
-      .select("id, attachment_paths") // вернуть хотя бы id удалённой записи
+      .select("id, attachments")
       .eq("id", idParam)
-      .single(); // ожидаем ровно одну запись
+      .single();
 
     if (selectError && /no rows|Row not found/i.test(selectError.message)) {
       return NextResponse.json(
@@ -373,11 +363,17 @@ export async function DELETE(incomingRequest: Request) {
       );
     }
 
-    // 2.2) Удаляем файлы из Storage, если они есть
-    const attachmentPaths: string[] = existingRequest?.attachment_paths ?? [];
+    const rawAttachments = (existingRequest?.attachments ?? []) as {
+      storagePath?: string;
+    }[];
+
+    const attachmentPaths: string[] = rawAttachments
+      .map((att) => att.storagePath)
+      .filter((p): p is string => typeof p === "string" && p.length > 0);
+
     if (attachmentPaths.length > 0) {
       const { error: storageError } = await supabaseServer.storage
-        .from("requests") // <-- имя bucket'а в Storage
+        .from(ATTACHMENTS_BUCKET)
         .remove(attachmentPaths);
 
       if (storageError) {
@@ -387,7 +383,8 @@ export async function DELETE(incomingRequest: Request) {
         );
       }
     }
-    const { data, error } = await supabaseServer
+
+    const { error } = await supabaseServer
       .from("requests")
       .delete()
       .eq("id", idParam)
@@ -404,7 +401,6 @@ export async function DELETE(incomingRequest: Request) {
       throw new Error(error.message);
     }
 
-    // Успех: как и раньше — 204 No Content
     return new NextResponse(null, {
       status: 204,
       headers: securityHeaders,
@@ -412,6 +408,7 @@ export async function DELETE(incomingRequest: Request) {
   } catch (caughtError) {
     const readable =
       caughtError instanceof Error ? caughtError.message : "Unknown error";
+
     return NextResponse.json(
       { error: "ServerError", details: readable },
       { status: 500, headers: securityHeaders }
@@ -419,5 +416,4 @@ export async function DELETE(incomingRequest: Request) {
   }
 }
 
-// 5) Флаг динамики — чтобы Next не кэшировал ответ в dev/SSG
 export const dynamic = "force-dynamic";

@@ -86,7 +86,7 @@ export async function POST(incomingRequest: Request): Promise<Response> {
         originalName.replace(/[^a-zA-Z0-9._]/g, "_") || "attachment";
 
       const attachmentId = `att_${crypto.randomUUID()}`;
-      const storagePath = `form-attachments/${attachmentId}_${safeBaseName}`;
+      const storagePath = `requests/${attachmentId}_${safeBaseName}`;
 
       const signedUrlResult = await supabaseServerForUploads.storage
         .from(SUPABASE_ATTACHMENTS_BUCKET)

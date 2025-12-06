@@ -11,6 +11,7 @@ type RequestRow = {
   comment?: string | null;
   status: RequestItem["status"];
   attachments?: unknown;
+  attachment_paths?: string[] | null;
 };
 
 export function mapRowToRequestItem(row: RequestRow): RequestItem {
@@ -23,10 +24,10 @@ export function mapRowToRequestItem(row: RequestRow): RequestItem {
         name: typeof x.name === "string" ? x.name : "",
         type: typeof x.type === "string" ? x.type : "application/octet-stream",
         size: Number.isFinite(x.size as number) ? Number(x.size) : 0,
-        dataUrl:
-          typeof x.dataUrl === "string"
-            ? (x.dataUrl as string)
-            : null,
+        storagePath: typeof x.storagePath === "string" ? x.storagePath : null,
+        publicUrl:
+          typeof x.publicUrl === "string" ? (x.publicUrl as string) : null,
+        dataUrl: typeof x.dataUrl === "string" ? (x.dataUrl as string) : null,
       } as RequestAttachment;
     });
   }
@@ -40,5 +41,8 @@ export function mapRowToRequestItem(row: RequestRow): RequestItem {
     comment: row.comment ?? null,
     status: row.status,
     attachments: sanitizeAttachments(row.attachments),
+    storagePaths: Array.isArray(row.attachment_paths)
+      ? row.attachment_paths.filter((p): p is string => typeof p === "string")
+      : [],
   };
 }

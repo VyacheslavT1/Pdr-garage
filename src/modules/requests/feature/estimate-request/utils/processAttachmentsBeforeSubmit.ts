@@ -28,11 +28,21 @@ export async function processAttachmentsBeforeSubmit(
     (entry): entry is File => entry instanceof File
   );
 
-  if (attachmentFiles.length === 0) {
+  // Отбрасываем пустые/нулевые файлы, чтобы необязательное поле не ломало отправку
+  const validFiles = attachmentFiles.filter(
+    (file) =>
+      file instanceof File &&
+      typeof file.name === "string" &&
+      file.name.trim().length > 0 &&
+      typeof file.size === "number" &&
+      file.size > 0
+  );
+
+  if (validFiles.length === 0) {
     return originalFormData;
   }
 
-  const filesMetadata = attachmentFiles.map((currentFile) => ({
+  const filesMetadata = validFiles.map((currentFile) => ({
     name: currentFile.name,
     type: currentFile.type,
     size: currentFile.size,

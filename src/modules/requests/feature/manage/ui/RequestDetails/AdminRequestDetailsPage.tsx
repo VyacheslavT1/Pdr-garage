@@ -14,6 +14,7 @@ import {
 } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import styles from "./RequestDetails.module.scss";
+import type { RequestAttachment } from "@/modules/requests/model/types";
 
 const { Title, Text } = Typography;
 
@@ -25,13 +26,7 @@ type RequestRow = {
   email: string;
   comment?: string | null;
   status: "Non traité" | "Traité";
-  attachments?: Array<{
-    id: string;
-    name: string;
-    type: string;
-    size: number;
-    dataUrl?: string | null;
-  }>;
+  attachments?: RequestAttachment[];
   gender?: "male" | "female";
 };
 
@@ -104,7 +99,9 @@ export default function AdminRequestDetailsPage() {
   const hasImages =
     Array.isArray(requestData?.attachments) &&
     requestData!.attachments!.some(
-      (f) => !!f?.dataUrl && typeof f.dataUrl === "string"
+      (f) =>
+        typeof f?.publicUrl === "string" ||
+        (!!f?.dataUrl && typeof f.dataUrl === "string")
     );
 
   function buildCsvContentFromSingleRequest(single: RequestRow): string {
@@ -334,14 +331,16 @@ export default function AdminRequestDetailsPage() {
               {hasImages ? (
                 <Image.PreviewGroup>
                   <div className={styles.photosGrid}>
-                    {requestData
-                      .attachments!.filter(
-                        (f) => !!f?.dataUrl && typeof f.dataUrl === "string"
-                      )
+                    {requestData.attachments!
+                      .map((f) => ({
+                        ...f,
+                        url: f.publicUrl ?? f.dataUrl ?? null,
+                      }))
+                      .filter((f) => !!f.url)
                       .map((f) => (
                         <Image
                           key={f.id}
-                          src={f.dataUrl!}
+                          src={f.url!}
                           alt={f.name}
                           className={styles.photoItem}
                           placeholder

@@ -1,4 +1,5 @@
 import { mapRowToRequestItem } from "../mappers";
+import type { RequestStatus } from "../../model/types";
 
 describe("mapRowToRequestItem", () => {
   it("конвертирует строку базы данных в RequestItem", () => {
@@ -10,9 +11,17 @@ describe("mapRowToRequestItem", () => {
       phone: "+123456",
       email: "alice@example.com",
       comment: "Need help",
-      status: "new",
+      status: "Non traité" as RequestStatus,
       attachments: [
-        { id: "a1", name: "photo.jpg", type: "image/jpeg", size: 512, dataUrl: "https://cdn/image" },
+        {
+          id: "a1",
+          name: "photo.jpg",
+          type: "image/jpeg",
+          size: 512,
+          storagePath: "requests/req-1/a1_photo.jpg",
+          publicUrl: "https://cdn.example/req-1/a1_photo.jpg",
+          dataUrl: "https://cdn/image",
+        },
         { id: 123, name: null, type: null, size: "not-number", dataUrl: null },
       ],
     };
@@ -27,23 +36,31 @@ describe("mapRowToRequestItem", () => {
       phone: "+123456",
       email: "alice@example.com",
       comment: "Need help",
-      status: "new",
+      status: "Non traité",
+      storagePaths: [],
     });
 
-    expect(mapped.attachments).toHaveLength(2);
-    expect(mapped.attachments[0]).toEqual({
+    expect(mapped.attachments).toBeDefined();
+    const attachments = mapped.attachments ?? [];
+
+    expect(attachments).toHaveLength(2);
+    expect(attachments[0]).toEqual({
       id: "a1",
       name: "photo.jpg",
       type: "image/jpeg",
       size: 512,
+      storagePath: "requests/req-1/a1_photo.jpg",
+      publicUrl: "https://cdn.example/req-1/a1_photo.jpg",
       dataUrl: "https://cdn/image",
     });
-    expect(mapped.attachments[1]).toEqual({
+    expect(attachments[1]).toEqual({
       id: "",
       name: "",
       type: "application/octet-stream",
       size: 0,
       dataUrl: null,
+      storagePath: null,
+      publicUrl: null,
     });
   });
 
@@ -54,10 +71,11 @@ describe("mapRowToRequestItem", () => {
       client_name: "Bob",
       phone: "+111",
       email: "bob@example.com",
-      status: "new",
+      status: "Non traité" as RequestStatus,
       attachments: null,
     } as any);
 
     expect(mapped.attachments).toEqual([]);
+    expect(mapped.storagePaths).toEqual([]);
   });
 });
