@@ -37,8 +37,81 @@ export async function populateAttachmentUrls(
 }
 
 export async function uploadAttachmentsForRequest(
-  _requestId: string,
+  requestId: string,
   attachments: RequestAttachment[]
 ): Promise<RequestAttachment[]> {
-  return attachments ?? [];
+  const safeAttachments = ensureArray(attachments);
+
+  if (process.env.DISABLE_STORAGE_UPLOADS === "true") {
+    return safeAttachments;
+  }
+
+  if (safeAttachments.length === 0) {
+    return [];
+  }
+
+  const bucket = supabaseServer.storage.from(ATTACHMENTS_BUCKET);
+
+  const results = await Promise.all(
+    safeAttachments.map(async (att) => {
+      if (!att?.dataUrl) {
+        return att;
+      }
+
+      const parsed = parseDataUrl(att.dataUrl);
+      if (!parsed) {
+        return {
+          ...att,
+          dataUrl: null,
+        };
+      }
+
+      const safeName = sanitizeFileName(att.name || "file");
+      const storagePath = `${ATTACHMENTS_BUCKET}/${requestId}/${att.id}_${safeName}`;
+      const contentType = att.type || parsed.mimeType;
+      const size = Number.isFinite(att.size) && att.size > 0 ? att.size : parsed.buffer.byteLength;
+
+      const { error: uploadError } = await bucket.upload(storagePath, parsed.buffer, {
+        contentType,
+        upsert: true,
+      });
+
+      if (uploadError) {
+        return {
+          ...att,
+          dataUrl: null,
+          storagePath: null,
+        };
+      }
+
+      const publicUrl = bucket.getPublicUrl(storagePath).data?.publicUrl ?? null;
+
+      return {
+        ...att,
+        dataUrl: publicUrl,
+        storagePath,
+        size,
+      };
+    })
+  );
+
+  return results;
+}
+
+function sanitizeFileName(value: string): string {
+  return value.replace(/[^a-zA-Z0-9._-]/g, "_");
+}
+
+function parseDataUrl(value: string): { mimeType: string; buffer: Buffer } | null {
+  const match = /^data:([^;]+);base64,(.+)$/.exec(value);
+  if (!match) return null;
+  const [, mimeType, base64] = match;
+  if (!base64) return null;
+  try {
+    const buffer = Buffer.from(base64, "base64");
+    if (buffer.length === 0) return null;
+    return { mimeType, buffer };
+  } catch {
+    return null;
+  }
 }

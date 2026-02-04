@@ -99,7 +99,11 @@ describe("Header", () => {
 
     expect(screen.getAllByRole("link", { name: "Accueil" })).toHaveLength(2);
     expect(screen.getAllByRole("link", { name: "Services" })).toHaveLength(2);
-    expect(screen.getByTestId("cta-link")).toHaveAttribute("href", "/contacts");
+    const ctaLinks = screen.getAllByTestId("cta-link");
+    expect(ctaLinks).toHaveLength(2);
+    ctaLinks.forEach((link) =>
+      expect(link).toHaveAttribute("href", "/contacts"),
+    );
     expect(screen.getByTestId("language-switcher")).toBeInTheDocument();
   });
 

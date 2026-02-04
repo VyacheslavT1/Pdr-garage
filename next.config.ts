@@ -11,15 +11,12 @@ const withNextIntl = createNextIntlPlugin();
 const baseConfig: import("next").NextConfig = {
   devIndicators: false,
   eslint: {
-    // не блокируем prod-сборку линтом (ошибки останутся в dev)
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    // в этой миграции не блокируем сборку по TS-ошибкам
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
-    disableStaticImages: true,
     // разрешаем использовать изображения с внешнего домена
     remotePatterns: [
       {

@@ -2,7 +2,9 @@
 
 "use server";
 
-import { headers } from "next/headers";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import type { RequestItem, RequestAttachment } from "@/modules/requests/model/types";
+import { uploadAttachmentsForRequest } from "@/modules/requests/lib/storage";
 
 export type SubmitEstimateResult = {
   ok: boolean;
@@ -21,6 +23,7 @@ export type SubmitEstimateResult = {
 
 const MAX_NAME_LENGTH = 60;
 const MAX_MESSAGE_LENGTH = 2000;
+const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
 
 type AttachmentsMetadataItem = {
   id: string;
@@ -53,6 +56,16 @@ function isValidFrenchPhone(phone: string): boolean {
   return frenchRegex.test(phone) || internationalFrenchRegex.test(phone);
 }
 
+function isAllowedAttachmentType(type: string): boolean {
+  return type.startsWith("image/") || type === "application/pdf";
+}
+
+async function fileToDataUrl(file: File): Promise<string> {
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const safeType = file.type || "application/octet-stream";
+  return `data:${safeType};base64,${buffer.toString("base64")}`;
+}
+
 export async function submitEstimateRequest(
   formData: FormData
 ): Promise<SubmitEstimateResult> {
@@ -67,18 +80,24 @@ export async function submitEstimateRequest(
     const company = String(formData.get("company") ?? "").trim();
     const consentAccepted = formData.has("consentToContact");
 
+    const attachmentEntries = formData.getAll("attachment");
+    const attachmentFiles = attachmentEntries.filter(
+      (entry): entry is File => entry instanceof File
+    );
+
     const attachmentsMetadataRaw = formData.get("attachmentsMetadata");
     const attachmentsPayload = [] as Array<{
       id: string;
       name: string;
       type: string;
       size: number;
-      storagePath: string;
+      storagePath?: string | null;
+      dataUrl?: string | null;
     }>;
 
     if (
       typeof attachmentsMetadataRaw === "string" &&
-      attachmentsMetadataRaw.trim() !== " "
+      attachmentsMetadataRaw.trim() !== ""
     ) {
       try {
         const parsed = JSON.parse(
@@ -109,6 +128,38 @@ export async function submitEstimateRequest(
     }
 
     const fieldErrors: SubmitEstimateResult["fieldErrors"] = {};
+
+    if (attachmentsPayload.length === 0 && attachmentFiles.length > 0) {
+      for (const file of attachmentFiles) {
+        if (
+          typeof file.name !== "string" ||
+          file.name.trim().length === 0 ||
+          typeof file.size !== "number" ||
+          file.size <= 0
+        ) {
+          continue;
+        }
+
+        if (!isAllowedAttachmentType(file.type || "")) {
+          fieldErrors.attachment = "validationAttachmentType";
+          break;
+        }
+
+        if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
+          fieldErrors.attachment = "validationAttachmentSize";
+          break;
+        }
+
+        const dataUrl = await fileToDataUrl(file);
+        attachmentsPayload.push({
+          id: `att_${crypto.randomUUID()}`,
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          dataUrl,
+        });
+      }
+    }
 
     if (!["male", "female"].includes(gender)) {
       fieldErrors.gender = "validationGenderInvalid";
@@ -159,42 +210,67 @@ export async function submitEstimateRequest(
     }
 
     try {
+      if (company) {
+        return { ok: true };
+      }
+
       const clientFullName = `${firstName} ${lastName}`.trim();
       const normalizedGender: "male" | "female" | undefined =
         gender === "male" || gender === "female"
           ? (gender as "male" | "female")
           : undefined;
 
-      const requestPayload = {
+      const requestId = `rq_${crypto.randomUUID()}`;
+      const attachments: RequestAttachment[] = attachmentsPayload.map((item) => ({
+        id: item.id,
+        name: item.name,
+        type: item.type,
+        size: item.size,
+        storagePath: item.storagePath ?? null,
+        dataUrl: item.dataUrl ?? null,
+      }));
+
+      const uploadedAttachments = await uploadAttachmentsForRequest(
+        requestId,
+        attachments
+      );
+
+      const storagePaths =
+        uploadedAttachments
+          .map((att) => att.storagePath)
+          .filter((p): p is string => typeof p === "string" && p.length > 0) ??
+        [];
+
+      const newRequestItem: RequestItem = {
+        id: requestId,
+        createdAt: new Date().toISOString(),
         clientName: clientFullName,
         phone: phone,
         email: email,
         comment: message || undefined,
-        company,
-        attachments: attachmentsPayload,
+        status: "Non traité",
+        attachments: uploadedAttachments,
         gender: normalizedGender,
+        storagePaths,
       };
 
-      const headerBag = await headers();
-      const protocol = headerBag.get("x-forwarded-proto") ?? "http";
-      const host = headerBag.get("host")!;
-      const baseUrl = `${protocol}://${host}`;
+      const { error: insertError } = await supabaseServer
+        .from("requests")
+        .insert([
+          {
+            id: newRequestItem.id,
+            created_at: newRequestItem.createdAt,
+            client_name: newRequestItem.clientName,
+            gender: newRequestItem.gender ?? null,
+            phone: newRequestItem.phone,
+            email: newRequestItem.email,
+            comment: newRequestItem.comment,
+            status: newRequestItem.status,
+            attachments: newRequestItem.attachments ?? [],
+          },
+        ]);
 
-      const createRequestResponse = await fetch(`${baseUrl}/api/requests`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(requestPayload),
-      });
-
-      if (
-        !(
-          createRequestResponse.status >= 200 &&
-          createRequestResponse.status < 300
-        )
-      ) {
+      if (insertError) {
         return { ok: false, formError: "formSubmitFailed" };
       }
     } catch {

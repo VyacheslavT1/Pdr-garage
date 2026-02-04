@@ -1,135 +1,62 @@
 // src/app/admin/page.tsx
 
-"use client";
-
-import AdminNav from "@/shared/ui/admin-nav/AdminNav";
-import Link from "next/link";
-import styles from "./AdminHome.module.scss";
-import { Empty, Spin, Alert } from "antd";
-import { useEffect, useState } from "react";
+import { headers } from "next/headers";
+import AdminHomeClient from "./AdminHomeClient";
 
 // Подставь свои эндпоинты:
 const REQUESTS_COUNT_ENDPOINT = "/api/requests/count?status=Non%20trait%C3%A9";
 const REVIEWS_COUNT_ENDPOINT =
   "/api/reviews/count?status=%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%B2%D0%B8%D0%BA"; // новые отзывы
 
-export default function AdminHomePage() {
-  const [newRequestsCount, setNewRequestsCount] = useState<number>(0);
-  const [newReviewsCount, setNewReviewsCount] = useState<number>(0);
-  const [isLoadingCounts, setIsLoadingCounts] = useState<boolean>(true);
-  const [loadingErrorMessage, setLoadingErrorMessage] = useState<string | null>(
-    null
-  );
+export const dynamic = "force-dynamic";
 
-  useEffect(() => {
-    let isCancelled = false;
+export default async function AdminHomePage() {
+  const headerBag = await headers();
+  const protocol = headerBag.get("x-forwarded-proto") ?? "http";
+  const host = headerBag.get("host");
+  const baseUrl = host ? `${protocol}://${host}` : "";
+  const cookie = headerBag.get("cookie") ?? "";
 
-    async function loadCounts() {
-      setIsLoadingCounts(true);
-      setLoadingErrorMessage(null);
+  const makeUrl = (path: string) => (baseUrl ? `${baseUrl}${path}` : path);
 
-      try {
-        const [requestsResponse, reviewsResponse] = await Promise.all([
-          fetch(REQUESTS_COUNT_ENDPOINT, { cache: "no-store" }),
-          fetch(REVIEWS_COUNT_ENDPOINT, { cache: "no-store" }),
-        ]);
+  let newRequestsCount = 0;
+  let newReviewsCount = 0;
+  let errorMessage: string | null = null;
 
-        if (!requestsResponse.ok) {
-          throw new Error(`Requests count HTTP ${requestsResponse.status}`);
-        }
-        if (!reviewsResponse.ok) {
-          throw new Error(`Reviews count HTTP ${reviewsResponse.status}`);
-        }
+  try {
+    const [requestsResponse, reviewsResponse] = await Promise.all([
+      fetch(makeUrl(REQUESTS_COUNT_ENDPOINT), {
+        headers: { cookie },
+        cache: "no-store",
+      }),
+      fetch(makeUrl(REVIEWS_COUNT_ENDPOINT), {
+        headers: { cookie },
+        cache: "no-store",
+      }),
+    ]);
 
-        const requestsJson: { count: number } = await requestsResponse.json();
-        const reviewsJson: { count: number } = await reviewsResponse.json();
-
-        if (isCancelled) return;
-
-        setNewRequestsCount(Number(requestsJson?.count ?? 0));
-        setNewReviewsCount(Number(reviewsJson?.count ?? 0));
-      } catch (caughtError: unknown) {
-        const errorMessage =
-          caughtError instanceof Error ? caughtError.message : "Unknown error";
-        if (!isCancelled) {
-          setLoadingErrorMessage(errorMessage);
-        }
-      } finally {
-        if (!isCancelled) {
-          setIsLoadingCounts(false);
-        }
-      }
+    if (!requestsResponse.ok) {
+      throw new Error(`Requests count HTTP ${requestsResponse.status}`);
+    }
+    if (!reviewsResponse.ok) {
+      throw new Error(`Reviews count HTTP ${reviewsResponse.status}`);
     }
 
-    loadCounts();
+    const requestsJson: { count: number } = await requestsResponse.json();
+    const reviewsJson: { count: number } = await reviewsResponse.json();
 
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
-
-  const noNewsText = "Pas de nouvelle";
-  function formatReviewsLine(n: number): string | null {
-    if (n <= 0) return null;
-    return `Vous avez ${n} ${n === 1 ? "nouvel avis" : "nouveaux avis"}`;
+    newRequestsCount = Number(requestsJson?.count ?? 0);
+    newReviewsCount = Number(reviewsJson?.count ?? 0);
+  } catch (caughtError: unknown) {
+    errorMessage =
+      caughtError instanceof Error ? caughtError.message : "Unknown error";
   }
-  function formatRequestsLine(n: number): string | null {
-    if (n <= 0) return null;
-    return `Vous avez ${n} ${n === 1 ? "nouvelle demande" : "nouvelles demandes"}`;
-  }
-  const reviewsLine = formatReviewsLine(newReviewsCount);
-  const requestsLine = formatRequestsLine(newRequestsCount);
 
   return (
-    <div className={styles.pageRoot}>
-      <AdminNav />
-      <h1 className={styles.title}>Panneau d’administration</h1>
-
-      <div className={styles.notifications}>
-        {isLoadingCounts ? (
-          <div className={styles.loadingRow} aria-busy="true">
-            <Spin tip="Chargement...">
-              <div className={styles.loadingPlaceholder} />
-            </Spin>
-          </div>
-        ) : loadingErrorMessage ? (
-          <Alert
-            type="error"
-            message="Impossible de charger les données"
-            description={loadingErrorMessage}
-            showIcon
-          />
-        ) : (
-          <Empty
-            description={
-              reviewsLine || requestsLine ? (
-                <div className={styles.noticeList}>
-                  {reviewsLine && (
-                    <Link
-                      href="/admin/reviews"
-                      className={styles.noticeLink}
-                    >
-                      <span className={styles.noticeStar}>*</span>
-                      <p>{reviewsLine}</p>
-                    </Link>
-                  )}
-                  {requestsLine && (
-                    <Link
-                      href="/admin/requests"
-                      className={styles.noticeLink}
-                    >
-                      <span className={styles.noticeStar}>*</span>
-                      <p>{requestsLine}</p>
-                    </Link>
-                  )}
-                </div>
-              ) : (
-                noNewsText
-              )
-            }
-          />
-        )}
-      </div>
-    </div>
+    <AdminHomeClient
+      newRequestsCount={newRequestsCount}
+      newReviewsCount={newReviewsCount}
+      errorMessage={errorMessage}
+    />
   );
 }

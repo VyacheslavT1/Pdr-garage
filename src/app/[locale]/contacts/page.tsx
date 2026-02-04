@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import ContactSection from "@/widgets/contact-section/ContactSection";
 
 export default function Page() {
-  return <ContactSection />;
+  return (
+    <Suspense fallback={null}>
+      <ContactSection />
+    </Suspense>
+  );
 }

@@ -82,9 +82,15 @@ jest.mock("antd", () => {
 
   const Spin = () => <div data-testid="spinner" />;
 
-  const Image = ({ children, ...props }: { children?: React.ReactNode }) => (
-    <img alt="" {...props} />
-  );
+  const Image = ({
+    children,
+    placeholder: _placeholder,
+    preview: _preview,
+    fallback: _fallback,
+    ...props
+  }: {
+    children?: React.ReactNode;
+  }) => <img alt="" {...props} />;
   Image.PreviewGroup = ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   );

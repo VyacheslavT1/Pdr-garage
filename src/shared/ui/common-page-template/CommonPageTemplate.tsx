@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import SideMenuList, { SideMenuItem } from "@/shared/ui/side-menu-list/SideMenuList";

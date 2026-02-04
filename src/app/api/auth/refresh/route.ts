@@ -16,7 +16,7 @@ import {
 import { securityHeaders } from "@/shared/api/next/securityHeaders";
 
 export async function POST() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const refreshCookie = cookieStore.get(AUTH_COOKIE.refresh);
 
   if (!refreshCookie?.value) {

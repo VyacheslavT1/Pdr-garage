@@ -58,6 +58,10 @@ jest.mock("@/modules/auth/lib/cookies", () => ({
   hasAccessTokenCookie: (cookie: string) => hasAccessTokenCookie(cookie),
 }));
 
+const consoleErrorSpy = jest
+  .spyOn(console, "error")
+  .mockImplementation(() => {});
+
 function createQueryBuilder<T>(result: T) {
   const chain: any = {
     select: jest.fn(() => chain),
@@ -82,6 +86,10 @@ describe("/api/requests routes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     delete (globalThis as any).__requestsRateLimitStore;
+  });
+
+  afterAll(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   describe("GET", () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
 import EstimateRequestForm from "@/modules/requests/feature/estimate-request/ui/EstimateRequestForm/EstimateRequestForm";
 import { COMPANY_ADDRESS } from "@/shared/config/siteInfo";
@@ -16,38 +16,19 @@ import {
   type PublishedReview,
 } from "./helpers";
 
-export default function ContactSection() {
+type ContactSectionProps = {
+  publishedReviews?: PublishedReview[];
+  reviewsErrorMessage?: string | null;
+};
+
+export default function ContactSection({
+  publishedReviews = [],
+  reviewsErrorMessage,
+}: ContactSectionProps) {
   const t = useTranslations("ContactSection");
 
-  const [publishedReviews, setPublishedReviews] = useState<PublishedReview[]>([]);
-  const [isLoadingReviews, setIsLoadingReviews] = useState<boolean>(false);
-  const [reviewsErrorMessage, setReviewsErrorMessage] = useState<string>("");
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    async function loadPublishedReviews() {
-      try {
-        setIsLoadingReviews(true);
-        setReviewsErrorMessage("");
-        const response = await fetch("/api/reviews/public?limit=10", {
-          method: "GET",
-          headers: { Accept: "application/json" },
-          signal: abortController.signal,
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const json = (await response.json()) as { items: PublishedReview[] };
-        setPublishedReviews(Array.isArray(json.items) ? json.items : []);
-      } catch (caught) {
-        if (!(caught instanceof DOMException && caught.name === "AbortError")) {
-          setReviewsErrorMessage("Impossible de charger les avis publiés.");
-        }
-      } finally {
-        setIsLoadingReviews(false);
-      }
-    }
-    loadPublishedReviews();
-    return () => abortController.abort();
-  }, []);
+  const safeReviews = Array.isArray(publishedReviews) ? publishedReviews : [];
+  const errorMessage = reviewsErrorMessage ?? "";
 
   return (
     <div className={styles.wrapper} aria-labelledby="contact-section-title">
@@ -92,49 +73,80 @@ export default function ContactSection() {
           </div>
 
           <div aria-live="polite">
-            {isLoadingReviews && <p>Chargement des avis…</p>}
-            {!isLoadingReviews && reviewsErrorMessage && <p>{reviewsErrorMessage}</p>}
-            {!isLoadingReviews && !reviewsErrorMessage && (
-              <>
-                {publishedReviews.length === 0 ? (
-                  <p>Aucun avis publié pour le moment.</p>
-                ) : (
-                  <ul className={styles.feedbackList}>
-                    {publishedReviews.map((reviewItem) => {
-                      const rating = typeof reviewItem.rating === "number" ? reviewItem.rating : 0;
-                      const safeRating = Math.max(0, Math.min(5, rating));
-                      const stars = "★".repeat(safeRating) + "☆".repeat(5 - safeRating);
-                      const initials = getInitialsFromName(reviewItem.clientName);
-                      const formattedDate = reviewItem.date ? new Date(reviewItem.date).toLocaleDateString("fr-FR") : null;
-                      return (
-                        <li key={reviewItem.id} className={styles.reviewItem}>
-                          <div className={styles.reviewStars} role="img" aria-label={`Note ${safeRating} sur 5`}>
-                            {stars}
+            {errorMessage ? (
+              <p>{errorMessage}</p>
+            ) : safeReviews.length === 0 ? (
+              <p>Aucun avis publié pour le moment.</p>
+            ) : (
+              <ul className={styles.feedbackList}>
+                {safeReviews.map((reviewItem) => {
+                  const rating =
+                    typeof reviewItem.rating === "number"
+                      ? reviewItem.rating
+                      : 0;
+                  const safeRating = Math.max(0, Math.min(5, rating));
+                  const stars =
+                    "★".repeat(safeRating) + "☆".repeat(5 - safeRating);
+                  const initials = getInitialsFromName(
+                    reviewItem.clientName
+                  );
+                  const formattedDate = reviewItem.date
+                    ? new Date(reviewItem.date).toLocaleDateString("fr-FR")
+                    : null;
+                  return (
+                    <li key={reviewItem.id} className={styles.reviewItem}>
+                      <div
+                        className={styles.reviewStars}
+                        role="img"
+                        aria-label={`Note ${safeRating} sur 5`}
+                      >
+                        {stars}
+                      </div>
+                      <div className={styles.reviewHeader}>
+                        <span className={styles.avatar} aria-hidden="true">
+                          {initials}
+                        </span>
+                        <strong className={styles.clientName}>
+                          {normalizeName(reviewItem.clientName)}
+                        </strong>
+                      </div>
+                      <div className={styles.reviewMeta}>
+                        {t("publishedOn")} {formattedDate ?? "—"}
+                      </div>
+                      {reviewItem.comment && (
+                        <p className={styles.reviewText}>
+                          {reviewItem.comment}
+                        </p>
+                      )}
+                      {reviewItem.adminReply && (
+                        <div className={styles.adminReply}>
+                          <div className={styles.adminReplyHeader}>
+                            <span className={styles.adminBadge}>
+                              {t("adminReply.badge")}
+                            </span>
+                            <span className={styles.adminMeta}>
+                              {reviewItem.adminReplyAuthor
+                                ? t("adminReply.by", {
+                                    author: reviewItem.adminReplyAuthor,
+                                  })
+                                : t("adminReply.byUnknown")}{" "}
+                              ·
+                              {reviewItem.adminReplyDate
+                                ? new Date(
+                                    reviewItem.adminReplyDate
+                                  ).toLocaleDateString("fr-FR")
+                                : "—"}
+                            </span>
                           </div>
-                          <div className={styles.reviewHeader}>
-                            <span className={styles.avatar} aria-hidden="true">{initials}</span>
-                            <strong className={styles.clientName}>{normalizeName(reviewItem.clientName)}</strong>
-                          </div>
-                          <div className={styles.reviewMeta}>{t("publishedOn")} {formattedDate ?? "—"}</div>
-                          {reviewItem.comment && <p className={styles.reviewText}>{reviewItem.comment}</p>}
-                          {reviewItem.adminReply && (
-                            <div className={styles.adminReply}>
-                              <div className={styles.adminReplyHeader}>
-                                <span className={styles.adminBadge}>{t("adminReply.badge")}</span>
-                                <span className={styles.adminMeta}>
-                                  {reviewItem.adminReplyAuthor ? t("adminReply.by", { author: reviewItem.adminReplyAuthor }) : t("adminReply.byUnknown")} ·
-                                  {reviewItem.adminReplyDate ? new Date(reviewItem.adminReplyDate).toLocaleDateString("fr-FR") : "—"}
-                                </span>
-                              </div>
-                              <p className={styles.adminReplyText}>{reviewItem.adminReply}</p>
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </>
+                          <p className={styles.adminReplyText}>
+                            {reviewItem.adminReply}
+                          </p>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             )}
           </div>
 

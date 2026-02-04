@@ -1,7 +1,5 @@
 // src/app/api/form-attachments/upload-url/route.ts
 
-"use server";
-
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/shared/api/supabase/server";
 

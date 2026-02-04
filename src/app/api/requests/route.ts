@@ -98,12 +98,16 @@ export async function GET(incomingRequest: Request) {
     );
 
     const items: RequestItem[] = await Promise.all(
-      itemsWithRawAttachments.map(async (item) => ({
-        ...item,
-        attachments: item.attachments
-          ? await populateAttachmentUrls(item.attachments)
-          : [],
-      }))
+      itemsWithRawAttachments.map(async (item) => {
+        if (!Array.isArray(item.attachments) || item.attachments.length === 0) {
+          return item;
+        }
+
+        return {
+          ...item,
+          attachments: await populateAttachmentUrls(item.attachments),
+        };
+      })
     );
 
     return NextResponse.json(
@@ -335,9 +339,11 @@ export async function PATCH(incomingRequest: Request) {
     }
 
     const updatedItem: RequestItem = mapRowToRequestItem(data);
-    updatedItem.attachments = updatedItem.attachments
-      ? await populateAttachmentUrls(updatedItem.attachments)
-      : [];
+    if (Array.isArray(updatedItem.attachments) && updatedItem.attachments.length > 0) {
+      updatedItem.attachments = await populateAttachmentUrls(
+        updatedItem.attachments
+      );
+    }
 
     return NextResponse.json(
       { item: updatedItem },
@@ -389,8 +395,8 @@ export async function DELETE(incomingRequest: Request) {
   }
 
   try {
-    const { data: existingRequest, error: selectError } = await supabaseServer
-      .from("requests")
+    const requestsTable = supabaseServer.from("requests");
+    const { data: existingRequest, error: selectError } = await requestsTable
       .select("id, attachments")
       .eq("id", idParam)
       .single();
@@ -423,8 +429,7 @@ export async function DELETE(incomingRequest: Request) {
       }
     }
 
-    const { error } = await supabaseServer
-      .from("requests")
+    const { error } = await requestsTable
       .delete()
       .eq("id", idParam)
       .select("id")

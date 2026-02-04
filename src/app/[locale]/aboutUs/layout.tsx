@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import Breadcrumb from "@/shared/ui/breadcrumb/Breadcrumb";
 
 type AboutUsLayoutProps = { children: ReactNode };
@@ -6,7 +6,9 @@ type AboutUsLayoutProps = { children: ReactNode };
 export default function AboutUsLayout({ children }: AboutUsLayoutProps) {
   return (
     <>
-      <Breadcrumb />
+      <Suspense fallback={null}>
+        <Breadcrumb />
+      </Suspense>
       <section>{children}</section>
     </>
   );

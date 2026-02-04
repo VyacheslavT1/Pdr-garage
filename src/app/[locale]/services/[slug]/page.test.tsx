@@ -6,6 +6,10 @@ import { serviceCards } from "@/shared/config/data/serviceCards";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+jest.mock("@/i18n/routing", () => ({
+  routing: { locales: ["fr", "en", "ru"], defaultLocale: "fr", localePrefix: "always" },
+}));
+
 jest.mock("next-intl", () => ({
   useTranslations: () =>
     ((key: string) => `t:${key}`) as (key: string) => string,

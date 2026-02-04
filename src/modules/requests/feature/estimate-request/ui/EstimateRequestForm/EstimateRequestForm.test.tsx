@@ -128,6 +128,7 @@ jest.mock("./parts/Checkbox/Checkbox", () => ({
   default: ({
     id,
     label,
+    checked,
     hasError: _hasError,
     errorMessage: _errorMessage,
     ...rest
@@ -136,7 +137,7 @@ jest.mock("./parts/Checkbox/Checkbox", () => ({
     label: string;
   }) => (
     <label htmlFor={id}>
-      <input id={id} type="checkbox" {...rest} /> {label}
+      <input id={id} type="checkbox" defaultChecked={checked} {...rest} /> {label}
     </label>
   ),
 }));

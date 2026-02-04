@@ -1,10 +1,6 @@
-"use client";
-
-import "@ant-design/v5-patch-for-react-19";
 import React from "react";
-import { ConfigProvider, App as AntdApp } from "antd";
 import styles from "./AdminLayout.module.scss";
-import frFR from "antd/locale/fr_FR";
+import AdminProviders from "./AdminProviders";
 
 export default function AdminLayout({
   children,
@@ -12,10 +8,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ConfigProvider locale={frFR}>
-      <div className={styles.adminRoot}>
-        <AntdApp>{children}</AntdApp>
-      </div>
-    </ConfigProvider>
+    <AdminProviders>
+      <div className={styles.adminRoot}>{children}</div>
+    </AdminProviders>
   );
 }

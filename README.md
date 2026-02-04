@@ -81,10 +81,16 @@ The project is optimized for **Cloudflare Workers** using **OpenNext**, with Sup
    npm install
    ```
 
-2. Start the dev server (Turbopack):
+2. Start the dev server (Webpack by default):
 
    ```bash
    npm run dev
+   ```
+
+   Optional Turbopack:
+
+   ```bash
+   npm run dev:turbo
    ```
 
 3. Build for production:

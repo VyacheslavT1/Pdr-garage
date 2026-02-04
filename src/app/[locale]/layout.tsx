@@ -1,4 +1,5 @@
 // app/[locale]/layout.tsx
+import { Suspense } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
@@ -7,6 +8,10 @@ import { routing } from "@/i18n/routing";
 import Header from "@/widgets/header/Header";
 import Footer from "@/widgets/footer/Footer";
 import ScrollToTopButton from "@/shared/ui/scroll-to-top/ScrollToTopButton";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export default async function LocaleLayout({
   children,
@@ -27,7 +32,9 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <Header />
+      <Suspense fallback={null}>
+        <Header />
+      </Suspense>
       <main>{children}</main>
       <ScrollToTopButton />
       <Footer />

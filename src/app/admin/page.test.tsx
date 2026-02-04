@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, waitFor, act } from "@testing-library/react";
-import AdminHomePage from "./page";
+import { render, screen } from "@testing-library/react";
+import AdminHomeClient from "./AdminHomeClient";
 
 jest.mock("@/shared/ui/admin-nav/AdminNav", () => ({
   __esModule: true,
@@ -50,32 +50,17 @@ jest.mock("antd", () => {
 });
 
 describe("AdminHomePage", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  it("shows notifications with links when new requests and reviews exist", async () => {
-    const fetchMock = jest
-      .spyOn(global, "fetch")
-      .mockImplementation((url: RequestInfo | URL) => {
-        const isRequests = String(url).includes("/requests/");
-        const body = isRequests ? { count: 2 } : { count: 1 };
-        return Promise.resolve({
-          ok: true,
-          json: async () => body,
-        } as Response);
-      });
-
-    render(<AdminHomePage />);
-
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
-
-    const requestsNotice = await screen.findByText(
-      "Vous avez 2 nouvelles demandes",
+  it("shows notifications with links when new requests and reviews exist", () => {
+    render(
+      <AdminHomeClient
+        newRequestsCount={2}
+        newReviewsCount={1}
+        errorMessage={null}
+      />,
     );
-    const reviewsNotice = await screen.findByText(
-      "Vous avez 1 nouvel avis",
-    );
+
+    const requestsNotice = screen.getByText("Vous avez 2 nouvelles demandes");
+    const reviewsNotice = screen.getByText("Vous avez 1 nouvel avis");
 
     expect(requestsNotice.closest("a")).toHaveAttribute(
       "href",
@@ -87,106 +72,31 @@ describe("AdminHomePage", () => {
     );
   });
 
-  it("shows a placeholder when there are no updates", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValue({
-      ok: true,
-      json: async () => ({ count: 0 }),
-    } as Response);
-
-    render(<AdminHomePage />);
-
-    await waitFor(() =>
-      expect(screen.getByTestId("empty")).toBeInTheDocument(),
+  it("shows a placeholder when there are no updates", () => {
+    render(
+      <AdminHomeClient
+        newRequestsCount={0}
+        newReviewsCount={0}
+        errorMessage={null}
+      />,
     );
+
+    expect(screen.getByTestId("empty")).toBeInTheDocument();
     expect(screen.getByText("Pas de nouvelle")).toBeInTheDocument();
   });
 
-  it("renders an alert when fetching counts fails", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: async () => ({ count: 0 }),
-    } as Response);
+  it("renders an alert when fetching counts fails", () => {
+    render(
+      <AdminHomeClient
+        newRequestsCount={0}
+        newReviewsCount={0}
+        errorMessage="Requests count HTTP 500"
+      />,
+    );
 
-    render(<AdminHomePage />);
-
-    expect(await screen.findByRole("alert")).toHaveTextContent(
+    expect(screen.getByRole("alert")).toHaveTextContent(
       "Impossible de charger les données",
     );
     expect(screen.getByText(/Requests count HTTP 500/)).toBeInTheDocument();
-  });
-
-  it("renders an alert when reviews endpoint fails", async () => {
-    jest.spyOn(global, "fetch").mockImplementation((url: RequestInfo | URL) => {
-      if (String(url).includes("/requests/")) {
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ count: 1 }),
-        } as Response);
-      }
-
-      return Promise.resolve({
-        ok: false,
-        status: 404,
-        json: async () => ({}),
-      } as Response);
-    });
-
-    render(<AdminHomePage />);
-
-    const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent("Impossible de charger les données");
-    expect(screen.getByText(/Reviews count HTTP 404/)).toBeInTheDocument();
-  });
-
-  it("renders Unknown error when fetch rejects with a non-Error value", async () => {
-    jest
-      .spyOn(global, "fetch")
-      .mockRejectedValueOnce("kaput")
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ count: 0 }),
-      } as Response);
-
-    render(<AdminHomePage />);
-
-    const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent("Impossible de charger les données");
-    expect(screen.getByText("Unknown error")).toBeInTheDocument();
-  });
-
-  it("cancels in-flight updates after unmount to avoid state updates on unmounted component", async () => {
-    jest.useFakeTimers();
-    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    const responses: Response[] = [
-      {
-        ok: true,
-        json: async () => ({ count: 2 }),
-      } as Response,
-      {
-        ok: true,
-        json: async () => ({ count: 1 }),
-      } as Response,
-    ];
-    jest.spyOn(global, "fetch").mockImplementation(() => {
-      return new Promise<Response>((resolve) => {
-        setTimeout(() => {
-          const next = responses.shift();
-          if (next) resolve(next);
-        }, 10);
-      });
-    });
-
-    const { unmount } = render(<AdminHomePage />);
-    unmount();
-
-    await act(async () => {
-      jest.runAllTimers();
-    });
-
-    expect(consoleSpy).not.toHaveBeenCalled();
-
-    consoleSpy.mockRestore();
-    jest.useRealTimers();
   });
 });

@@ -1,36 +1,42 @@
-jest.mock("next/headers", () => ({
-  headers: jest.fn(),
+import { submitEstimateRequest } from "./submit";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import { uploadAttachmentsForRequest } from "@/modules/requests/lib/storage";
+
+jest.mock("@/shared/api/supabase/server", () => ({
+  supabaseServer: { from: jest.fn() },
 }));
 
-import { headers } from "next/headers";
-import { submitEstimateRequest } from "./submit";
+jest.mock("@/modules/requests/lib/storage", () => ({
+  uploadAttachmentsForRequest: jest.fn(),
+}));
 
 describe("submitEstimateRequest", () => {
-  const headersMock = headers as jest.Mock;
-  const originalFetch = global.fetch;
-  const fetchMock = jest.fn();
+  const fromMock = supabaseServer.from as jest.MockedFunction<
+    typeof supabaseServer.from
+  >;
+  const uploadAttachmentsMock =
+    uploadAttachmentsForRequest as jest.MockedFunction<
+      typeof uploadAttachmentsForRequest
+    >;
   const uuidSpy = jest.spyOn(global.crypto, "randomUUID");
-
-  beforeAll(() => {
-    global.fetch = fetchMock as unknown as typeof global.fetch;
-  });
+  const insertMock = jest.fn();
 
   afterAll(() => {
-    global.fetch = originalFetch;
     uuidSpy.mockRestore();
   });
 
   beforeEach(() => {
-    fetchMock.mockReset();
-    headersMock.mockReset();
+    insertMock.mockReset();
+    fromMock.mockReset();
+    uploadAttachmentsMock.mockReset();
     uuidSpy.mockReturnValue("uuid-123");
-    headersMock.mockResolvedValue({
-      get: (key: string) => {
-        if (key === "x-forwarded-proto") return "https";
-        if (key === "host") return "example.com";
-        return null;
-      },
-    });
+    fromMock.mockReturnValue({
+      insert: insertMock,
+    } as unknown as ReturnType<typeof supabaseServer.from>);
+    insertMock.mockResolvedValue({ error: null });
+    uploadAttachmentsMock.mockImplementation(
+      async (_requestId, attachments) => attachments
+    );
   });
 
   it("возвращает ошибки валидации при некорректных данных", async () => {
@@ -54,7 +60,7 @@ describe("submitEstimateRequest", () => {
       message: "validationMessageRequired",
       consent: "validationConsentRequired",
     });
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(insertMock).not.toHaveBeenCalled();
   });
 
   it("отправляет форму и возвращает ok=true", async () => {
@@ -76,29 +82,17 @@ describe("submitEstimateRequest", () => {
     });
     formData.append("attachment", sampleImage);
 
-    fetchMock.mockResolvedValueOnce({ status: 201 } as Response);
-
     const result = await submitEstimateRequest(formData);
 
     expect(result).toEqual({ ok: true });
-    expect(fetchMock).toHaveBeenCalledWith(
-      "https://example.com/api/requests",
-      expect.objectContaining({
-        method: "POST",
-        headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        }),
-      }),
-    );
+    expect(uploadAttachmentsMock).toHaveBeenCalledTimes(1);
+    expect(insertMock).toHaveBeenCalledTimes(1);
 
-    const [, requestInit] = fetchMock.mock.calls[0];
-    const parsedBody = JSON.parse(
-      String((requestInit as RequestInit)?.body),
-    ) as Record<string, unknown>;
+    const [insertPayload] = insertMock.mock.calls[0];
+    const inserted = Array.isArray(insertPayload) ? insertPayload[0] : null;
 
-    expect(parsedBody).toMatchObject({
-      clientName: "Jean Dupont",
+    expect(inserted).toMatchObject({
+      client_name: "Jean Dupont",
       phone: "+33 6 12 34 56 78",
       email: "jean@example.com",
       comment: "Bonjour",
@@ -123,7 +117,7 @@ describe("submitEstimateRequest", () => {
     formData.set("message", "Bonjour");
     formData.set("consentToContact", "on");
 
-    fetchMock.mockResolvedValueOnce({ status: 500 } as Response);
+    insertMock.mockResolvedValueOnce({ error: { message: "fail" } });
 
     const result = await submitEstimateRequest(formData);
 
@@ -140,7 +134,7 @@ describe("submitEstimateRequest", () => {
     formData.set("message", "Bonjour");
     formData.set("consentToContact", "on");
 
-    fetchMock.mockRejectedValueOnce(new Error("network error"));
+    insertMock.mockRejectedValueOnce(new Error("db down"));
 
     const result = await submitEstimateRequest(formData);
 
@@ -166,7 +160,7 @@ describe("submitEstimateRequest", () => {
 
     expect(result.ok).toBe(false);
     expect(result.fieldErrors?.attachment).toBe("validationAttachmentType");
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(insertMock).not.toHaveBeenCalled();
   });
 
   it("валидирует максимальные длины, размер вложения и обязательные поля", async () => {
@@ -200,7 +194,7 @@ describe("submitEstimateRequest", () => {
         consent: "validationConsentRequired",
       }),
     );
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(insertMock).not.toHaveBeenCalled();
   });
 
   it("возвращает ошибки, если имена содержат запрещённые символы", async () => {
@@ -220,7 +214,7 @@ describe("submitEstimateRequest", () => {
       firstName: "validationFirstNameSymbols",
       lastName: "validationLastNameSymbols",
     });
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(insertMock).not.toHaveBeenCalled();
   });
 
   it("возвращает formError если обработка FormData завершилась исключением", async () => {
@@ -237,15 +231,7 @@ describe("submitEstimateRequest", () => {
     expect(result).toEqual({ ok: false, formError: "formSubmitFailed" });
   });
 
-  it("использует http по умолчанию, когда заголовок x-forwarded-proto отсутствует", async () => {
-    headersMock.mockResolvedValueOnce({
-      get: (key: string) => {
-        if (key === "host") return "api.example.com";
-        return null;
-      },
-    });
-    fetchMock.mockResolvedValueOnce({ status: 201 } as Response);
-
+  it("создаёт запись без обращения к внешнему API", async () => {
     const formData = new FormData();
     formData.set("gender", "female");
     formData.set("firstName", "Marie");
@@ -258,9 +244,6 @@ describe("submitEstimateRequest", () => {
     const result = await submitEstimateRequest(formData);
 
     expect(result).toEqual({ ok: true });
-    expect(fetchMock).toHaveBeenCalledWith(
-      "http://api.example.com/api/requests",
-      expect.any(Object),
-    );
+    expect(insertMock).toHaveBeenCalledTimes(1);
   });
 });
