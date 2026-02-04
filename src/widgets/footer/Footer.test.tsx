@@ -32,36 +32,36 @@ jest.mock("@/shared/ui/fonts", () => ({
 
 jest.mock("@/shared/Icons/logo.svg", () => ({
   __esModule: true,
-  default: () => <span data-testid="footer-logo" />, // eslint-disable-line
+  default: () => <span data-testid="footer-logo" />,
 }));
 
 jest.mock("@/shared/Icons/screwdriver-wrench.svg", () => ({
   __esModule: true,
-  default: () => <span className="icon" />, // eslint-disable-line
+  default: () => <span className="icon" />,
 }));
 jest.mock("@/shared/Icons/info.svg", () => ({
   __esModule: true,
-  default: () => <span className="icon" />, // eslint-disable-line
+  default: () => <span className="icon" />,
 }));
 jest.mock("@/shared/Icons/contact-form.svg", () => ({
   __esModule: true,
-  default: () => <span className="icon" />, // eslint-disable-line
+  default: () => <span className="icon" />,
 }));
 jest.mock("@/shared/Icons/phone.svg", () => ({
   __esModule: true,
-  default: () => <span className="icon" />, // eslint-disable-line
+  default: () => <span className="icon" />,
 }));
 jest.mock("@/shared/Icons/mail.svg", () => ({
   __esModule: true,
-  default: () => <span className="icon" />, // eslint-disable-line
+  default: () => <span className="icon" />,
 }));
 jest.mock("@/shared/Icons/map-pin.svg", () => ({
   __esModule: true,
-  default: () => <span className="icon" />, // eslint-disable-line
+  default: () => <span className="icon" />,
 }));
 jest.mock("@/shared/Icons/clock.svg", () => ({
   __esModule: true,
-  default: () => <span className="icon" />, // eslint-disable-line
+  default: () => <span className="icon" />,
 }));
 
 jest.mock("@/i18n/navigation", () => ({
@@ -73,9 +73,9 @@ jest.mock("@/i18n/navigation", () => ({
 }));
 
 jest.mock("react-icons/fa", () => ({
-  FaFacebookF: () => <span data-testid="facebook-icon" />, // eslint-disable-line
-  FaInstagram: () => <span data-testid="instagram-icon" />, // eslint-disable-line
-  FaTelegram: () => <span data-testid="telegram-icon" />, // eslint-disable-line
+  FaFacebookF: () => <span data-testid="facebook-icon" />,
+  FaInstagram: () => <span data-testid="instagram-icon" />,
+  FaTelegram: () => <span data-testid="telegram-icon" />,
 }));
 
 describe("Footer", () => {

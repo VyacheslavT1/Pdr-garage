@@ -40,10 +40,17 @@ type RequestRow = {
   gender?: "male" | "female";
 };
 
+const getErrorName = (error: unknown): string | undefined => {
+  if (!error || typeof error !== "object") return undefined;
+  if (!("name" in error)) return undefined;
+  const name = (error as { name?: unknown }).name;
+  return typeof name === "string" ? name : undefined;
+};
+
 // Игнорируем отменённые запросы (AbortController), частый кейс в dev/StrictMode
-const isAbortError = (e: unknown) =>
-  (e instanceof DOMException && e.name === "AbortError") ||
-  (e as any)?.name === "AbortError";
+const isAbortError = (error: unknown) =>
+  (error instanceof DOMException && error.name === "AbortError") ||
+  getErrorName(error) === "AbortError";
 
 export default function AdminRequestsPage() {
   const [requestsData, setRequestsData] = useState<RequestRow[]>([]);
@@ -348,7 +355,7 @@ export default function AdminRequestsPage() {
       if (isAbortError(caught)) return;
       const readable =
         caught instanceof Error ? caught.message : "Erreur inconnue";
-      // message.error(`Impossible de supprimer: ${readable}`);
+      setErrorMessage(readable);
     } finally {
       setDeletingRequestId(null);
     }

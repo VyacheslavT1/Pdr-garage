@@ -70,27 +70,27 @@ jest.mock("@/shared/ui/dropdown/Dropdown", () => ({
 
 jest.mock("@/shared/Icons/logo.svg", () => ({
   __esModule: true,
-  default: (props: any) => <span data-testid="logo" {...props} />, // eslint-disable-line
+  default: (props: any) => <span data-testid="logo" {...props} />,
 }));
 
 jest.mock("@/shared/Icons/chevron-down.svg", () => ({
   __esModule: true,
-  default: () => <span data-testid="chevron-down" />, // eslint-disable-line
+  default: () => <span data-testid="chevron-down" />,
 }));
 
 jest.mock("@/shared/Icons/chevron-up.svg", () => ({
   __esModule: true,
-  default: () => <span data-testid="chevron-up" />, // eslint-disable-line
+  default: () => <span data-testid="chevron-up" />,
 }));
 
 jest.mock("@/shared/Icons/menu.svg", () => ({
   __esModule: true,
-  default: () => <span data-testid="menu-icon" />, // eslint-disable-line
+  default: () => <span data-testid="menu-icon" />,
 }));
 
 jest.mock("@/shared/Icons/close.svg", () => ({
   __esModule: true,
-  default: () => <span data-testid="close-icon" />, // eslint-disable-line
+  default: () => <span data-testid="close-icon" />,
 }));
 
 describe("Header", () => {

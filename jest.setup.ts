@@ -2,14 +2,23 @@ import "@testing-library/jest-dom";
 import "whatwg-fetch";
 import { TextEncoder, TextDecoder } from "util";
 
-if (typeof global.TextEncoder === "undefined") {
-  // @ts-expect-error intentional assignment
-  global.TextEncoder = TextEncoder;
+type GlobalWithPolyfills = typeof globalThis & {
+  TextEncoder?: typeof TextEncoder;
+  TextDecoder?: typeof TextDecoder;
+  TransformStream?: typeof TransformStream;
+  ReadableStream?: typeof ReadableStream;
+  WritableStream?: typeof WritableStream;
+};
+
+const globalWithPolyfills = global as GlobalWithPolyfills;
+
+if (typeof globalWithPolyfills.TextEncoder === "undefined") {
+  globalWithPolyfills.TextEncoder = TextEncoder;
 }
 
-if (typeof global.TextDecoder === "undefined") {
-  // @ts-expect-error intentional assignment
-  global.TextDecoder = TextDecoder as typeof global.TextDecoder;
+if (typeof globalWithPolyfills.TextDecoder === "undefined") {
+  globalWithPolyfills.TextDecoder =
+    TextDecoder as unknown as GlobalWithPolyfills["TextDecoder"];
 }
 
 const nodeCrypto = require("crypto");
@@ -34,17 +43,23 @@ if (typeof global.crypto === "undefined" || typeof global.crypto.randomUUID !== 
 
 const webStream = require("stream/web");
 
-if (typeof global.TransformStream === "undefined" && typeof webStream.TransformStream === "function") {
-  // @ts-expect-error Node stream polyfill
-  global.TransformStream = webStream.TransformStream;
+if (
+  typeof globalWithPolyfills.TransformStream === "undefined" &&
+  typeof webStream.TransformStream === "function"
+) {
+  globalWithPolyfills.TransformStream = webStream.TransformStream;
 }
-if (typeof global.ReadableStream === "undefined" && typeof webStream.ReadableStream === "function") {
-  // @ts-expect-error Node stream polyfill
-  global.ReadableStream = webStream.ReadableStream;
+if (
+  typeof globalWithPolyfills.ReadableStream === "undefined" &&
+  typeof webStream.ReadableStream === "function"
+) {
+  globalWithPolyfills.ReadableStream = webStream.ReadableStream;
 }
-if (typeof global.WritableStream === "undefined" && typeof webStream.WritableStream === "function") {
-  // @ts-expect-error Node stream polyfill
-  global.WritableStream = webStream.WritableStream;
+if (
+  typeof globalWithPolyfills.WritableStream === "undefined" &&
+  typeof webStream.WritableStream === "function"
+) {
+  globalWithPolyfills.WritableStream = webStream.WritableStream;
 }
 
 const { server } = require("@/tests/mocks/server") as typeof import("@/tests/mocks/server");

@@ -19,7 +19,6 @@ jest.mock("@/modules/auth/model/types", () => ({
 describe("combined middleware", () => {
   const redirectSpy = jest.spyOn(NextResponse, "redirect");
   const nextSpy = jest.spyOn(NextResponse, "next");
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { default: middleware } = require("./middleware") as {
     default: (req: NextRequest) => ReturnType<typeof NextResponse.next>;
   };

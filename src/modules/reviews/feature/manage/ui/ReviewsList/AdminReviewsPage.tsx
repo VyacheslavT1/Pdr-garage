@@ -8,10 +8,17 @@ import styles from "./AdminReviews.module.scss";
 
 const { Title, Text } = Typography;
 
+const getErrorName = (error: unknown): string | undefined => {
+  if (!error || typeof error !== "object") return undefined;
+  if (!("name" in error)) return undefined;
+  const name = (error as { name?: unknown }).name;
+  return typeof name === "string" ? name : undefined;
+};
+
 // Игнорируем отменённые запросы (AbortController)
-const isAbortError = (e: unknown) =>
-  (e instanceof DOMException && e.name === "AbortError") ||
-  (e as any)?.name === "AbortError";
+const isAbortError = (error: unknown) =>
+  (error instanceof DOMException && error.name === "AbortError") ||
+  getErrorName(error) === "AbortError";
 
 type ReviewRow = {
   id: string;

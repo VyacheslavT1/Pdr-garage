@@ -11,7 +11,6 @@ describe("RadioButton", () => {
         label="Mr"
         checked
         required
-        ariaInvalid={false}
       />,
     );
 
@@ -21,25 +20,8 @@ describe("RadioButton", () => {
     expect(input).toHaveAttribute("name", "gender");
     expect(input).toHaveAttribute("value", "male");
     expect(input).toBeRequired();
-    expect(input).toHaveAttribute("aria-invalid", "false");
 
     const label = screen.getByText("Mr");
     expect(label).toHaveAttribute("for", "gender-male");
-  });
-
-  it("проставляет aria-invalid при ошибке", () => {
-    render(
-      <RadioButton
-        id="gender-female"
-        name="gender"
-        value="female"
-        label="Mme"
-        checked={false}
-        ariaInvalid
-      />,
-    );
-
-    const input = screen.getByRole("radio", { name: "Mme" });
-    expect(input).toHaveAttribute("aria-invalid", "true");
   });
 });

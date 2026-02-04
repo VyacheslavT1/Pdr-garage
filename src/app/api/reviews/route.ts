@@ -276,7 +276,7 @@ export async function DELETE(incomingRequest: Request) {
 
   try {
     // 3) Удаляем из БД и просим вернуть id удалённой строки
-    const { data, error } = await supabaseServer
+    const { error } = await supabaseServer
       .from("reviews")
       .delete()
       .eq("id", idParam)

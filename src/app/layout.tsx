@@ -2,9 +2,15 @@
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { montserrat } from "@/shared/ui/fonts";
-import type { Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 
-export const metadata = {
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  "http://localhost:3000";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "PDR Studio",
   description: "Automotive services showcase",
 };

@@ -105,7 +105,11 @@ export default function EstimateRequestForm() {
       >
         <h3 className={styles.formTitle}>{t("formTitle")}</h3>
 
-        <fieldset className={styles.formFieldset} onChange={handleGenderChange}>
+        <fieldset
+          className={styles.formFieldset}
+          onChange={handleGenderChange}
+          aria-invalid={Boolean(fieldErrors.gender)}
+        >
           <RadioButton
             id="male"
             name="gender"
@@ -113,7 +117,6 @@ export default function EstimateRequestForm() {
             checked={gender === "male"}
             label={t("genderMale")}
             required
-            ariaInvalid={Boolean(fieldErrors.gender)}
           />
           <RadioButton
             id="female"
@@ -122,7 +125,6 @@ export default function EstimateRequestForm() {
             checked={gender === "female"}
             label={t("genderFemale")}
             required
-            ariaInvalid={Boolean(fieldErrors.gender)}
           />
 
           {fieldErrors.gender && (

@@ -101,18 +101,24 @@ export default function ReviewCreateForm({
     };
   }, []);
 
-  function validate(): string | null {
-    if (!clientNameValue.trim()) return t("errors.clientNameRequired");
-    if (clientNameValue.trim().length > 120)
-      return t("errors.clientNameTooLong");
-    if (ratingValue) {
-      const numeric = Number(ratingValue);
+  function validate(values?: {
+    clientName?: string;
+    rating?: string;
+    comment?: string;
+  }): string | null {
+    const clientName = values?.clientName ?? clientNameValue;
+    const rating = values?.rating ?? ratingValue;
+    const comment = values?.comment ?? commentValue;
+
+    if (!clientName.trim()) return t("errors.clientNameRequired");
+    if (clientName.trim().length > 120) return t("errors.clientNameTooLong");
+    if (rating) {
+      const numeric = Number(rating);
       if (!Number.isFinite(numeric) || numeric < 1 || numeric > 5) {
         return t("errors.ratingInvalid");
       }
     }
-    if (commentValue && commentValue.length > 2000)
-      return t("errors.commentTooLong");
+    if (comment && comment.length > 2000) return t("errors.commentTooLong");
     return null;
   }
 
@@ -129,26 +135,13 @@ export default function ReviewCreateForm({
     const ratingRaw = ratingValue;
     const ratingNumber = ratingRaw ? Number(ratingRaw) : null;
 
-    if (!clientNameRaw) {
-      setSubmitErrorMessage(t("errors.clientNameRequired"));
-      return;
-    }
-    if (clientNameRaw.length > 120) {
-      setSubmitErrorMessage(t("errors.clientNameTooLong"));
-      return;
-    }
-    if (ratingNumber !== null) {
-      if (
-        !Number.isFinite(ratingNumber) ||
-        ratingNumber < 1 ||
-        ratingNumber > 5
-      ) {
-        setSubmitErrorMessage(t("errors.ratingInvalid"));
-        return;
-      }
-    }
-    if (commentRaw && commentRaw.length > 2000) {
-      setSubmitErrorMessage(t("errors.commentTooLong"));
+    const validationError = validate({
+      clientName: clientNameRaw,
+      rating: ratingRaw,
+      comment: commentRaw,
+    });
+    if (validationError) {
+      setSubmitErrorMessage(validationError);
       return;
     }
 

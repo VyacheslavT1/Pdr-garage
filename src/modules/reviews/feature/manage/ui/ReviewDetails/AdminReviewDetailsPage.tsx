@@ -13,6 +13,7 @@ import {
   Popconfirm,
   Spin,
 } from "antd";
+import type { DescriptionsProps } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import styles from "../../../../../requests/feature/manage/ui/RequestDetails/RequestDetails.module.scss";
 
@@ -30,6 +31,8 @@ type ReviewRow = {
   adminReplyDate?: string | null;
   adminReplyAuthor?: string | null;
 };
+
+type DescriptionItem = NonNullable<DescriptionsProps["items"]>[number];
 
 export default function AdminReviewDetailsPage() {
   const routeParams = useParams<{ id: string }>();
@@ -208,6 +211,53 @@ export default function AdminReviewDetailsPage() {
     return <Tag color={color}>{s}</Tag>;
   };
 
+  const buildDescriptionItems = (review: ReviewRow): DescriptionItem[] => {
+    const items: Array<DescriptionItem | null> = [
+      {
+        key: "clientName",
+        label: "Client",
+        children: <Text>{review.clientName}</Text>,
+      },
+      {
+        key: "comment",
+        label: "Avis",
+        children: review.comment ? (
+          <Text>{review.comment}</Text>
+        ) : (
+          <Text type="secondary">—</Text>
+        ),
+      },
+      {
+        key: "rating",
+        label: "Note",
+        children:
+          typeof review.rating === "number" ? (
+            <Rate disabled value={review.rating} />
+          ) : (
+            <Text type="secondary">—</Text>
+          ),
+      },
+      {
+        key: "updatedAt",
+        label: "Date",
+        children: <Text>{new Date(review.updatedAt).toLocaleString()}</Text>,
+      },
+      {
+        key: "status",
+        label: "Statut",
+        children: statusTag(review.status),
+      },
+      review.adminReply
+        ? {
+            key: "adminReply",
+            label: "Réponse admin",
+            children: <Text>{review.adminReply}</Text>,
+          }
+        : null,
+    ];
+    return items.filter((item): item is DescriptionItem => item !== null);
+  };
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
@@ -231,55 +281,7 @@ export default function AdminReviewDetailsPage() {
               column={1}
               size="middle"
               className={styles.descriptionsRoot}
-              items={
-                [
-                  {
-                    key: "clientName",
-                    label: "Client",
-                    children: <Text>{reviewData.clientName}</Text>,
-                  },
-                  {
-                    key: "comment",
-                    label: "Avis",
-                    children: reviewData.comment ? (
-                      <Text>{reviewData.comment}</Text>
-                    ) : (
-                      <Text type="secondary">—</Text>
-                    ),
-                  },
-                  {
-                    key: "rating",
-                    label: "Note",
-                    children:
-                      typeof reviewData.rating === "number" ? (
-                        <Rate disabled value={reviewData.rating} />
-                      ) : (
-                        <Text type="secondary">—</Text>
-                      ),
-                  },
-                  {
-                    key: "updatedAt",
-                    label: "Date",
-                    children: (
-                      <Text>
-                        {new Date(reviewData.updatedAt).toLocaleString()}
-                      </Text>
-                    ),
-                  },
-                  {
-                    key: "status",
-                    label: "Statut",
-                    children: statusTag(reviewData.status),
-                  },
-                  reviewData.adminReply
-                    ? {
-                        key: "adminReply",
-                        label: "Réponse admin",
-                        children: <Text>{reviewData.adminReply}</Text>,
-                      }
-                    : undefined,
-                ].filter(Boolean) as any
-              }
+              items={buildDescriptionItems(reviewData)}
             />
 
             <div className={styles.actions}>

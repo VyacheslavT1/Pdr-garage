@@ -17,7 +17,7 @@ jest.mock("next/link", () => {
 
 jest.mock("@/shared/Icons/up-arrow.svg", () => ({
   __esModule: true,
-  default: () => <span data-testid="up-arrow" />, // eslint-disable-line
+  default: () => <span data-testid="up-arrow" />,
 }));
 
 describe("ScrollToTopButton", () => {

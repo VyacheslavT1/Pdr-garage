@@ -10,7 +10,6 @@ type RadioButtonProps = {
   checked: boolean;
   label: string;
   required?: boolean;
-  ariaInvalid?: boolean;
 };
 
 export default function RadioButton({
@@ -20,7 +19,6 @@ export default function RadioButton({
   checked,
   label,
   required,
-  ariaInvalid,
 }: RadioButtonProps) {
   return (
     <div className={styles.radioContainer}>
@@ -31,7 +29,6 @@ export default function RadioButton({
         value={value}
         defaultChecked={checked}
         required={required}
-        aria-invalid={ariaInvalid}
       />
       <label htmlFor={id}>{label}</label>
     </div>
