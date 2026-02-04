@@ -1,25 +1,47 @@
+import { unstable_cache } from "next/cache";
+import { supabaseServer } from "@/shared/api/supabase/server";
+import { mapRowToReviewItem } from "@/modules/reviews/lib/mappers";
 import ContactSectionClient from "./local";
 import type { PublishedReview } from "./helpers";
 
-const REVIEWS_ENDPOINT = "/api/reviews/public?limit=10";
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  process.env.SITE_URL ??
-  "http://localhost:3000";
+const REVIEWS_LIMIT = 10;
+const getPublishedReviews = unstable_cache(
+  async (): Promise<PublishedReview[]> => {
+    const { data, error } = await supabaseServer
+      .from("reviews")
+      .select(
+        "id, client_name, rating, comment, date, admin_reply, admin_reply_author, admin_reply_date, status, updated_at"
+      )
+      .eq("status", "Publié")
+      .order("date", { ascending: false })
+      .limit(REVIEWS_LIMIT);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const fullItems = (data || []).map(mapRowToReviewItem);
+    return fullItems.map((it) => ({
+      id: it.id,
+      clientName: it.clientName,
+      rating: it.rating ?? null,
+      comment: it.comment ?? null,
+      date: it.date ?? null,
+      adminReply: it.adminReply ?? null,
+      adminReplyAuthor: it.adminReplyAuthor ?? null,
+      adminReplyDate: it.adminReplyDate ?? null,
+    }));
+  },
+  ["contact-section-reviews"],
+  { revalidate: 60 }
+);
 
 export default async function ContactSection() {
   let publishedReviews: PublishedReview[] = [];
   let reviewsErrorMessage = "";
 
   try {
-    const url = `${SITE_URL.replace(/\/$/, "")}${REVIEWS_ENDPOINT}`;
-    const response = await fetch(url, { next: { revalidate: 60 } });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const json = (await response.json()) as { items?: PublishedReview[] };
-    publishedReviews = Array.isArray(json.items) ? json.items : [];
+    publishedReviews = await getPublishedReviews();
   } catch {
     reviewsErrorMessage = "Impossible de charger les avis publiés.";
   }
